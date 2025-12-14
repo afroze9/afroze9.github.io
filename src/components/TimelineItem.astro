@@ -1,0 +1,124 @@
+---
+interface Props {
+  title: string;
+  period: string;
+  highlights: string[];
+  isFirst?: boolean;
+  isLast?: boolean;
+}
+
+const { title, period, highlights, isFirst = false, isLast = false } = Astro.props;
+---
+
+<div class:list={["timeline-item", { first: isFirst, last: isLast }]}>
+  <div class="timeline-marker">
+    <div class="marker-dot"></div>
+    {!isLast && <div class="marker-line"></div>}
+  </div>
+  <div class="timeline-content">
+    <div class="timeline-header">
+      <h3 class="role-title">{title}</h3>
+      <span class="period">{period}</span>
+    </div>
+    <ul class="highlights">
+      {highlights.map((highlight) => (
+        <li>{highlight}</li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: var(--space-md);
+    position: relative;
+  }
+
+  .timeline-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 6px;
+  }
+
+  .marker-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    border: 2px solid var(--color-background);
+    box-shadow: 0 0 0 2px var(--color-accent);
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .marker-line {
+    width: 2px;
+    flex-grow: 1;
+    background: var(--color-border);
+    margin-top: var(--space-sm);
+  }
+
+  .timeline-content {
+    padding-bottom: var(--space-xl);
+  }
+
+  .timeline-item.last .timeline-content {
+    padding-bottom: 0;
+  }
+
+  .timeline-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .role-title {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    margin: 0;
+  }
+
+  .period {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .highlights {
+    margin: 0;
+    padding-left: var(--space-lg);
+  }
+
+  .highlights li {
+    margin-bottom: var(--space-sm);
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+  }
+
+  .highlights li:last-child {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 480px) {
+    .timeline-item {
+      grid-template-columns: 16px 1fr;
+      gap: var(--space-sm);
+    }
+
+    .marker-dot {
+      width: 10px;
+      height: 10px;
+    }
+
+    .timeline-header {
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+  }
+</style>

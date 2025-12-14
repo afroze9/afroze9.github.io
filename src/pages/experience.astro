@@ -1,0 +1,389 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+
+const description = "Career experience of Afroze Amjad, Senior Software Architect. 10+ years in software architecture, cloud systems, and engineering leadership.";
+
+const highlights = [
+  { value: "10+", label: "Years Experience" },
+  { value: "25+", label: "Engineers Led" },
+  { value: "300+", label: "Developers Impacted" },
+  { value: "1000+", label: "Clients Served" },
+];
+
+const journey = [
+  {
+    year: "2025",
+    title: "Senior Software Architect",
+    company: "Confiz",
+    focus: "GenAI & Engineering Leadership",
+    description: "Leading multi-disciplinary teams on Generative AI initiatives. Directing the Engineering Council for technology standards. Architecting enterprise platform migrations.",
+    achievements: ["25+ member teams", "Engineering Council lead", "US client relationships"]
+  },
+  {
+    year: "2024",
+    title: "Software Architect",
+    company: "Confiz",
+    focus: "AI Solutions & Enterprise Systems",
+    description: "Delivering AI-powered solutions for Fortune 500 clients. Building real-time analytics engines and OLAP reporting systems.",
+    achievements: ["15% sales conversion increase", "40% faster reporting", "25% AI adoption boost"]
+  },
+  {
+    year: "2022",
+    title: "Associate Software Architect",
+    company: "Confiz",
+    focus: "Platform Architecture & DevOps",
+    description: "Creating microservices frameworks and improving platform scalability. Implementing security roadmaps and high-availability solutions.",
+    achievements: ["40% dev time reduction", "50% API load handling", "95% feature adoption"]
+  },
+  {
+    year: "2021",
+    title: "Assistant Software Architect",
+    company: "CureMD",
+    focus: "Healthcare Integration & Quality",
+    description: "Orchestrating FHIR-based data synchronization for healthcare clients. Leading API modernization with Clean Architecture principles.",
+    achievements: ["1,000+ client sync", "400+ hrs debt reduced", "300+ dev code quality"]
+  },
+  {
+    year: "2020",
+    title: "Lead Software Engineer",
+    company: "CureMD",
+    focus: "Automation & Developer Experience",
+    description: "Building automation frameworks and developer tools. Creating Azure DevOps integrations and frontend frameworks.",
+    achievements: ["100 hrs/mo saved", "50% faster feedback", "700+ user systems"]
+  },
+  {
+    year: "2018",
+    title: "Principal Business Analyst",
+    company: "CureMD",
+    focus: "Process Transformation",
+    description: "Driving Agile transformation and CI/CD adoption. Leading healthcare compliance submissions and system integrations.",
+    achievements: ["Agile transformation", "20% faster deployments", "1,800+ providers served"]
+  },
+  {
+    year: "2014",
+    title: "Application Analyst",
+    company: "CureMD",
+    focus: "Healthcare Systems",
+    description: "Starting career in healthcare technology. Building automation tools and training teams on EHR systems.",
+    achievements: ["6,000+ hrs/mo saved", "30+ team members trained", "SharePoint migration"]
+  },
+];
+---
+
+<BaseLayout title="Experience" description={description}>
+  <section class="intro">
+    <h1>Experience</h1>
+    <p>
+      A decade of building systems that scale, leading teams that deliver,
+      and solving problems that matter.
+    </p>
+  </section>
+
+  <section class="highlights">
+    <div class="highlights-grid">
+      {highlights.map((h) => (
+        <div class="highlight-item">
+          <span class="highlight-value">{h.value}</span>
+          <span class="highlight-label">{h.label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="journey">
+    <h2>The Journey</h2>
+    <div class="journey-list">
+      {journey.map((item, index) => (
+        <article class="journey-item">
+          <div class="journey-year">
+            <span class="year">{item.year}</span>
+            {index < journey.length - 1 && <div class="year-line"></div>}
+          </div>
+          <div class="journey-content">
+            <header class="journey-header">
+              <h3>{item.title}</h3>
+              <div class="journey-meta">
+                <span class="company">{item.company}</span>
+                <span class="focus">{item.focus}</span>
+              </div>
+            </header>
+            <p class="journey-description">{item.description}</p>
+            <div class="journey-achievements">
+              {item.achievements.map((a) => (
+                <span class="achievement">{a}</span>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="skills">
+    <SectionHeader title="Technical Toolkit" />
+    <div class="skills-visual">
+      <div class="skill-group">
+        <h3>Languages</h3>
+        <div class="skill-bars">
+          <div class="skill-bar" style="--level: 95%"><span>C#</span></div>
+          <div class="skill-bar" style="--level: 90%"><span>TypeScript</span></div>
+          <div class="skill-bar" style="--level: 85%"><span>Python</span></div>
+          <div class="skill-bar" style="--level: 80%"><span>Java</span></div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Cloud & Infrastructure</h3>
+        <div class="skill-bars">
+          <div class="skill-bar" style="--level: 95%"><span>Azure</span></div>
+          <div class="skill-bar" style="--level: 80%"><span>AWS</span></div>
+          <div class="skill-bar" style="--level: 85%"><span>Docker</span></div>
+          <div class="skill-bar" style="--level: 75%"><span>Terraform</span></div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Frameworks</h3>
+        <div class="skill-bars">
+          <div class="skill-bar" style="--level: 95%"><span>.NET Core</span></div>
+          <div class="skill-bar" style="--level: 85%"><span>React</span></div>
+          <div class="skill-bar" style="--level: 80%"><span>Node.js</span></div>
+          <div class="skill-bar" style="--level: 75%"><span>Angular</span></div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Data</h3>
+        <div class="skill-bars">
+          <div class="skill-bar" style="--level: 90%"><span>SQL Server</span></div>
+          <div class="skill-bar" style="--level: 85%"><span>PostgreSQL</span></div>
+          <div class="skill-bar" style="--level: 75%"><span>MongoDB</span></div>
+          <div class="skill-bar" style="--level: 70%"><span>Redis</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding-top: var(--space-xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  .intro h1 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .intro p {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-muted);
+    max-width: 50ch;
+    margin: 0;
+  }
+
+  /* Highlights */
+  .highlights {
+    margin-bottom: var(--space-2xl);
+    padding: var(--space-lg);
+    background: var(--color-accent-light);
+    border-radius: 8px;
+  }
+
+  .highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  @media (min-width: 480px) {
+    .highlights-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .highlight-item {
+    text-align: center;
+  }
+
+  .highlight-value {
+    display: block;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    line-height: 1;
+  }
+
+  .highlight-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-xs);
+  }
+
+  /* Journey */
+  .journey {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .journey h2 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--color-accent);
+    display: inline-block;
+  }
+
+  .journey-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .journey-item {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: var(--space-md);
+  }
+
+  .journey-year {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .year {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .year-line {
+    width: 2px;
+    flex-grow: 1;
+    background: var(--color-border);
+    margin: var(--space-sm) 0;
+  }
+
+  .journey-content {
+    padding-bottom: var(--space-xl);
+  }
+
+  .journey-item:last-child .journey-content {
+    padding-bottom: 0;
+  }
+
+  .journey-header {
+    margin-bottom: var(--space-sm);
+  }
+
+  .journey-header h3 {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-xs);
+  }
+
+  .journey-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  .company {
+    color: var(--color-text);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .focus {
+    color: var(--color-text-muted);
+  }
+
+  .focus::before {
+    content: "•";
+    margin-right: var(--space-sm);
+  }
+
+  .journey-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+    line-height: 1.6;
+  }
+
+  .journey-achievements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .achievement {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    background: var(--color-background);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text);
+  }
+
+  /* Skills */
+  .skills {
+    margin-top: var(--space-2xl);
+  }
+
+  .skills-visual {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  @media (min-width: 640px) {
+    .skills-visual {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .skill-group h3 {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-md);
+  }
+
+  .skill-bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .skill-bar {
+    position: relative;
+    height: 28px;
+    background: var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .skill-bar::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: var(--level, 50%);
+    background: var(--color-accent);
+    border-radius: 4px;
+  }
+
+  .skill-bar span {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 var(--space-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-background);
+  }
+</style>

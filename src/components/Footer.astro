@@ -1,0 +1,57 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <p class="copyright">Afroze Amjad {currentYear}</p>
+      <div class="links">
+        <a href="https://github.com/afroze9" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://linkedin.com/in/afroze-amjad" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="mailto:afrozeamjad@gmail.com">Email</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: var(--border-width) solid var(--color-border);
+    padding: var(--space-lg) 0;
+    margin-top: auto;
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .copyright {
+    margin: 0;
+  }
+
+  .links {
+    display: flex;
+    gap: var(--space-lg);
+  }
+
+  .links a {
+    color: var(--color-text-muted);
+  }
+
+  .links a:hover {
+    color: var(--color-accent);
+  }
+
+  @media (min-width: 640px) {
+    .footer-content {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+import Navigation from "./Navigation.astro";
+import ThemeToggle from "./ThemeToggle.astro";
+---
+
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <div class="brand">
+        <a href="/" class="brand-link">
+          <span class="name">Afroze Amjad</span>
+          <span class="title">Senior Software Architect</span>
+        </a>
+      </div>
+      <div class="header-right">
+        <Navigation />
+        <ThemeToggle />
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    border-bottom: var(--border-width) solid var(--color-border);
+    padding: var(--space-lg) 0;
+  }
+
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .brand-link {
+    text-decoration: none;
+    display: block;
+  }
+
+  .brand-link:hover {
+    text-decoration: none;
+  }
+
+  .name {
+    display: block;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    line-height: var(--line-height-tight);
+  }
+
+  .title {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-xs);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  @media (min-width: 640px) {
+    .header-content {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+</style>

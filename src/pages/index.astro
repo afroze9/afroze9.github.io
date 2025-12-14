@@ -1,0 +1,388 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const description = "Senior Software Architect specializing in GenAI solutions, cloud architecture, and engineering leadership. 10+ years building scalable platforms for enterprise clients.";
+
+const stats = [
+  { value: "10+", label: "Years" },
+  { value: "25+", label: "Engineers Led" },
+  { value: "1000+", label: "Clients" },
+];
+
+const impactItems = [
+  { metric: "40%", description: "Development time reduced via microservices framework" },
+  { metric: "15%", description: "Sales conversions increased with AI retail copilot" },
+  { metric: "100 hrs", description: "Monthly savings through DevOps automation" },
+  { metric: "300+", description: "Developers impacted by code quality initiatives" },
+];
+
+const focusAreas = [
+  {
+    icon: "ai",
+    title: "Generative AI",
+    description: "Building AI agents and copilots that deliver measurable business value"
+  },
+  {
+    icon: "cloud",
+    title: "Cloud Architecture",
+    description: "Designing scalable, cost-effective solutions on Azure and AWS"
+  },
+  {
+    icon: "team",
+    title: "Engineering Leadership",
+    description: "Growing teams and driving technical excellence across organizations"
+  },
+  {
+    icon: "transform",
+    title: "Platform Modernization",
+    description: "Migrating legacy systems to cloud-native architectures"
+  },
+];
+---
+
+<BaseLayout title="Home" description={description}>
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-tagline">Building systems that scale.</p>
+      <p class="hero-intro">
+        I'm a software architect who turns complex problems into elegant solutions.
+        From AI copilots to enterprise platforms, I focus on outcomes that matter.
+      </p>
+      <div class="hero-stats">
+        {stats.map((stat) => (
+          <div class="stat">
+            <span class="stat-value">{stat.value}</span>
+            <span class="stat-label">{stat.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="impact">
+    <div class="section-header">
+      <h2>Impact</h2>
+      <p>Results from recent projects</p>
+    </div>
+    <div class="impact-grid">
+      {impactItems.map((item) => (
+        <div class="impact-card">
+          <span class="impact-metric">{item.metric}</span>
+          <span class="impact-description">{item.description}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="focus">
+    <div class="section-header">
+      <h2>What I Do</h2>
+      <p>Current areas of focus</p>
+    </div>
+    <div class="focus-grid">
+      {focusAreas.map((area) => (
+        <div class="focus-card">
+          <div class="focus-icon" data-icon={area.icon}>
+            {area.icon === "ai" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/>
+                <circle cx="8" cy="14" r="1"/><circle cx="16" cy="14" r="1"/>
+              </svg>
+            )}
+            {area.icon === "cloud" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+              </svg>
+            )}
+            {area.icon === "team" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            )}
+            {area.icon === "transform" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/>
+                <polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/>
+                <line x1="4" y1="4" x2="9" y2="9"/>
+              </svg>
+            )}
+          </div>
+          <h3>{area.title}</h3>
+          <p>{area.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="connect">
+    <div class="section-header">
+      <h2>Let's Connect</h2>
+      <p>Open to architecture challenges, AI initiatives, or engineering leadership opportunities</p>
+    </div>
+    <div class="connect-grid">
+      <a href="https://linkedin.com/in/afroze-amjad" target="_blank" rel="noopener noreferrer" class="connect-card">
+        <div class="connect-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+        </div>
+        <div class="connect-info">
+          <span class="connect-label">LinkedIn</span>
+          <span class="connect-value">afroze-amjad</span>
+        </div>
+      </a>
+      <a href="https://github.com/afroze9" target="_blank" rel="noopener noreferrer" class="connect-card">
+        <div class="connect-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </div>
+        <div class="connect-info">
+          <span class="connect-label">GitHub</span>
+          <span class="connect-value">afroze9</span>
+        </div>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .hero {
+    margin-bottom: var(--space-2xl);
+    padding: var(--space-xl) 0;
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    margin-bottom: var(--space-sm);
+    line-height: 1.2;
+  }
+
+  .hero-intro {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-muted);
+    max-width: 50ch;
+    margin-bottom: var(--space-xl);
+    line-height: 1.6;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-value {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-xs);
+  }
+
+  /* Section Header */
+  .section-header {
+    margin-bottom: var(--space-lg);
+  }
+
+  .section-header h2 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-xs);
+  }
+
+  .section-header p {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin: 0;
+  }
+
+  /* Impact */
+  .impact {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 480px) {
+    .impact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .impact-card {
+    padding: var(--space-lg);
+    background: var(--color-accent-light);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .impact-metric {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+  }
+
+  .impact-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    line-height: 1.4;
+  }
+
+  /* Focus */
+  .focus {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .focus-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 480px) {
+    .focus-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .focus-card {
+    padding: var(--space-lg);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 8px;
+    transition: border-color 0.2s ease;
+  }
+
+  .focus-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .focus-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-accent-light);
+    border-radius: 8px;
+    margin-bottom: var(--space-md);
+    color: var(--color-accent);
+  }
+
+  .focus-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .focus-card h3 {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-xs);
+  }
+
+  .focus-card p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Connect */
+  .connect {
+    margin-bottom: var(--space-xl);
+  }
+
+  .connect-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 480px) {
+    .connect-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .connect-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  a.connect-card:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+    text-decoration: none;
+  }
+
+  .connect-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-accent-light);
+    border-radius: 8px;
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .connect-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .connect-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .connect-label {
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+  }
+
+  .connect-value {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  a.connect-card:hover .connect-value {
+    color: var(--color-accent);
+  }
+</style>

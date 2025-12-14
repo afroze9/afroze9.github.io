@@ -1,0 +1,46 @@
+---
+interface Props {
+  value: string;
+  label: string;
+  context?: string;
+}
+
+const { value, label, context } = Astro.props;
+---
+
+<div class="metric-card">
+  <span class="value">{value}</span>
+  <span class="label">{label}</span>
+  {context && <span class="context">{context}</span>}
+</div>
+
+<style>
+  .metric-card {
+    padding: var(--space-md);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--border-radius);
+    background: var(--color-background);
+  }
+
+  .value {
+    display: block;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    line-height: var(--line-height-tight);
+  }
+
+  .label {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    margin-top: var(--space-xs);
+  }
+
+  .context {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-xs);
+  }
+</style>

@@ -1,0 +1,123 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import { getCollection } from "astro:content";
+
+const description = "Technical writing by Afroze Amjad on software architecture, AI systems, and engineering leadership.";
+
+const posts = await getCollection("writing", ({ data }) => !data.draft);
+const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="Writing" description={description}>
+  <section class="intro">
+    <p>
+      Thoughts on software architecture, AI systems, and engineering leadership.
+    </p>
+  </section>
+
+  <section class="posts">
+    <SectionHeader title="Articles" />
+    {sortedPosts.length > 0 ? (
+      <ul class="post-list">
+        {sortedPosts.map((post) => (
+          <li class="post-item">
+            <a href={`/writing/${post.slug}/`}>
+              <span class="post-title">{post.data.title}</span>
+              <span class="post-date">
+                {post.data.pubDate.toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+            </a>
+            <p class="post-description">{post.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div class="coming-soon">
+        <p>Technical articles coming soon.</p>
+        <p class="muted">
+          Topics will include software architecture patterns, AI system design,
+          and engineering leadership insights.
+        </p>
+      </div>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding-top: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .intro p {
+    font-size: var(--font-size-lg);
+    max-width: 55ch;
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .post-item {
+    padding: var(--space-md) 0;
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .post-item:last-child {
+    border-bottom: none;
+  }
+
+  .post-item a {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-sm);
+    text-decoration: none;
+  }
+
+  .post-title {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+  }
+
+  .post-item a:hover .post-title {
+    color: var(--color-accent);
+  }
+
+  .post-date {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .post-description {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin-top: var(--space-xs);
+    margin-bottom: 0;
+  }
+
+  .coming-soon {
+    padding: var(--space-lg);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--border-radius);
+    text-align: center;
+  }
+
+  .coming-soon p {
+    margin-bottom: var(--space-sm);
+  }
+
+  .coming-soon .muted {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin-bottom: 0;
+  }
+</style>

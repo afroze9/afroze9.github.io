@@ -1,0 +1,82 @@
+---
+interface Props {
+  company: string;
+  title: string;
+  period: string;
+  location: string;
+  highlights: string[];
+}
+
+const { company, title, period, location, highlights } = Astro.props;
+---
+
+<div class="role-card">
+  <div class="role-header">
+    <h3 class="role-title">{title}</h3>
+    <span class="period">{period}</span>
+  </div>
+  <div class="company-info">
+    <span class="company">{company}</span>
+    <span class="location">{location}</span>
+  </div>
+  <ul class="highlights">
+    {highlights.map((highlight) => (
+      <li>{highlight}</li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .role-card {
+    margin-bottom: var(--space-xl);
+  }
+
+  .role-card:last-child {
+    margin-bottom: 0;
+  }
+
+  .role-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-sm);
+  }
+
+  .role-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: 0;
+  }
+
+  .period {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .company-info {
+    display: flex;
+    gap: var(--space-md);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-md);
+  }
+
+  .company {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+  }
+
+  .highlights {
+    margin-bottom: 0;
+  }
+
+  .highlights li {
+    margin-bottom: var(--space-sm);
+  }
+
+  .highlights li:last-child {
+    margin-bottom: 0;
+  }
+</style>

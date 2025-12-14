@@ -1,0 +1,403 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const description = "Open source projects and contributions by Afroze Amjad on GitHub.";
+
+const githubProjects = [
+  {
+    name: "nexus",
+    description: "Multi-tenant application framework with .NET microservices architecture. Features service discovery, API gateway, and distributed configuration.",
+    language: "C#",
+    url: "https://github.com/nexus-framework/nexus",
+    topics: ["microservices", "multi-tenant", ".net", "docker"]
+  },
+  {
+    name: "solid-auth0",
+    description: "Auth0 authentication integration for SolidJS applications. Provides hooks and components for seamless OAuth flows.",
+    language: "TypeScript",
+    url: "https://github.com/afroze9/solid-auth0",
+    topics: ["solidjs", "auth0", "authentication", "oauth"]
+  },
+  {
+    name: "project-management",
+    description: "Full-stack project management system built with Clean Architecture and DDD patterns. Demonstrates CQRS, MediatR, and modern .NET practices.",
+    language: "C#",
+    url: "https://github.com/afroze-project-management",
+    topics: ["clean-architecture", "ddd", "cqrs", "efcore"]
+  },
+  {
+    name: "sk-assistant",
+    description: "AI assistant built with Semantic Kernel. Demonstrates LLM integration, prompt engineering, and intelligent agent patterns.",
+    language: "C#",
+    url: "https://github.com/afroze9/sk-assistant",
+    topics: ["semantic-kernel", "ai", "llm", "agents"]
+  }
+];
+
+const stats = [
+  { label: "Repositories", value: "20+" },
+  { label: "Primary Language", value: "C#" },
+  { label: "Focus Areas", value: ".NET, Cloud" },
+];
+---
+
+<BaseLayout title="Open Source" description={description}>
+  <section class="intro">
+    <h1>Open Source</h1>
+    <p>
+      Personal projects, experiments, and contributions on GitHub.
+      Building in public and sharing what I learn.
+    </p>
+  </section>
+
+  <section class="github-profile">
+    <div class="profile-card">
+      <div class="profile-header">
+        <svg class="github-logo" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <div class="profile-info">
+          <span class="username">@afroze9</span>
+          <a href="https://github.com/afroze9" target="_blank" rel="noopener noreferrer" class="profile-link">
+            View Profile →
+          </a>
+        </div>
+      </div>
+      <div class="profile-stats">
+        {stats.map((stat) => (
+          <div class="stat-item">
+            <span class="stat-value">{stat.value}</span>
+            <span class="stat-label">{stat.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="repositories">
+    <h2>Featured Repositories</h2>
+    <div class="repo-grid">
+      {githubProjects.map((repo) => (
+        <a href={repo.url} class="repo-card" target="_blank" rel="noopener noreferrer">
+          <div class="repo-header">
+            <svg class="repo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span class="repo-name">{repo.name}</span>
+            <svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </div>
+          <p class="repo-description">{repo.description}</p>
+          <div class="repo-footer">
+            <span class="repo-language">
+              <span class="language-dot" data-lang={repo.language}></span>
+              {repo.language}
+            </span>
+            <div class="repo-topics">
+              {repo.topics.slice(0, 3).map((topic) => (
+                <span class="topic-tag">{topic}</span>
+              ))}
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-content">
+      <h2>Want to collaborate?</h2>
+      <p>I'm always open to interesting projects and contributions.</p>
+      <a href="https://github.com/afroze9" target="_blank" rel="noopener noreferrer" class="cta-button">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        Follow on GitHub
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding-top: var(--space-xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  .intro h1 {
+    margin-bottom: var(--space-sm);
+  }
+
+  .intro p {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-muted);
+    max-width: 50ch;
+    margin: 0;
+  }
+
+  /* GitHub Profile Card */
+  .github-profile {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .profile-card {
+    padding: var(--space-xl);
+    background: var(--color-accent-light);
+    border-radius: 12px;
+  }
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .github-logo {
+    width: 48px;
+    height: 48px;
+    color: var(--color-text);
+  }
+
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .username {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .profile-link {
+    font-size: var(--font-size-sm);
+    color: var(--color-accent);
+  }
+
+  .profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+
+  @media (max-width: 480px) {
+    .profile-stats {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: var(--space-md);
+    background: var(--color-background);
+    border-radius: 8px;
+  }
+
+  .stat-value {
+    display: block;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+  }
+
+  .stat-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  /* Repositories */
+  .repositories {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .repositories h2 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 2px solid var(--color-accent);
+    display: inline-block;
+  }
+
+  .repo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+
+  @media (max-width: 640px) {
+    .repo-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .repo-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-xl);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    min-height: 200px;
+  }
+
+  .repo-card:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+
+  .repo-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .repo-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+  }
+
+  .repo-name {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    font-size: var(--font-size-lg);
+    flex: 1;
+  }
+
+  .external-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--color-text-muted);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .repo-card:hover .external-icon {
+    opacity: 1;
+  }
+
+  .repo-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+    flex: 1;
+    line-height: 1.6;
+  }
+
+  .repo-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  .repo-language {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .language-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-text-muted);
+  }
+
+  .language-dot[data-lang="C#"] {
+    background: #178600;
+  }
+
+  .language-dot[data-lang="TypeScript"] {
+    background: #3178c6;
+  }
+
+  .language-dot[data-lang="JavaScript"] {
+    background: #f1e05a;
+  }
+
+  .language-dot[data-lang="Python"] {
+    background: #3572A5;
+  }
+
+  .language-dot[data-lang="Astro"] {
+    background: #ff5a03;
+  }
+
+  .repo-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .topic-tag {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    background: var(--color-background);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 12px;
+    color: var(--color-text-muted);
+  }
+
+  /* CTA */
+  .cta {
+    margin-bottom: var(--space-xl);
+  }
+
+  .cta-content {
+    text-align: center;
+    padding: var(--space-xl);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 12px;
+  }
+
+  .cta-content h2 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .cta-content p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--color-text);
+    color: var(--color-background);
+    border-radius: 8px;
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .cta-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .cta-button:hover {
+    background: var(--color-accent);
+    text-decoration: none;
+  }
+</style>
