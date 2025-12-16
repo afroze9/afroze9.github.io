@@ -1,14 +1,15 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionHeader from "../components/SectionHeader.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
-const description = "Career experience of Afroze Amjad, Senior Software Architect. 10+ years in software architecture, cloud systems, and engineering leadership.";
+const description =
+  "Career experience of Afroze Amjad, Senior Software Architect. 10+ years in software architecture, cloud systems, and engineering leadership.";
 
 const highlights = [
   { value: "10+", label: "Years Experience" },
-  { value: "25+", label: "Engineers Led" },
+  { value: "150+", label: "Engineers Led" },
   { value: "300+", label: "Developers Impacted" },
-  { value: "1000+", label: "Clients Served" },
+  { value: "50+", label: "Clients Served" },
 ];
 
 const journey = [
@@ -17,8 +18,9 @@ const journey = [
     title: "Senior Software Architect",
     company: "Confiz",
     focus: "GenAI & Engineering Leadership",
-    description: "Leading multi-disciplinary teams on Generative AI initiatives. Directing the Engineering Council for technology standards. Architecting enterprise platform migrations.",
-    achievements: ["25+ member teams", "Engineering Council lead", "US client relationships"]
+    description:
+      "Leading multi-disciplinary teams on Generative AI initiatives. Directing the Engineering Council for technology standards. Architecting enterprise platform migrations.",
+    achievements: ["25+ member teams", "Engineering Council lead", "US client relationships"],
   },
   {
     year: "2024",
@@ -26,23 +28,25 @@ const journey = [
     company: "Confiz",
     focus: "AI Solutions & Enterprise Systems",
     description: "Delivering AI-powered solutions for Fortune 500 clients. Building real-time analytics engines and OLAP reporting systems.",
-    achievements: ["15% sales conversion increase", "40% faster reporting", "25% AI adoption boost"]
+    achievements: ["15% sales conversion increase", "40% faster reporting", "25% AI adoption boost"],
   },
   {
     year: "2022",
     title: "Associate Software Architect",
     company: "Confiz",
     focus: "Platform Architecture & DevOps",
-    description: "Creating microservices frameworks and improving platform scalability. Implementing security roadmaps and high-availability solutions.",
-    achievements: ["40% dev time reduction", "50% API load handling", "95% feature adoption"]
+    description:
+      "Creating microservices frameworks and improving platform scalability. Implementing security roadmaps and high-availability solutions.",
+    achievements: ["40% dev time reduction", "50% API load handling", "95% feature adoption"],
   },
   {
     year: "2021",
     title: "Assistant Software Architect",
     company: "CureMD",
     focus: "Healthcare Integration & Quality",
-    description: "Orchestrating FHIR-based data synchronization for healthcare clients. Leading API modernization with Clean Architecture principles.",
-    achievements: ["1,000+ client sync", "400+ hrs debt reduced", "300+ dev code quality"]
+    description:
+      "Orchestrating FHIR-based data synchronization for healthcare clients. Leading API modernization with Clean Architecture principles.",
+    achievements: ["1,000+ client sync", "400+ hrs debt reduced", "300+ dev code quality"],
   },
   {
     year: "2020",
@@ -50,7 +54,7 @@ const journey = [
     company: "CureMD",
     focus: "Automation & Developer Experience",
     description: "Building automation frameworks and developer tools. Creating Azure DevOps integrations and frontend frameworks.",
-    achievements: ["100 hrs/mo saved", "50% faster feedback", "700+ user systems"]
+    achievements: ["100 hrs/mo saved", "50% faster feedback", "700+ user systems"],
   },
   {
     year: "2018",
@@ -58,7 +62,7 @@ const journey = [
     company: "CureMD",
     focus: "Process Transformation",
     description: "Driving Agile transformation and CI/CD adoption. Leading healthcare compliance submissions and system integrations.",
-    achievements: ["Agile transformation", "20% faster deployments", "1,800+ providers served"]
+    achievements: ["Agile transformation", "20% faster deployments", "1,800+ providers served"],
   },
   {
     year: "2014",
@@ -66,7 +70,7 @@ const journey = [
     company: "CureMD",
     focus: "Healthcare Systems",
     description: "Starting career in healthcare technology. Building automation tools and training teams on EHR systems.",
-    achievements: ["6,000+ hrs/mo saved", "30+ team members trained", "SharePoint migration"]
+    achievements: ["6,000+ hrs/mo saved", "30+ team members trained", "SharePoint migration"],
   },
 ];
 ---
@@ -74,49 +78,50 @@ const journey = [
 <BaseLayout title="Experience" description={description}>
   <section class="intro">
     <h1>Experience</h1>
-    <p>
-      A decade of building systems that scale, leading teams that deliver,
-      and solving problems that matter.
-    </p>
+    <p>A decade of building systems that scale, leading teams that deliver, and solving problems that matter.</p>
   </section>
 
   <section class="highlights">
     <div class="highlights-grid">
-      {highlights.map((h) => (
-        <div class="highlight-item">
-          <span class="highlight-value">{h.value}</span>
-          <span class="highlight-label">{h.label}</span>
-        </div>
-      ))}
+      {
+        highlights.map((h) => (
+          <div class="highlight-item">
+            <span class="highlight-value">{h.value}</span>
+            <span class="highlight-label">{h.label}</span>
+          </div>
+        ))
+      }
     </div>
   </section>
 
   <section class="journey">
     <h2>The Journey</h2>
     <div class="journey-list">
-      {journey.map((item, index) => (
-        <article class="journey-item">
-          <div class="journey-year">
-            <span class="year">{item.year}</span>
-            {index < journey.length - 1 && <div class="year-line"></div>}
-          </div>
-          <div class="journey-content">
-            <header class="journey-header">
-              <h3>{item.title}</h3>
-              <div class="journey-meta">
-                <span class="company">{item.company}</span>
-                <span class="focus">{item.focus}</span>
-              </div>
-            </header>
-            <p class="journey-description">{item.description}</p>
-            <div class="journey-achievements">
-              {item.achievements.map((a) => (
-                <span class="achievement">{a}</span>
-              ))}
+      {
+        journey.map((item, index) => (
+          <article class="journey-item">
+            <div class="journey-year">
+              <span class="year">{item.year}</span>
+              {index < journey.length - 1 && <div class="year-line" />}
             </div>
-          </div>
-        </article>
-      ))}
+            <div class="journey-content">
+              <header class="journey-header">
+                <h3>{item.title}</h3>
+                <div class="journey-meta">
+                  <span class="company">{item.company}</span>
+                  <span class="focus">{item.focus}</span>
+                </div>
+              </header>
+              <p class="journey-description">{item.description}</p>
+              <div class="journey-achievements">
+                {item.achievements.map((a) => (
+                  <span class="achievement">{a}</span>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))
+      }
     </div>
   </section>
 
