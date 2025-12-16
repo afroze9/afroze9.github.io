@@ -1,7 +1,7 @@
 ---
 title: "A Simple Batch Reporting Tool for a Very Fragmented EHR Setup"
 description: "How a small WPF app removed a lot of manual pain from running customer reports across isolated healthcare tenants."
-pubDate: 2024-03-15
+pubDate: 2025-12-16
 draft: false
 ---
 
@@ -13,14 +13,14 @@ Support and account managers (myself being one at that time) regularly needed to
 
 ## The Setup
 
-![](./assets/Reporting.png)
+![](./assets/batch-reports.png)
 
-- One IIS + SQL Server per data center
+- One IIS + SQL Server per Data Center
 - Multiple tenants per server
 - One database per tenant
 - Separate user stores per server (same username could exist in multiple places)
 
-There *was* a shared internal portal that support could use to log into different instances. It also allowed running predefined SQL reports, but only for one customer at a time.
+There *was* a shared internal portal that support could use to log into different instances. It also allowed running predefined SQL reports, but only for a single customer at a time.
 
 That was the annoying part.
 
@@ -28,19 +28,13 @@ That was the annoying part.
 
 The typical workflow looked like this:
 
-- Log into a server
-- Pick a tenant
-- Run a report
-- Export it
-- Repeat for the next tenant
-- Manually format files
-- Email them one by one
+![](./assets/batch-reports-flow.png)
 
-This was slow, error-prone, and honestly a bad use of people’s time. If someone had 10–15 customers, this could easily take hours.
+This was slow, error-prone, and honestly a bad use of people’s time. I had 10+ accounts, this could easily eat up the first half of my dat.
 
 ## The Approach
 
-Instead of changing the EHR system or building some big centralized service, I went with the simplest thing that could work:
+Instead of changing the EHR system or building some big centralized service (which I had no say over or access to), I went with the simplest thing that could work:
 
 A small **.NET WPF desktop app** for internal users.
 
@@ -50,12 +44,12 @@ No production system changes, no cross-server magic, no new infrastructure.
 
 The app was intentionally boring.
 
-- It had a mapping of **account managers → their assigned tenants**
+- It had a mapping of **Account Managers → Their Assigned Customers**
 - Users could select:
-  - One or more tenants
+  - One or more customers
   - One or more predefined reports
 - The app would:
-  - Connect to each tenant database
+  - Connect to each tenant database via the central portal thingy
   - Run the selected SQL
   - Export the results to formatted Excel files
 
@@ -80,7 +74,7 @@ This kept humans in the loop where it mattered.
 - It didn’t require touching regulated production code
 - It fit how support teams actually worked
 
-Sometimes the right solution is not a distributed system — it’s just a tool that saves people time.
+Sometimes the right solution is not a distributed system, it’s just a tool that saves people time.
 
 ## Things I’d Do Differently Now
 
