@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 const description = "Project case studies by Afroze Amjad. AI copilots, cloud architecture, and enterprise platform solutions.";
 
 const projects = await getCollection("projects");
-const sortedProjects = projects.sort((a, b) => a.data.order - b.data.order);
+const sortedProjects = projects.sort((a, b) => b.data.date.localeCompare(a.data.date));
 const featuredProjects = sortedProjects.filter(p => p.data.featured);
 const otherProjects = sortedProjects.filter(p => !p.data.featured);
 
@@ -172,7 +172,7 @@ const categoryColors: Record<string, string> = {
   .intro p {
     font-size: var(--font-size-lg);
     color: var(--color-text-muted);
-    max-width: 55ch;
+    max-width: 70ch;
     margin: 0;
   }
 
@@ -227,13 +227,7 @@ const categoryColors: Record<string, string> = {
   }
 
   .other-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 768px) {
-    .other-grid {
-      grid-template-columns: 1fr;
-    }
+    grid-template-columns: 1fr;
   }
 
   /* Project Cards */
