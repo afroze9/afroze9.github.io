@@ -1,20 +1,22 @@
 /* CSS Variables */
 :root {
-  /* Colors - Light Mode (Custom Palette) */
-  --color-text: #0a1128;              /* Prussian Blue */
-  --color-text-muted: #5a6a7a;        /* Muted from Prussian Blue */
-  --color-background: #f8ffe5;        /* Light Yellow */
-  --color-accent: #4075a0;            /* Rich Cerulean */
-  --color-accent-light: #e8f4eb;      /* Tinted Light Yellow */
-  --color-border: #c3a29e;            /* Rosy Taupe */
-  --color-secondary: #b185a7;         /* Amethyst Smoke */
+  /* Core Colors — Light (Charcoal + Copper) */
+  --color-background: #f7f5f2;   /* warm neutral paper */
+  --color-text: #2b2b2b;         /* charcoal */
+  --color-text-muted: #6b6b6b;   /* softened charcoal */
 
-  /* Category Colors */
-  --color-cat-ai: #b185a7;            /* Amethyst Smoke */
-  --color-cat-arch: #4075a0;          /* Rich Cerulean */
-  --color-cat-platform: #2d8659;      /* Green complement */
-  --color-cat-devops: #c3a29e;        /* Rosy Taupe */
-  --color-cat-integration: #8b5c6b;   /* Darker Amethyst */
+  --color-accent: #b87333;       /* muted copper */
+  --color-accent-light: #f1e6dc; /* copper tint */
+
+  --color-border: #dedad4;       /* warm gray */
+  --color-secondary: #8a5a2b;    /* deep copper */
+
+  /* Category Colors (harmonized) */
+  --color-cat-ai: #8a5a2b;        /* deep copper */
+  --color-cat-arch: #5c6f7b;     /* steel blue-gray */
+  --color-cat-platform: #6b7f63; /* muted olive */
+  --color-cat-devops: #7a6a5a;   /* warm taupe */
+  --color-cat-integration: #725a4a; /* brown-copper */
 
   /* Typography */
   --font-family: system-ui, -apple-system, BlinkMacSystemFont,
@@ -43,32 +45,36 @@
   --content-padding: var(--space-lg);
 
   /* Borders */
-  --border-radius: 4px;
+  --border-radius: 6px;
   --border-width: 1px;
 }
+
 
 /* Dark Mode - System Preference */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-text: #f8ffe5;            /* Light Yellow */
-    --color-text-muted: #c3a29e;      /* Rosy Taupe */
-    --color-background: #0a1128;      /* Prussian Blue */
-    --color-accent: #6b9fc4;          /* Lighter Rich Cerulean */
-    --color-accent-light: #1a2a48;    /* Darker Prussian Blue */
-    --color-border: #2a3a58;          /* Mid Prussian Blue */
-    --color-secondary: #c9a5bf;       /* Lighter Amethyst */
+    --color-background: #101418;   /* storm dark */
+    --color-text: #d9dee5;         /* misty gray */
+    --color-text-muted: #9aa3ad;   /* softened gray */
+
+    --color-accent: #7aa2c7;       /* storm blue */
+    --color-accent-light: #1b2228; /* subtle lift */
+
+    --color-border: #1f2a33;       /* deep steel */
+    --color-secondary: #8fa9c3;    /* desaturated blue */
   }
 }
 
-/* Dark Mode - Manual Toggle */
 :root[data-theme="dark"] {
-  --color-text: #f8ffe5;              /* Light Yellow */
-  --color-text-muted: #c3a29e;        /* Rosy Taupe */
-  --color-background: #0a1128;        /* Prussian Blue */
-  --color-accent: #6b9fc4;            /* Lighter Rich Cerulean */
-  --color-accent-light: #1a2a48;      /* Darker Prussian Blue */
-  --color-border: #2a3a58;            /* Mid Prussian Blue */
-  --color-secondary: #c9a5bf;         /* Lighter Amethyst */
+    --color-background: #101418;
+    --color-text: #d9dee5;
+    --color-text-muted: #9aa3ad;
+
+    --color-accent: #7aa2c7;
+    --color-accent-light: #1b2228;
+
+    --color-border: #1f2a33;
+    --color-secondary: #8fa9c3;
 }
 
 /* Reset */
@@ -110,7 +116,8 @@ p:last-child { margin-bottom: 0; }
 
 a {
   color: var(--color-accent);
-  text-decoration: none;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 a:hover {
