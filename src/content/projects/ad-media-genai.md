@@ -1,6 +1,6 @@
 ---
 title: "Ad Media Gen AI Agents"
-date: "2024"
+date: "2025"
 company: "Media Data Broker"
 category: "ai"
 problem: "Media managers needed better tools to optimize Return on Ad Spend (ROAS) across campaigns, but existing solutions required significant manual analysis and lacked intelligent insights."

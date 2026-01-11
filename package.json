@@ -2,7 +2,7 @@
   "name": "afroze-amjad-portfolio",
   "type": "module",
   "version": "1.0.0",
-  "description": "Senior Software Architect Portfolio",
+  "description": "Solution Architect Portfolio",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
