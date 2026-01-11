@@ -1,25 +1,25 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const description = "Philosophy and background of Afroze Amjad, Senior Software Architect focused on GenAI, cloud architecture, and engineering leadership.";
+const description = "Philosophy and background of Afroze Amjad, Solution Architect focused on GenAI, cloud architecture, and engineering leadership.";
 
 const principles = [
   {
     title: "Simplicity over cleverness",
-    description: "The best code is the code you don't have to think about. Reduce cognitive load, make intent obvious."
+    description: "The best code is the code you don't have to think about. Reduce cognitive load, make intent obvious.",
   },
   {
     title: "Outcomes over technology",
-    description: "Technology serves business goals. Choose tools that solve problems, not tools that are interesting."
+    description: "Technology serves business goals. Choose tools that solve problems, not tools that are interesting.",
   },
   {
     title: "Constraints breed creativity",
-    description: "Embrace limitations. They focus thinking and lead to elegant solutions."
+    description: "Embrace limitations. They focus thinking and lead to elegant solutions.",
   },
   {
     title: "Build for change",
-    description: "Requirements evolve. Architecture should make change cheap, not prevent it."
-  }
+    description: "Requirements evolve. Architecture should make change cheap, not prevent it.",
+  },
 ];
 
 const timeline = [
@@ -31,6 +31,7 @@ const timeline = [
   { year: "2022", event: "Joined Confiz, expanded to enterprise clients" },
   { year: "2024", event: "AI-first projects for Fortune 500 companies" },
   { year: "2025", event: "Senior Architect, Engineering Council lead" },
+  { year: "2026", event: "Associate Director Engineering, AI Strategy & Enterprise Solutions" },
 ];
 
 const interests = [
@@ -44,9 +45,7 @@ const interests = [
 <BaseLayout title="About" description={description}>
   <section class="intro">
     <h1>About</h1>
-    <p class="lead">
-      I build systems that are simple to understand, easy to maintain, and resilient under pressure.
-    </p>
+    <p class="lead">I build systems that are simple to understand, easy to maintain, and resilient under pressure.</p>
   </section>
 
   <section class="principles">
@@ -55,13 +54,15 @@ const interests = [
       <p>Guiding principles for architecture decisions</p>
     </div>
     <div class="principles-grid">
-      {principles.map((p, i) => (
-        <div class="principle-card">
-          <span class="principle-number">{String(i + 1).padStart(2, '0')}</span>
-          <h3>{p.title}</h3>
-          <p>{p.description}</p>
-        </div>
-      ))}
+      {
+        principles.map((p, i) => (
+          <div class="principle-card">
+            <span class="principle-number">{String(i + 1).padStart(2, "0")}</span>
+            <h3>{p.title}</h3>
+            <p>{p.description}</p>
+          </div>
+        ))
+      }
     </div>
   </section>
 
@@ -73,28 +74,25 @@ const interests = [
     <div class="story-content">
       <div class="story-text">
         <p>
-          My journey started in Electrical Engineering at NUST, where I learned to think in systems
-          and decompose complex problems. I didn't plan to become a software architect, but each role
-          naturally led to the next.
+          My journey started in Electrical Engineering at NUST, where I learned to think in systems and decompose complex problems. I didn't plan to
+          become a software architect, but each role naturally led to the next.
         </p>
         <p>
-          A decade in healthcare technology taught me what reliability really means. When your system
-          serves thousands of healthcare providers, you learn the cost of downtime and the value of
-          boring, predictable architecture.
+          A decade in healthcare technology taught me what reliability really means. When your system serves thousands of healthcare providers, you
+          learn the cost of downtime and the value of boring, predictable architecture.
         </p>
-        <p>
-          Today, I apply those lessons to AI systems, enterprise platforms, and cloud migrations.
-          The technology changes; the principles don't.
-        </p>
+        <p>Today, I apply those lessons to AI systems, enterprise platforms, and cloud migrations. The technology changes; the principles don't.</p>
       </div>
       <div class="timeline">
-        {timeline.map((item, i) => (
-          <div class="timeline-item">
-            <span class="timeline-year">{item.year}</span>
-            <span class="timeline-dot"></span>
-            <span class="timeline-event">{item.event}</span>
-          </div>
-        ))}
+        {
+          timeline.map((item, i) => (
+            <div class="timeline-item">
+              <span class="timeline-year">{item.year}</span>
+              <span class="timeline-dot" />
+              <span class="timeline-event">{item.event}</span>
+            </div>
+          ))
+        }
       </div>
     </div>
   </section>
@@ -105,36 +103,44 @@ const interests = [
       <p>What I'm exploring and thinking about</p>
     </div>
     <div class="interests-grid">
-      {interests.map((item) => (
-        <div class="interest-card">
-          <div class="interest-icon">
-            {item.icon === "brain" && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2a9 9 0 0 0-9 9c0 3.6 2.4 6.5 5.5 7.5.3.1.5.4.5.7v2.8h6v-2.8c0-.3.2-.6.5-.7 3.1-1 5.5-3.9 5.5-7.5a9 9 0 0 0-9-9z"/>
-                <path d="M12 2v4M8 6l2 2M16 6l-2 2"/>
-              </svg>
-            )}
-            {item.icon === "network" && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/>
-                <line x1="12" y1="8" x2="5" y2="16"/><line x1="12" y1="8" x2="19" y2="16"/>
-              </svg>
-            )}
-            {item.icon === "code" && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
-              </svg>
-            )}
-            {item.icon === "pen" && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
-                <path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/>
-              </svg>
-            )}
+      {
+        interests.map((item) => (
+          <div class="interest-card">
+            <div class="interest-icon">
+              {item.icon === "brain" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2a9 9 0 0 0-9 9c0 3.6 2.4 6.5 5.5 7.5.3.1.5.4.5.7v2.8h6v-2.8c0-.3.2-.6.5-.7 3.1-1 5.5-3.9 5.5-7.5a9 9 0 0 0-9-9z" />
+                  <path d="M12 2v4M8 6l2 2M16 6l-2 2" />
+                </svg>
+              )}
+              {item.icon === "network" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="5" r="3" />
+                  <circle cx="5" cy="19" r="3" />
+                  <circle cx="19" cy="19" r="3" />
+                  <line x1="12" y1="8" x2="5" y2="16" />
+                  <line x1="12" y1="8" x2="19" y2="16" />
+                </svg>
+              )}
+              {item.icon === "code" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="16 18 22 12 16 6" />
+                  <polyline points="8 6 2 12 8 18" />
+                </svg>
+              )}
+              {item.icon === "pen" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 19l7-7 3 3-7 7-3-3z" />
+                  <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+                  <path d="M2 2l7.586 7.586" />
+                  <circle cx="11" cy="11" r="2" />
+                </svg>
+              )}
+            </div>
+            <span>{item.label}</span>
           </div>
-          <span>{item.label}</span>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </section>
 
@@ -145,8 +151,8 @@ const interests = [
     <div class="edu-card">
       <div class="edu-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-          <path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"/>
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+          <path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"></path>
         </svg>
       </div>
       <div class="edu-content">
