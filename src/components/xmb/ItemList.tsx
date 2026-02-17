@@ -1,5 +1,23 @@
 import type { XMBItem } from "../../types";
 import { CATEGORY_ICON_SIZE, CATEGORY_Y, INTERSECTION_X_PERCENT } from "./CategoryBar";
+import {
+  User,
+  Briefcase,
+  Folder,
+  Pencil,
+  Settings,
+  Brain,
+  Cloud,
+  Users,
+  RefreshCw,
+  FileText,
+  GraduationCap,
+  Mail,
+  Sun,
+  Volume2,
+  Info,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface ItemListProps {
   items: XMBItem[];
@@ -15,18 +33,47 @@ const ABOVE_BAR_GAP = 0; // Gap between category bar and items above
 const BELOW_BAR_GAP = 80; // Gap between category bar and items below (more push)
 const TEXT_OFFSET = CATEGORY_ICON_SIZE + 15; // Text starts after icon + small gap
 
-// Simple icon mapping (duplicated from XMBIcon for now)
-const iconMap: Record<string, string> = {
-  user: "👤",
-  briefcase: "💼",
-  folder: "📁",
-  pencil: "✏️",
-  gear: "⚙️",
-  brain: "🧠",
-  cloud: "☁️",
-  users: "👥",
-  refresh: "🔄",
+// Lucide icon mapping
+const iconMap: Record<string, LucideIcon> = {
+  user: User,
+  briefcase: Briefcase,
+  folder: Folder,
+  pencil: Pencil,
+  gear: Settings,
+  brain: Brain,
+  cloud: Cloud,
+  users: Users,
+  refresh: RefreshCw,
+  file: FileText,
+  education: GraduationCap,
+  contact: Mail,
+  theme: Sun,
+  sound: Volume2,
+  credits: Info,
 };
+
+// CSS keyframes for pulsing glow (injected once)
+const pulseKeyframes = `
+@keyframes textGlow {
+  0%, 100% {
+    text-shadow: 0 0 8px rgba(255,255,255,0.4), 0 0 16px rgba(255,255,255,0.2), 0 2px 4px rgba(0,0,0,0.7);
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.7);
+  }
+}
+`;
+
+// Inject keyframes into document
+if (typeof document !== "undefined") {
+  const styleId = "xmb-item-list-styles";
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement("style");
+    style.id = styleId;
+    style.textContent = pulseKeyframes;
+    document.head.appendChild(style);
+  }
+}
 
 export function ItemList({ items, selectedIndex, categoryIcon }: ItemListProps) {
   if (items.length === 0) {
@@ -67,7 +114,7 @@ export function ItemList({ items, selectedIndex, categoryIcon }: ItemListProps) 
       {items.map((item, index) => {
         const yPosition = getItemY(index);
         const isSelected = index === selectedIndex;
-        const iconChar = iconMap[item.icon || categoryIcon] || "📄";
+        const IconComponent = iconMap[item.icon || categoryIcon] || FileText;
         const iconSize = isSelected ? ITEM_ICON_SELECTED_SIZE : ITEM_ICON_SIZE;
 
         return (
@@ -103,12 +150,15 @@ export function ItemList({ items, selectedIndex, categoryIcon }: ItemListProps) 
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: iconSize * 0.5,
                   filter: isSelected ? "brightness(1.2)" : "brightness(0.8)",
                   transition: "all 0.2s ease-out",
                 }}
               >
-                {iconChar}
+                <IconComponent
+                  size={iconSize * 0.5}
+                  color="white"
+                  strokeWidth={1.5}
+                />
               </div>
             </div>
             {/* Label and subtitle - fixed position from left edge */}
@@ -125,9 +175,12 @@ export function ItemList({ items, selectedIndex, categoryIcon }: ItemListProps) 
                   color: "white",
                   fontSize: isSelected ? "17px" : "14px",
                   fontWeight: isSelected ? 600 : 400,
-                  textShadow: "0 2px 4px rgba(0,0,0,0.7)",
+                  textShadow: isSelected
+                    ? undefined // Will use animation
+                    : "0 2px 4px rgba(0,0,0,0.7)",
                   whiteSpace: "nowrap",
                   transition: "font-size 0.2s ease-out",
+                  animation: isSelected ? "textGlow 2s ease-in-out infinite" : "none",
                 }}
               >
                 {item.label}

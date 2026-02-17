@@ -105,9 +105,12 @@ export interface XMBCategory {
   items: XMBItem[];
 }
 
+// Theme colors (PS3-style)
+export type ThemeColor = 'blue' | 'red' | 'green' | 'purple' | 'orange' | 'pink';
+
 // Settings types
 export interface Settings {
-  theme: 'dark' | 'light';
+  theme: ThemeColor;
   soundEnabled: boolean;
 }
 

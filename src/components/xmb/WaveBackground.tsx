@@ -1,14 +1,50 @@
 import { useRef, useEffect } from 'react';
 import { Application, Graphics } from 'pixi.js';
+import type { ThemeColor } from '../../types';
 
 interface WaveBackgroundProps {
-  theme: 'dark' | 'light';
+  theme: ThemeColor;
 }
+
+// PS3-style color themes
+const themeColors: Record<ThemeColor, { gradient: string; waves: number[] }> = {
+  blue: {
+    gradient: 'linear-gradient(180deg, #0a0a1a 0%, #0d1b2a 50%, #1b3a5f 100%)',
+    waves: [0x0d1b2a, 0x1b3a5f, 0x274c77, 0x3d6a99, 0x4a7fa8],
+  },
+  red: {
+    gradient: 'linear-gradient(180deg, #1a0a0a 0%, #2a0d0d 50%, #5f1b1b 100%)',
+    waves: [0x2a0d0d, 0x5f1b1b, 0x772727, 0x993d3d, 0xa84a4a],
+  },
+  green: {
+    gradient: 'linear-gradient(180deg, #0a1a0a 0%, #0d2a0d 50%, #1b5f1b 100%)',
+    waves: [0x0d2a0d, 0x1b5f1b, 0x277727, 0x3d993d, 0x4aa84a],
+  },
+  purple: {
+    gradient: 'linear-gradient(180deg, #120a1a 0%, #1d0d2a 50%, #3d1b5f 100%)',
+    waves: [0x1d0d2a, 0x3d1b5f, 0x522777, 0x6d3d99, 0x7a4aa8],
+  },
+  orange: {
+    gradient: 'linear-gradient(180deg, #1a120a 0%, #2a1d0d 50%, #5f3d1b 100%)',
+    waves: [0x2a1d0d, 0x5f3d1b, 0x775227, 0x996d3d, 0xa87a4a],
+  },
+  pink: {
+    gradient: 'linear-gradient(180deg, #1a0a14 0%, #2a0d1d 50%, #5f1b4a 100%)',
+    waves: [0x2a0d1d, 0x5f1b4a, 0x772760, 0x993d7a, 0xa84a8a],
+  },
+};
 
 export function WaveBackground({ theme }: WaveBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<Application | null>(null);
+  const themeRef = useRef<ThemeColor>(theme);
 
+  // Keep themeRef in sync with prop
+  useEffect(() => {
+    themeRef.current = theme;
+  }, [theme]);
+
+  // Initialize PixiJS only once
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -43,22 +79,12 @@ export function WaveBackground({ theme }: WaveBackgroundProps) {
       // Animation variables
       let time = 0;
 
-      // Colors based on theme
-      const getWaveColor = (index: number) => {
-        if (theme === 'dark') {
-          const colors = [0x1a1a2e, 0x16213e, 0x0f3460, 0x1a1a2e, 0x16213e];
-          return colors[index % colors.length];
-        } else {
-          const colors = [0xe8f4f8, 0xd1e8ef, 0xb8dbe6, 0xa0cfdd, 0x88c3d4];
-          return colors[index % colors.length];
-        }
-      };
-
-      // Animation loop
+      // Animation loop - reads theme from ref so it always gets current value
       const animate = () => {
         time += 0.005;
         const width = app.screen.width;
         const height = app.screen.height;
+        const colors = themeColors[themeRef.current];
 
         waves.forEach((wave, index) => {
           wave.clear();
@@ -68,7 +94,7 @@ export function WaveBackground({ theme }: WaveBackgroundProps) {
           const speed = 1 + index * 0.2;
           const yOffset = height * 0.3 + index * (height * 0.12);
 
-          wave.fill({ color: getWaveColor(index), alpha: 0.3 + index * 0.1 });
+          wave.fill({ color: colors.waves[index], alpha: 0.3 + index * 0.1 });
           wave.moveTo(0, height);
 
           // Draw wave path
@@ -107,13 +133,9 @@ export function WaveBackground({ theme }: WaveBackgroundProps) {
         appRef.current = null;
       }
     };
-  }, [theme]);
+  }, []); // Only run once on mount
 
-  // Background gradient based on theme
-  const gradientStyle =
-    theme === 'dark'
-      ? 'linear-gradient(180deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%)'
-      : 'linear-gradient(180deg, #f0f8ff 0%, #e0f0ff 50%, #d0e8ff 100%)';
+  const colors = themeColors[theme];
 
   return (
     <div
@@ -124,7 +146,8 @@ export function WaveBackground({ theme }: WaveBackgroundProps) {
         left: 0,
         width: '100%',
         height: '100%',
-        background: gradientStyle,
+        background: colors.gradient,
+        transition: 'background 0.3s ease-out',
         zIndex: -1,
       }}
     />

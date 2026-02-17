@@ -1,10 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useXMBNavigation } from '../../hooks/useXMBNavigation';
 import { WaveBackground } from './WaveBackground';
 import { CategoryBar } from './CategoryBar';
 import { ItemList } from './ItemList';
 import { DetailPanel } from './DetailPanel';
-import type { XMBCategory, Profile, Experience, Project, Skill, Settings } from '../../types';
+import { ThemeSelector } from './ThemeSelector';
+import { loadSettings, saveSettings } from '../../utils/storage';
+import type { XMBCategory, Profile, Experience, Project, Skill, Settings, ThemeColor } from '../../types';
 
 // Import data
 import profileData from '../../data/profile.json';
@@ -16,13 +18,25 @@ interface XMBContainerProps {
   initialSettings?: Settings;
 }
 
+// Theme display names
+const themeNames: Record<ThemeColor, string> = {
+  blue: 'Blue',
+  red: 'Red',
+  green: 'Green',
+  purple: 'Purple',
+  orange: 'Orange',
+  pink: 'Pink',
+};
+
 export function XMBContainer({ initialSettings }: XMBContainerProps) {
   const [settings, setSettings] = useState<Settings>(
-    initialSettings || {
-      theme: 'dark',
-      soundEnabled: true,
-    }
+    () => initialSettings || loadSettings()
   );
+
+  // Save settings to localStorage whenever they change
+  useEffect(() => {
+    saveSettings(settings);
+  }, [settings]);
 
   // Build categories from data
   const categories: XMBCategory[] = useMemo(() => {
@@ -93,7 +107,8 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
           {
             id: 'theme',
             label: 'Theme',
-            subtitle: settings.theme === 'dark' ? 'Dark mode' : 'Light mode',
+            subtitle: themeNames[settings.theme],
+            icon: 'theme',
             data: { type: 'theme' },
           },
           {
@@ -117,14 +132,9 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
   } = useXMBNavigation({
     categories,
     onSelect: (categoryId, itemId) => {
-      // Handle settings toggles
+      // Handle settings toggles (except theme which uses the panel)
       if (categoryId === 'settings') {
-        if (itemId === 'theme') {
-          setSettings((prev) => ({
-            ...prev,
-            theme: prev.theme === 'dark' ? 'light' : 'dark',
-          }));
-        } else if (itemId === 'sound') {
+        if (itemId === 'sound') {
           setSettings((prev) => ({
             ...prev,
             soundEnabled: !prev.soundEnabled,
@@ -160,7 +170,12 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
         title={currentItem?.label || ''}
         onClose={back}
       >
-        {currentItem?.data ? (
+        {state.detailPanelOpen && currentItem?.id === 'theme' ? (
+          <ThemeSelector
+            currentTheme={settings.theme}
+            onSelect={(theme) => setSettings((prev) => ({ ...prev, theme }))}
+          />
+        ) : currentItem?.data ? (
           <pre style={{ whiteSpace: 'pre-wrap', fontSize: '14px' }}>
             {JSON.stringify(currentItem.data, null, 2)}
           </pre>

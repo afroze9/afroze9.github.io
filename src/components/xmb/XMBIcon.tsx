@@ -1,4 +1,17 @@
 import type { CSSProperties } from 'react';
+import {
+  User,
+  Briefcase,
+  Folder,
+  Pencil,
+  Settings,
+  Brain,
+  Cloud,
+  Users,
+  RefreshCw,
+  FileText,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 interface XMBIconProps {
   icon: string;
@@ -9,17 +22,18 @@ interface XMBIconProps {
   style?: CSSProperties;
 }
 
-// Simple icon mapping - will be replaced with actual SVG icons
-const iconMap: Record<string, string> = {
-  user: '👤',
-  briefcase: '💼',
-  folder: '📁',
-  pencil: '✏️',
-  gear: '⚙️',
-  brain: '🧠',
-  cloud: '☁️',
-  users: '👥',
-  refresh: '🔄',
+// Lucide icon mapping
+const iconMap: Record<string, LucideIcon> = {
+  user: User,
+  briefcase: Briefcase,
+  folder: Folder,
+  pencil: Pencil,
+  gear: Settings,
+  brain: Brain,
+  cloud: Cloud,
+  users: Users,
+  refresh: RefreshCw,
+  file: FileText,
 };
 
 export function XMBIcon({
@@ -30,7 +44,7 @@ export function XMBIcon({
   showLabel = true,
   style
 }: XMBIconProps) {
-  const iconChar = iconMap[icon] || '📄';
+  const IconComponent = iconMap[icon] || FileText;
 
   // Categories: only show label when selected
   // For categories, label appears below icon
@@ -58,13 +72,16 @@ export function XMBIcon({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: size * 0.55,
           // No background box - just brightness change like PS3
           filter: isSelected ? 'brightness(1.3)' : 'brightness(0.7)',
           transition: 'all 0.2s ease-out',
         }}
       >
-        {iconChar}
+        <IconComponent
+          size={size * 0.55}
+          color="white"
+          strokeWidth={1.5}
+        />
       </div>
       {shouldShowLabel && (
         <span
