@@ -1,0 +1,26 @@
+[
+  {
+    "id": "dev-time",
+    "metric": "Development Time Reduced",
+    "value": "40%",
+    "description": "Through AI-augmented development workflows and automated tooling"
+  },
+  {
+    "id": "team-scale",
+    "metric": "Engineers Led",
+    "value": "50+",
+    "description": "Across multiple cross-functional teams delivering enterprise solutions"
+  },
+  {
+    "id": "cost-reduction",
+    "metric": "Cloud Cost Savings",
+    "value": "40%",
+    "description": "Achieved through optimized architecture and migration strategies"
+  },
+  {
+    "id": "transactions",
+    "metric": "Daily Transactions",
+    "value": "100K+",
+    "description": "Processed through high-throughput payment and healthcare systems"
+  }
+]

@@ -1,0 +1,155 @@
+[
+  {
+    "id": "ai-dev-platform",
+    "name": "AI-Augmented Development Platform",
+    "year": 2024,
+    "description": "Enterprise platform integrating generative AI into software development lifecycle, enabling automated code review, documentation, and testing.",
+    "technologies": ["Azure OpenAI", "LangChain", "React", "Python", "Kubernetes"],
+    "role": "Solution Architect",
+    "category": "featured"
+  },
+  {
+    "id": "healthcare-analytics",
+    "name": "Healthcare Analytics Platform",
+    "year": 2023,
+    "description": "Real-time analytics platform processing millions of patient records, providing actionable insights for healthcare providers.",
+    "technologies": ["Azure Synapse", "Power BI", "React", "Python", "Databricks"],
+    "role": "Technical Lead",
+    "category": "featured"
+  },
+  {
+    "id": "patient-engagement",
+    "name": "Patient Engagement Suite",
+    "year": 2022,
+    "description": "Multi-channel patient engagement platform with appointment scheduling, telehealth, and secure messaging capabilities.",
+    "technologies": ["React Native", ".NET Core", "Azure", "SignalR", "Twilio"],
+    "role": "Technical Lead",
+    "category": "featured"
+  },
+  {
+    "id": "fintech-payments",
+    "name": "Fintech Payment Gateway",
+    "year": 2023,
+    "description": "High-throughput payment processing system handling 100K+ daily transactions with real-time fraud detection.",
+    "technologies": ["Node.js", "Kafka", "Redis", "PostgreSQL", "AWS"],
+    "role": "Solution Architect",
+    "category": "featured"
+  },
+  {
+    "id": "cloud-migration",
+    "name": "Enterprise Cloud Migration",
+    "year": 2022,
+    "description": "Led migration of legacy on-premise systems to Azure cloud, achieving 40% cost reduction and improved scalability.",
+    "technologies": ["Azure", "Terraform", "Docker", "Kubernetes", ".NET"],
+    "role": "Solution Architect",
+    "category": "additional"
+  },
+  {
+    "id": "ehr-integration",
+    "name": "EHR Integration Hub",
+    "year": 2021,
+    "description": "FHIR-compliant integration platform connecting 30+ EHR systems for seamless health data exchange.",
+    "technologies": ["HL7 FHIR", "Azure API Management", ".NET Core", "SQL Server"],
+    "role": "Technical Lead",
+    "category": "additional"
+  },
+  {
+    "id": "telehealth-platform",
+    "name": "Telehealth Video Platform",
+    "year": 2020,
+    "description": "HIPAA-compliant video consultation platform built during COVID-19, scaling to support 10K concurrent sessions.",
+    "technologies": ["WebRTC", "React", "Node.js", "Azure Media Services"],
+    "role": "Technical Lead",
+    "category": "additional"
+  },
+  {
+    "id": "revenue-cycle",
+    "name": "Revenue Cycle Management",
+    "year": 2019,
+    "description": "Automated billing and claims processing system reducing claim denials by 35% through intelligent validation.",
+    "technologies": [".NET", "SQL Server", "Azure Functions", "Power Automate"],
+    "role": "Senior Developer",
+    "category": "additional"
+  },
+  {
+    "id": "clinical-decision",
+    "name": "Clinical Decision Support",
+    "year": 2019,
+    "description": "AI-powered clinical decision support system providing real-time alerts and recommendations for providers.",
+    "technologies": ["Python", "ML.NET", "React", "Azure ML", "FHIR"],
+    "role": "Senior Developer",
+    "category": "additional"
+  },
+  {
+    "id": "mobile-health",
+    "name": "Mobile Health App",
+    "year": 2018,
+    "description": "Cross-platform mobile application for patient health tracking, medication reminders, and provider communication.",
+    "technologies": ["React Native", "Node.js", "Firebase", "HealthKit"],
+    "role": "Developer",
+    "category": "additional"
+  },
+  {
+    "id": "practice-dashboard",
+    "name": "Practice Management Dashboard",
+    "year": 2018,
+    "description": "Real-time operational dashboard for healthcare practices showing KPIs, schedules, and financial metrics.",
+    "technologies": ["Angular", "D3.js", ".NET Core", "SignalR", "SQL Server"],
+    "role": "Developer",
+    "category": "additional"
+  },
+  {
+    "id": "patient-portal",
+    "name": "Patient Portal 2.0",
+    "year": 2017,
+    "description": "Redesigned patient portal with improved UX, self-scheduling, and integrated payment processing.",
+    "technologies": ["React", "ASP.NET MVC", "Stripe", "SQL Server"],
+    "role": "Developer",
+    "category": "additional"
+  },
+  {
+    "id": "document-management",
+    "name": "Document Management System",
+    "year": 2016,
+    "description": "Secure document storage and retrieval system with OCR capabilities for healthcare records.",
+    "technologies": ["ASP.NET", "Azure Blob Storage", "Tesseract OCR", "SQL Server"],
+    "role": "Developer",
+    "category": "additional"
+  },
+  {
+    "id": "reporting-engine",
+    "name": "Custom Reporting Engine",
+    "year": 2016,
+    "description": "Flexible reporting system allowing healthcare practices to create custom reports without IT involvement.",
+    "technologies": ["C#", "Crystal Reports", "SQL Server", "SSRS"],
+    "role": "Developer",
+    "category": "additional"
+  },
+  {
+    "id": "appointment-scheduler",
+    "name": "Smart Appointment Scheduler",
+    "year": 2015,
+    "description": "Intelligent scheduling system optimizing provider calendars and reducing patient wait times.",
+    "technologies": ["ASP.NET MVC", "jQuery", "SQL Server", "SignalR"],
+    "role": "Developer",
+    "category": "additional"
+  },
+  {
+    "id": "ehr-training",
+    "name": "EHR Training Platform",
+    "year": 2014,
+    "description": "Interactive training platform for healthcare staff to learn EHR systems through guided simulations.",
+    "technologies": ["ASP.NET", "JavaScript", "SQL Server"],
+    "role": "Developer",
+    "category": "additional"
+  },
+  {
+    "id": "workflow-automation",
+    "name": "Clinical Workflow Automation",
+    "year": 2013,
+    "description": "Workflow automation tools reducing manual data entry and improving clinical documentation efficiency.",
+    "technologies": ["C#", "Windows Forms", "SQL Server"],
+    "role": "Analyst/Developer",
+    "category": "additional"
+  }
+]

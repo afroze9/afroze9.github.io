@@ -1,0 +1,63 @@
+{
+  "name": "Afroze Amjad",
+  "title": "Associate Director Engineering",
+  "bio": "A decade of building systems that scale, leading teams that deliver, and solving problems that matter.",
+  "philosophy": [
+    "Build for scale, design for humans",
+    "Complexity is the enemy of execution",
+    "Data-driven decisions, people-centered outcomes",
+    "Continuous learning is non-negotiable"
+  ],
+  "timeline": [
+    {
+      "year": 2014,
+      "event": "Started career as Application Analyst at CureMD"
+    },
+    {
+      "year": 2018,
+      "event": "Promoted to Principal Business Analyst at CureMD"
+    },
+    {
+      "year": 2020,
+      "event": "Advanced to Lead Software Engineer at CureMD"
+    },
+    {
+      "year": 2021,
+      "event": "Became Assistant Software Architect at CureMD"
+    },
+    {
+      "year": 2022,
+      "event": "Joined Confiz as Associate Software Architect"
+    },
+    {
+      "year": 2024,
+      "event": "Promoted to Software Architect at Confiz"
+    },
+    {
+      "year": 2025,
+      "event": "Advanced to Senior Software Architect at Confiz"
+    },
+    {
+      "year": 2026,
+      "event": "Promoted to Associate Director Engineering at Confiz"
+    }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor of Science in Computer Science",
+      "institution": "NUST",
+      "year": 2014
+    }
+  ],
+  "contact": {
+    "linkedin": "https://linkedin.com/in/afrozeamjad",
+    "github": "https://github.com/afrozeamjad",
+    "email": "afroze.amjad@gmail.com"
+  },
+  "stats": {
+    "yearsExperience": 10,
+    "engineersLed": 150,
+    "developersImpacted": 300,
+    "clientsServed": 50
+  }
+}

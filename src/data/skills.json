@@ -1,0 +1,26 @@
+[
+  {
+    "id": "generative-ai",
+    "name": "Generative AI",
+    "description": "Designing and implementing AI-augmented workflows using LLMs, RAG architectures, and intelligent automation to accelerate development and enhance user experiences.",
+    "icon": "brain"
+  },
+  {
+    "id": "cloud-architecture",
+    "name": "Cloud Architecture",
+    "description": "Architecting scalable, resilient cloud solutions on Azure and AWS, with expertise in microservices, containerization, and infrastructure as code.",
+    "icon": "cloud"
+  },
+  {
+    "id": "engineering-leadership",
+    "name": "Engineering Leadership",
+    "description": "Building and scaling high-performing engineering teams, establishing technical standards, and driving organizational excellence through mentorship and process improvement.",
+    "icon": "users"
+  },
+  {
+    "id": "platform-modernization",
+    "name": "Platform Modernization",
+    "description": "Transforming legacy systems into modern, cloud-native architectures while maintaining business continuity and minimizing risk.",
+    "icon": "refresh"
+  }
+]

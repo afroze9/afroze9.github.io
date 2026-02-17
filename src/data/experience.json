@@ -1,0 +1,113 @@
+[
+  {
+    "id": "confiz-ad",
+    "company": "Confiz",
+    "title": "Associate Director Engineering",
+    "startYear": 2026,
+    "endYear": null,
+    "description": "Spearheading AI strategy and solution architecture for enterprise clients. Leading cross-functional teams to deliver scalable AI-driven platforms.",
+    "achievements": [
+      "Enterprise AI solutions",
+      "Global team leadership"
+    ],
+    "technologies": ["AI Strategy", "Enterprise Solutions", "Solution Architecture"]
+  },
+  {
+    "id": "confiz-ssa",
+    "company": "Confiz",
+    "title": "Senior Software Architect",
+    "startYear": 2025,
+    "endYear": 2026,
+    "description": "Leading multi-disciplinary teams on Generative AI initiatives. Directing the Engineering Council for technology standards. Architecting enterprise platform migrations.",
+    "achievements": [
+      "25+ member teams",
+      "Engineering Council lead",
+      "US client relationships"
+    ],
+    "technologies": ["Generative AI", "Engineering Leadership", "Platform Migrations"]
+  },
+  {
+    "id": "confiz-sa",
+    "company": "Confiz",
+    "title": "Software Architect",
+    "startYear": 2024,
+    "endYear": 2025,
+    "description": "Delivering AI-powered solutions for Fortune 500 clients. Building real-time analytics engines and OLAP reporting systems.",
+    "achievements": [
+      "15% sales conversion increase",
+      "40% faster reporting",
+      "25% AI adoption boost"
+    ],
+    "technologies": ["AI Solutions", "Real-time Analytics", "OLAP", "Enterprise Systems"]
+  },
+  {
+    "id": "confiz-asa",
+    "company": "Confiz",
+    "title": "Associate Software Architect",
+    "startYear": 2022,
+    "endYear": 2024,
+    "description": "Creating microservices frameworks and improving platform scalability. Implementing security roadmaps and high-availability solutions.",
+    "achievements": [
+      "40% dev time reduction",
+      "50% API load handling",
+      "95% feature adoption"
+    ],
+    "technologies": ["Microservices", "Platform Architecture", "DevOps", "Security"]
+  },
+  {
+    "id": "curemd-asa",
+    "company": "CureMD",
+    "title": "Assistant Software Architect",
+    "startYear": 2021,
+    "endYear": 2022,
+    "description": "Orchestrating FHIR-based data synchronization for healthcare clients. Leading API modernization with Clean Architecture principles.",
+    "achievements": [
+      "1,000+ client sync",
+      "400+ hrs debt reduced",
+      "300+ dev code quality"
+    ],
+    "technologies": ["FHIR", "Healthcare Integration", "Clean Architecture", "API Modernization"]
+  },
+  {
+    "id": "curemd-lse",
+    "company": "CureMD",
+    "title": "Lead Software Engineer",
+    "startYear": 2020,
+    "endYear": 2021,
+    "description": "Building automation frameworks and developer tools. Creating Azure DevOps integrations and frontend frameworks.",
+    "achievements": [
+      "100 hrs/mo saved",
+      "50% faster feedback",
+      "700+ user systems"
+    ],
+    "technologies": ["Automation", "Azure DevOps", "Developer Experience", "Frontend Frameworks"]
+  },
+  {
+    "id": "curemd-pba",
+    "company": "CureMD",
+    "title": "Principal Business Analyst",
+    "startYear": 2018,
+    "endYear": 2020,
+    "description": "Driving Agile transformation and CI/CD adoption. Leading healthcare compliance submissions and system integrations.",
+    "achievements": [
+      "Agile transformation",
+      "20% faster deployments",
+      "1,800+ providers served"
+    ],
+    "technologies": ["Agile", "CI/CD", "Process Transformation", "Healthcare Compliance"]
+  },
+  {
+    "id": "curemd-aa",
+    "company": "CureMD",
+    "title": "Application Analyst",
+    "startYear": 2014,
+    "endYear": 2018,
+    "description": "Starting career in healthcare technology. Building automation tools and training teams on EHR systems.",
+    "achievements": [
+      "6,000+ hrs/mo saved",
+      "30+ team members trained",
+      "SharePoint migration"
+    ],
+    "technologies": ["Healthcare Systems", "EHR", "Automation", "Training"]
+  }
+]
