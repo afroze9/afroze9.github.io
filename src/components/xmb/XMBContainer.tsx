@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { useXMBNavigation } from '../../hooks/useXMBNavigation';
 import { useAudio } from '../../hooks/useAudio';
+import { useFullscreen } from '../../hooks/useFullscreen';
 import { WaveBackground } from './WaveBackground';
 import { CategoryBar } from './CategoryBar';
 import { ItemList } from './ItemList';
@@ -87,6 +88,9 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
     enabled: settings.soundEnabled,
     userHasInteracted: true,
   });
+
+  // Fullscreen support
+  const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   // Build categories from data
   const categories: XMBCategory[] = useMemo(() => {
@@ -181,11 +185,18 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
             icon: 'volume',
             data: { type: 'sound' },
           },
+          {
+            id: 'fullscreen',
+            label: 'Fullscreen',
+            subtitle: isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen',
+            icon: 'maximize',
+            data: { type: 'fullscreen' },
+          },
           { id: 'credits', label: 'Credits', subtitle: 'About this site', icon: 'info', data: { type: 'credits' } },
         ],
       },
     ];
-  }, [settings]);
+  }, [settings, isFullscreen]);
 
   const {
     state,
@@ -209,6 +220,8 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
             ...prev,
             soundEnabled: !prev.soundEnabled,
           }));
+        } else if (itemId === 'fullscreen') {
+          toggleFullscreen();
         }
       }
     },

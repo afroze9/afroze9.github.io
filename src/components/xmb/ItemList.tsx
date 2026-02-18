@@ -47,6 +47,7 @@ import {
   Palette,
   Volume2,
   Info,
+  Maximize,
   // Profile icons
   BookOpen,
   Mail,
@@ -126,6 +127,7 @@ const iconMap: Record<string, LucideIcon> = {
   palette: Palette,
   volume: Volume2,
   info: Info,
+  maximize: Maximize,
 
   // Profile icons
   'book-open': BookOpen,
