@@ -263,14 +263,14 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
           navigateLeft(); // Swipe right = go to previous category (left)
         }
       },
-      onSwipeUp: () => {
+      onSwipeUp: (info) => {
         if (!state.detailPanelOpen) {
-          navigateDown(); // Swipe up = go to next item (down)
+          navigateDown(info.count); // Swipe up = go to next item(s) (down)
         }
       },
-      onSwipeDown: () => {
+      onSwipeDown: (info) => {
         if (!state.detailPanelOpen) {
-          navigateUp(); // Swipe down = go to previous item (up)
+          navigateUp(info.count); // Swipe down = go to previous item(s) (up)
         }
       },
       onTap: () => {

@@ -93,17 +93,18 @@ export function useXMBNavigation({
     return canMove;
   }, [categories.length, state.detailPanelOpen, state.selectedCategoryIndex, onNavigate]);
 
-  const navigateUp = useCallback(() => {
+  const navigateUp = useCallback((count: number = 1) => {
     if (state.detailPanelOpen) return false;
     const categoryId = categories[state.selectedCategoryIndex]?.id as XMBCategoryId;
     const currentIdx = state.selectedItemIndices[categoryId] ?? 0;
     const canMove = currentIdx > 0;
     if (canMove) {
+      const newIndex = Math.max(0, currentIdx - count);
       setState((prev) => ({
         ...prev,
         selectedItemIndices: {
           ...prev.selectedItemIndices,
-          [categoryId]: currentIdx - 1,
+          [categoryId]: newIndex,
         },
       }));
       onNavigate?.();
@@ -111,7 +112,7 @@ export function useXMBNavigation({
     return canMove;
   }, [categories, state.detailPanelOpen, state.selectedCategoryIndex, state.selectedItemIndices, onNavigate]);
 
-  const navigateDown = useCallback(() => {
+  const navigateDown = useCallback((count: number = 1) => {
     if (state.detailPanelOpen) return false;
     const category = categories[state.selectedCategoryIndex];
     const categoryId = category?.id as XMBCategoryId;
@@ -119,11 +120,12 @@ export function useXMBNavigation({
     const maxIndex = (category?.items.length ?? 1) - 1;
     const canMove = currentIdx < maxIndex;
     if (canMove) {
+      const newIndex = Math.min(maxIndex, currentIdx + count);
       setState((prev) => ({
         ...prev,
         selectedItemIndices: {
           ...prev.selectedItemIndices,
-          [categoryId]: currentIdx + 1,
+          [categoryId]: newIndex,
         },
       }));
       onNavigate?.();

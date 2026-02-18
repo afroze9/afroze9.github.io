@@ -1,10 +1,16 @@
 import { useEffect, useRef, useCallback } from 'react';
 
+interface SwipeInfo {
+  distance: number; // pixels swiped
+  velocity: number; // pixels per millisecond
+  count: number; // suggested number of items to move (1-5)
+}
+
 interface SwipeHandlers {
-  onSwipeLeft?: () => void;
-  onSwipeRight?: () => void;
-  onSwipeUp?: () => void;
-  onSwipeDown?: () => void;
+  onSwipeLeft?: (info: SwipeInfo) => void;
+  onSwipeRight?: (info: SwipeInfo) => void;
+  onSwipeUp?: (info: SwipeInfo) => void;
+  onSwipeDown?: (info: SwipeInfo) => void;
   onTap?: () => void;
 }
 
@@ -12,6 +18,20 @@ interface SwipeOptions {
   threshold?: number; // minimum distance to trigger swipe
   velocityThreshold?: number; // minimum velocity for quick swipes
   enabled?: boolean;
+}
+
+// Calculate how many items to move based on swipe distance and velocity
+function calculateSwipeCount(distance: number, velocity: number): number {
+  // Base count on distance (every 100px = 1 item)
+  const distanceCount = Math.floor(distance / 100);
+
+  // Bonus for velocity (fast swipes move more)
+  const velocityBonus = velocity > 1.5 ? 2 : velocity > 0.8 ? 1 : 0;
+
+  // Combine and clamp to 1-5 range
+  const count = Math.max(1, Math.min(5, distanceCount + velocityBonus));
+
+  return count;
 }
 
 export function useSwipeGestures(
@@ -74,17 +94,24 @@ export function useSwipeGestures(
 
     // Check if swipe meets threshold or velocity requirement
     if (swipeDistance >= threshold || swipeVelocity >= velocityThreshold) {
+      const count = calculateSwipeCount(swipeDistance, swipeVelocity);
+      const info: SwipeInfo = {
+        distance: swipeDistance,
+        velocity: swipeVelocity,
+        count,
+      };
+
       if (isHorizontalSwipe) {
         if (deltaX > 0) {
-          handlers.onSwipeRight?.();
+          handlers.onSwipeRight?.(info);
         } else {
-          handlers.onSwipeLeft?.();
+          handlers.onSwipeLeft?.(info);
         }
       } else {
         if (deltaY > 0) {
-          handlers.onSwipeDown?.();
+          handlers.onSwipeDown?.(info);
         } else {
-          handlers.onSwipeUp?.();
+          handlers.onSwipeUp?.(info);
         }
       }
     }
