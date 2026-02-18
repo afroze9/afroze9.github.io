@@ -69,23 +69,42 @@ export function DetailPanel({ isOpen, title, children, onClose }: DetailPanelPro
   }, [isOpen, title]);
 
   return (
-    <div
-      ref={panelRef}
-      style={{
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        width: '50%',
-        height: '100%',
-        background: 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 10%, rgba(0,0,0,0.9) 100%)',
-        transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
-        transition: 'transform 0.3s ease-out',
-        padding: '80px 60px',
-        boxSizing: 'border-box',
-        overflowY: 'auto',
-        zIndex: 100,
-      }}
-    >
+    <>
+      {/* Backdrop overlay - covers left side, closes panel on click */}
+      <div
+        onClick={onClose}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '50%',
+          height: '100%',
+          background: 'transparent',
+          opacity: isOpen ? 1 : 0,
+          pointerEvents: isOpen ? 'auto' : 'none',
+          transition: 'opacity 0.3s ease-out',
+          zIndex: 99,
+          cursor: 'pointer',
+        }}
+      />
+      {/* Detail panel */}
+      <div
+        ref={panelRef}
+        style={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          width: '50%',
+          height: '100%',
+          background: 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 10%, rgba(0,0,0,0.9) 100%)',
+          transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
+          transition: 'transform 0.3s ease-out',
+          padding: '80px 60px',
+          boxSizing: 'border-box',
+          overflowY: 'auto',
+          zIndex: 100,
+        }}
+      >
       <button
         onClick={onClose}
         style={{
@@ -144,5 +163,6 @@ export function DetailPanel({ isOpen, title, children, onClose }: DetailPanelPro
         ↑↓ Scroll · PgUp/PgDn · Home/End
       </div>
     </div>
+    </>
   );
 }

@@ -5,7 +5,11 @@
     "description": "Multi-tenant application framework with .NET microservices architecture. Features service discovery, API gateway, and distributed configuration.",
     "url": "https://github.com/nexus-framework/nexus",
     "language": "C#",
-    "tags": ["microservices", "multi-tenant", ".NET"],
+    "tags": [
+      "microservices",
+      "multi-tenant",
+      ".NET"
+    ],
     "icon": "git-branch"
   },
   {
@@ -14,7 +18,11 @@
     "description": "Auth0 authentication integration for SolidJS applications. Provides hooks and components for seamless OAuth flows.",
     "url": "https://github.com/afroze9/solid-auth0",
     "language": "TypeScript",
-    "tags": ["SolidJS", "Auth0", "authentication"],
+    "tags": [
+      "SolidJS",
+      "Auth0",
+      "authentication"
+    ],
     "icon": "shield"
   },
   {
@@ -23,7 +31,11 @@
     "description": "Full-stack project management system built with Clean Architecture and DDD patterns. Demonstrates CQRS, MediatR, and modern .NET practices.",
     "url": "https://github.com/afroze-project-management",
     "language": "C#",
-    "tags": ["clean-architecture", "DDD", "CQRS"],
+    "tags": [
+      "clean-architecture",
+      "DDD",
+      "CQRS"
+    ],
     "icon": "kanban"
   },
   {
@@ -32,7 +44,24 @@
     "description": "AI assistant built with Semantic Kernel. Demonstrates LLM integration, prompt engineering, and intelligent agent patterns.",
     "url": "https://github.com/afroze9/sk-assistant",
     "language": "C#",
-    "tags": ["semantic-kernel", "AI", "LLM"],
-    "icon": "sparkles"
+    "tags": [
+      "semantic-kernel",
+      "AI",
+      "LLM"
+    ],
+    "icon": "bot"
+  },
+  {
+    "id": "xmb-portfolio",
+    "name": "XMB Portfolio",
+    "description": "This portfolio website! A PS3-style XrossMediaBar interface built with React, PixiJS, and TypeScript. Features animated wave backgrounds, smooth navigation, and deep linking.",
+    "url": "https://github.com/afroze9/afroze9.github.io",
+    "language": "TypeScript",
+    "tags": [
+      "React",
+      "PixiJS",
+      "portfolio"
+    ],
+    "icon": "github"
   }
 ]

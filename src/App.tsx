@@ -1,12 +1,12 @@
-import { useState, useMemo } from 'react';
-import { XMBContainer } from './components/xmb';
-import { BootSequence } from './components/boot/BootSequence';
-import { loadSettings } from './utils/storage';
-import './App.css';
+import { useMemo, useState } from "react";
+import "./App.css";
+import { BootSequence } from "./components/boot/BootSequence";
+import { XMBContainer } from "./components/xmb";
+import { loadSettings } from "./utils/storage";
 
 // Profile data - could be imported from profile.json but keeping it simple
-const PROFILE_NAME = 'Afroze Amjad';
-const PROFILE_TITLE = 'Associate Director Engineering';
+const PROFILE_NAME = "Afroze Amjad";
+const PROFILE_TITLE = "Solution Architect";
 
 function App() {
   const [bootComplete, setBootComplete] = useState(false);
@@ -23,14 +23,7 @@ function App() {
 
   return (
     <>
-      {!bootComplete && (
-        <BootSequence
-          onComplete={handleBootComplete}
-          profileName={PROFILE_NAME}
-          profileTitle={PROFILE_TITLE}
-          theme={savedTheme}
-        />
-      )}
+      {!bootComplete && <BootSequence onComplete={handleBootComplete} profileName={PROFILE_NAME} profileTitle={PROFILE_TITLE} theme={savedTheme} />}
       {showXMB && <XMBContainer />}
     </>
   );

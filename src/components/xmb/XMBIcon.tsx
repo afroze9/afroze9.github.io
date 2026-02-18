@@ -39,6 +39,7 @@ import {
   Shield,
   Kanban,
   Sparkles,
+  Github,
   // Writing icons
   FileCode,
   // Settings icons
@@ -107,6 +108,7 @@ const iconMap: Record<string, LucideIcon> = {
   shield: Shield,
   kanban: Kanban,
   sparkles: Sparkles,
+  github: Github,
 
   // Writing icons
   'file-code': FileCode,

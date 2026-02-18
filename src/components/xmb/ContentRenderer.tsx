@@ -247,8 +247,11 @@ This portfolio is built as a PS3-style XMB (XrossMediaBar) interface.
 ### Inspiration
 The PlayStation 3's iconic XMB interface, known for its elegant horizontal-vertical navigation and ambient wave backgrounds.
 
+### Source Code
+[View on GitHub](https://github.com/afroze9/afroze9.github.io)
+
 ### Created By
-Afroze Amjad · 2024
+Afroze Amjad · 2025
   `.trim();
 
   return <MarkdownContent content={markdown} />;
