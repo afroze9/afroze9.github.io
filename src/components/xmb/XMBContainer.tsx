@@ -2,6 +2,8 @@ import { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { useXMBNavigation } from '../../hooks/useXMBNavigation';
 import { useAudio } from '../../hooks/useAudio';
 import { useFullscreen } from '../../hooks/useFullscreen';
+import { useSwipeGestures } from '../../hooks/useSwipeGestures';
+import { useMobile } from '../../hooks/useMobile';
 import { WaveBackground } from './WaveBackground';
 import { CategoryBar } from './CategoryBar';
 import { ItemList } from './ItemList';
@@ -91,6 +93,9 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
 
   // Fullscreen support
   const { isFullscreen, toggleFullscreen } = useFullscreen();
+
+  // Mobile detection
+  const isMobile = useMobile();
 
   // Build categories from data
   const categories: XMBCategory[] = useMemo(() => {
@@ -205,6 +210,8 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
     currentItem,
     goToCategory,
     goToItem,
+    navigateLeft,
+    navigateRight,
     navigateUp,
     navigateDown,
     back,
@@ -238,6 +245,40 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
       select();
     }
   }, [entrancePhase, select]);
+
+  // Swipe gestures for mobile navigation
+  useSwipeGestures(
+    {
+      onSwipeLeft: () => {
+        if (state.detailPanelOpen) {
+          // Swipe left in detail panel does nothing or could scroll
+        } else {
+          navigateRight(); // Swipe left = go to next category (right)
+        }
+      },
+      onSwipeRight: () => {
+        if (state.detailPanelOpen) {
+          back(); // Swipe right in detail panel = close/back
+        } else {
+          navigateLeft(); // Swipe right = go to previous category (left)
+        }
+      },
+      onSwipeUp: () => {
+        if (!state.detailPanelOpen) {
+          navigateDown(); // Swipe up = go to next item (down)
+        }
+      },
+      onSwipeDown: () => {
+        if (!state.detailPanelOpen) {
+          navigateUp(); // Swipe down = go to previous item (up)
+        }
+      },
+      onTap: () => {
+        // Tap handled by click events on items
+      },
+    },
+    { enabled: isMobile && entrancePhase === 'complete' }
+  );
 
   return (
     <div
@@ -306,11 +347,14 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
           left: '50%',
           transform: 'translateX(-50%)',
           color: 'rgba(255,255,255,0.5)',
-          fontSize: '12px',
+          fontSize: isMobile ? '11px' : '12px',
           textAlign: 'center',
+          padding: '0 20px',
         }}
       >
-        ← → Navigate Categories | ↑ ↓ Navigate Items | Enter Select | Esc Back | Click or Scroll to Navigate
+        {isMobile
+          ? 'Swipe ← → Categories | ↑ ↓ Items | Tap to Select'
+          : '← → Navigate Categories | ↑ ↓ Navigate Items | Enter Select | Esc Back | Click or Scroll to Navigate'}
       </div>
     </div>
   );

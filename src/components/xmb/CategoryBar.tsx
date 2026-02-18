@@ -1,5 +1,6 @@
 import type { XMBCategory } from '../../types';
 import { XMBIcon } from './XMBIcon';
+import { useLayout } from '../../context/LayoutContext';
 
 interface CategoryBarProps {
   categories: XMBCategory[];
@@ -7,28 +8,33 @@ interface CategoryBarProps {
   onCategoryClick?: (index: number) => void;
 }
 
-// Fixed X position for the selected category (left-ish, like PS3)
-// This is the LEFT EDGE of the selected category icon
-const INTERSECTION_X_PERCENT = 25;
-const CATEGORY_ICON_SIZE = 100; // Size of category icon (larger)
-const CATEGORY_SPACING = 160; // px between category centers
-const CATEGORY_Y = 260; // Fixed Y position for horizontal bar center
+// Default values for export (used by ItemList)
+export const INTERSECTION_X_PERCENT = 25;
+export const CATEGORY_ICON_SIZE = 100;
+export const CATEGORY_Y = 260;
 
 export function CategoryBar({ categories, selectedIndex, onCategoryClick }: CategoryBarProps) {
+  const layout = useLayout();
+
+  const iconSize = layout.categoryIconSize;
+  const spacing = layout.categorySpacing;
+  const xPercent = layout.intersectionX;
+  const yPosition = layout.intersectionY;
+
   return (
     <div
       style={{
         position: 'absolute',
-        top: CATEGORY_Y,
+        top: yPosition,
         left: 0,
         right: 0,
-        height: '80px',
+        height: `${iconSize}px`,
         pointerEvents: 'none',
       }}
     >
       {categories.map((category, index) => {
         const offsetFromSelected = index - selectedIndex;
-        const xOffset = offsetFromSelected * CATEGORY_SPACING;
+        const xOffset = offsetFromSelected * spacing;
         const isSelected = index === selectedIndex;
 
         return (
@@ -37,8 +43,7 @@ export function CategoryBar({ categories, selectedIndex, onCategoryClick }: Cate
             onClick={() => onCategoryClick?.(index)}
             style={{
               position: 'absolute',
-              // Position so the CENTER of this icon is at INTERSECTION_X + half icon width + offset
-              left: `calc(${INTERSECTION_X_PERCENT}% + ${CATEGORY_ICON_SIZE / 2}px + ${xOffset}px)`,
+              left: `calc(${xPercent}% + ${iconSize / 2}px + ${xOffset}px)`,
               top: '50%',
               transform: 'translate(-50%, -50%)',
               transition: 'left 0.3s ease-out, opacity 0.3s ease-out',
@@ -52,6 +57,7 @@ export function CategoryBar({ categories, selectedIndex, onCategoryClick }: Cate
               label={category.label}
               isSelected={isSelected}
               isCategory={true}
+              size={iconSize}
             />
           </div>
         );
@@ -59,5 +65,3 @@ export function CategoryBar({ categories, selectedIndex, onCategoryClick }: Cate
     </div>
   );
 }
-
-export { INTERSECTION_X_PERCENT, CATEGORY_ICON_SIZE, CATEGORY_Y };

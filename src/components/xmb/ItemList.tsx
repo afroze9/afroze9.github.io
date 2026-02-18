@@ -1,5 +1,5 @@
 import type { XMBItem } from "../../types";
-import { CATEGORY_ICON_SIZE, CATEGORY_Y, INTERSECTION_X_PERCENT } from "./CategoryBar";
+import { useLayout } from "../../context/LayoutContext";
 import {
   User,
   Briefcase,
@@ -62,14 +62,6 @@ interface ItemListProps {
   onItemClick?: (index: number) => void;
   onWheel?: (deltaY: number) => void;
 }
-
-// Use same size as category icons for consistency
-const ITEM_ICON_SIZE = CATEGORY_ICON_SIZE * 0.85; // Slightly smaller than category
-const ITEM_ICON_SELECTED_SIZE = CATEGORY_ICON_SIZE; // Selected matches category size
-const ITEM_SPACING = 85; // Vertical spacing between items
-const ABOVE_BAR_GAP = 0; // Gap between category bar and items above
-const BELOW_BAR_GAP = 80; // Gap between category bar and items below (more push)
-const TEXT_OFFSET = CATEGORY_ICON_SIZE + 15; // Text starts after icon + small gap
 
 // Lucide icon mapping
 const iconMap: Record<string, LucideIcon> = {
@@ -165,26 +157,38 @@ export function ItemList({
   onItemClick,
   onWheel,
 }: ItemListProps) {
+  const layout = useLayout();
+
   if (items.length === 0) {
     return null;
   }
 
+  // Responsive layout values
+  const iconSize = layout.categoryIconSize;
+  const itemIconSize = iconSize * 0.85;
+  const itemIconSelectedSize = iconSize;
+  const itemSpacing = layout.itemSpacing;
+  const belowBarGap = layout.belowBarGap;
+  const intersectionX = layout.intersectionX;
+  const intersectionY = layout.intersectionY;
+  const aboveBarGap = 0;
+  const textOffset = iconSize + (layout.isMobile ? 8 : 15);
+
   const getItemY = (index: number): number => {
     const offsetFromSelected = index - selectedIndex;
 
-    // Category bar center is at CATEGORY_Y
-    const categoryBarTop = CATEGORY_Y - CATEGORY_ICON_SIZE / 2;
-    const categoryBarBottom = CATEGORY_Y + CATEGORY_ICON_SIZE / 2;
+    // Category bar center is at intersectionY
+    const categoryBarTop = intersectionY - iconSize / 2;
+    const categoryBarBottom = intersectionY + iconSize / 2;
 
     if (offsetFromSelected < 0) {
       // Items ABOVE selected - position above the category bar
-      // First item above should be flush with the top of the bar (with small gap)
-      const firstAboveY = categoryBarTop - ABOVE_BAR_GAP - ITEM_ICON_SIZE;
-      return firstAboveY + (offsetFromSelected + 1) * ITEM_SPACING;
+      const firstAboveY = categoryBarTop - aboveBarGap - itemIconSize;
+      return firstAboveY + (offsetFromSelected + 1) * itemSpacing;
     } else {
       // Selected item (0) and items below - position below the category bar
-      const firstBelowY = categoryBarBottom + BELOW_BAR_GAP;
-      return firstBelowY + offsetFromSelected * ITEM_SPACING;
+      const firstBelowY = categoryBarBottom + belowBarGap;
+      return firstBelowY + offsetFromSelected * itemSpacing;
     }
   };
 
@@ -212,7 +216,7 @@ export function ItemList({
         const yPosition = getItemY(index);
         const isSelected = index === selectedIndex;
         const IconComponent = iconMap[item.icon || categoryIcon] || FileText;
-        const iconSize = isSelected ? ITEM_ICON_SELECTED_SIZE : ITEM_ICON_SIZE;
+        const currentIconSize = isSelected ? itemIconSelectedSize : itemIconSize;
 
         return (
           <div
@@ -220,13 +224,13 @@ export function ItemList({
             onClick={() => onItemClick?.(index)}
             style={{
               position: "absolute",
-              left: `${INTERSECTION_X_PERCENT}%`,
+              left: `${intersectionX}%`,
               top: yPosition,
               transition: "top 0.3s ease-out, opacity 0.3s ease-out",
               display: "flex",
               alignItems: "center",
               opacity: isSelected ? 1 : 0.6,
-              height: ITEM_ICON_SELECTED_SIZE, // Fixed height for alignment
+              height: itemIconSelectedSize,
               cursor: "pointer",
               pointerEvents: "auto",
             }}
@@ -234,8 +238,8 @@ export function ItemList({
             {/* Icon container - fixed width to keep icons centered */}
             <div
               style={{
-                width: ITEM_ICON_SELECTED_SIZE, // Fixed width container (same as category)
-                height: ITEM_ICON_SELECTED_SIZE,
+                width: itemIconSelectedSize,
+                height: itemIconSelectedSize,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -245,8 +249,8 @@ export function ItemList({
               {/* Actual icon - grows when selected but stays centered in container */}
               <div
                 style={{
-                  width: iconSize,
-                  height: iconSize,
+                  width: currentIconSize,
+                  height: currentIconSize,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -255,7 +259,7 @@ export function ItemList({
                 }}
               >
                 <IconComponent
-                  size={iconSize * 0.5}
+                  size={currentIconSize * 0.5}
                   color="white"
                   strokeWidth={1.5}
                 />
@@ -264,23 +268,27 @@ export function ItemList({
             {/* Label and subtitle - fixed position from left edge */}
             <div
               style={{
-                marginLeft: TEXT_OFFSET - ITEM_ICON_SELECTED_SIZE, // Keep text aligned
+                marginLeft: textOffset - itemIconSelectedSize,
                 display: "flex",
                 flexDirection: "column",
                 gap: "2px",
+                maxWidth: layout.isMobile ? 'calc(100vw - 100px)' : 'none',
               }}
             >
               <span
                 style={{
                   color: "white",
-                  fontSize: isSelected ? "17px" : "14px",
+                  fontSize: isSelected ? `${layout.itemFontSize}px` : `${layout.itemFontSize - 3}px`,
                   fontWeight: isSelected ? 600 : 400,
                   textShadow: isSelected
-                    ? undefined // Will use animation
+                    ? undefined
                     : "0 2px 4px rgba(0,0,0,0.7)",
-                  whiteSpace: "nowrap",
+                  whiteSpace: layout.isMobile ? "normal" : "nowrap",
+                  overflow: layout.isMobile ? "visible" : "hidden",
+                  textOverflow: "ellipsis",
                   transition: "font-size 0.2s ease-out",
                   animation: isSelected ? "textGlow 2s ease-in-out infinite" : "none",
+                  lineHeight: 1.2,
                 }}
               >
                 {item.label}
@@ -289,11 +297,14 @@ export function ItemList({
                 <span
                   style={{
                     color: "rgba(255,255,255,0.55)",
-                    fontSize: isSelected ? "12px" : "11px",
+                    fontSize: `${layout.subtitleFontSize}px`,
                     fontWeight: 400,
                     textShadow: "0 1px 2px rgba(0,0,0,0.5)",
-                    whiteSpace: "nowrap",
+                    whiteSpace: layout.isMobile ? "normal" : "nowrap",
+                    overflow: layout.isMobile ? "visible" : "hidden",
+                    textOverflow: "ellipsis",
                     transition: "font-size 0.2s ease-out",
+                    lineHeight: 1.2,
                   }}
                 >
                   {item.subtitle}

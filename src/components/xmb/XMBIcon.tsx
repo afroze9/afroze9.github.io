@@ -60,6 +60,7 @@ interface XMBIconProps {
   isSelected: boolean;
   isCategory?: boolean;
   showLabel?: boolean;
+  size?: number; // Base size override
   style?: CSSProperties;
 }
 
@@ -133,6 +134,7 @@ export function XMBIcon({
   isSelected,
   isCategory = false,
   showLabel = true,
+  size: sizeOverride,
   style
 }: XMBIconProps) {
   const IconComponent = iconMap[icon] || FileText;
@@ -141,9 +143,11 @@ export function XMBIcon({
   // For categories, label appears below icon
   const shouldShowLabel = isCategory ? (showLabel && isSelected) : showLabel;
 
-  const baseSize = isCategory ? 90 : 70;
-  const selectedSize = isCategory ? 100 : 80;
-  const size = isSelected ? selectedSize : baseSize;
+  // Calculate size - use override if provided, otherwise use defaults
+  const defaultBaseSize = isCategory ? 90 : 70;
+  const baseSize = sizeOverride ?? defaultBaseSize;
+  const selectedSize = isSelected ? baseSize * 1.1 : baseSize;
+  const size = selectedSize;
 
   return (
     <div

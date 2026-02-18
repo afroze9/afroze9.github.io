@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import "./App.css";
 import { BootSequence } from "./components/boot/BootSequence";
 import { XMBContainer } from "./components/xmb";
+import { LayoutProvider } from "./context/LayoutContext";
 import { loadSettings } from "./utils/storage";
 
 // Profile data - could be imported from profile.json but keeping it simple
@@ -22,10 +23,10 @@ function App() {
   };
 
   return (
-    <>
+    <LayoutProvider>
       {!bootComplete && <BootSequence onComplete={handleBootComplete} profileName={PROFILE_NAME} profileTitle={PROFILE_TITLE} theme={savedTheme} />}
       {showXMB && <XMBContainer />}
-    </>
+    </LayoutProvider>
   );
 }
 
