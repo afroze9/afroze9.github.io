@@ -31,19 +31,38 @@ const themeNames: Record<ThemeColor, string> = {
   pink: 'Pink',
 };
 
+// Entrance animation phases
+type EntrancePhase = 'background' | 'ribbons' | 'icons' | 'complete';
+
 export function XMBContainer({ initialSettings }: XMBContainerProps) {
   const [settings, setSettings] = useState<Settings>(
     () => initialSettings || loadSettings()
   );
+  const [entrancePhase, setEntrancePhase] = useState<EntrancePhase>('background');
+
+  // Staged entrance animation
+  useEffect(() => {
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    // Background is already visible, start ribbons after a short delay
+    timers.push(setTimeout(() => setEntrancePhase('ribbons'), 300));
+    // Show icons after ribbons have started
+    timers.push(setTimeout(() => setEntrancePhase('icons'), 800));
+    // Mark entrance complete
+    timers.push(setTimeout(() => setEntrancePhase('complete'), 1500));
+
+    return () => timers.forEach(clearTimeout);
+  }, []);
 
   // Save settings to localStorage whenever they change
   useEffect(() => {
     saveSettings(settings);
   }, [settings]);
 
-  // Audio system
+  // Audio system - user has already interacted via boot sequence
   const { playNavigate, playSelect, playBack } = useAudio({
     enabled: settings.soundEnabled,
+    userHasInteracted: true,
   });
 
   // Build categories from data
@@ -166,29 +185,40 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
-      <WaveBackground theme={settings.theme} />
-
-      <CategoryBar
-        categories={categories}
-        selectedIndex={state.selectedCategoryIndex}
-        onCategoryClick={goToCategory}
+      <WaveBackground
+        theme={settings.theme}
+        showRibbons={entrancePhase !== 'background'}
       />
 
-      {currentCategory && (
-        <ItemList
-          items={currentCategory.items}
-          selectedIndex={currentItemIndex}
-          categoryIcon={currentCategory.icon}
-          onItemClick={goToItem}
-          onWheel={(deltaY) => {
-            if (deltaY > 0) {
-              navigateDown();
-            } else if (deltaY < 0) {
-              navigateUp();
-            }
-          }}
+      {/* Icons fade in after ribbons */}
+      <div
+        style={{
+          opacity: entrancePhase === 'background' || entrancePhase === 'ribbons' ? 0 : 1,
+          transition: 'opacity 0.6s ease-out',
+        }}
+      >
+        <CategoryBar
+          categories={categories}
+          selectedIndex={state.selectedCategoryIndex}
+          onCategoryClick={goToCategory}
         />
-      )}
+
+        {currentCategory && (
+          <ItemList
+            items={currentCategory.items}
+            selectedIndex={currentItemIndex}
+            categoryIcon={currentCategory.icon}
+            onItemClick={goToItem}
+            onWheel={(deltaY) => {
+              if (deltaY > 0) {
+                navigateDown();
+              } else if (deltaY < 0) {
+                navigateUp();
+              }
+            }}
+          />
+        )}
+      </div>
 
       <DetailPanel
         isOpen={state.detailPanelOpen}

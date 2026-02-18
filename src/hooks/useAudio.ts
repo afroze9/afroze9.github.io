@@ -4,6 +4,7 @@ type SoundType = 'navigate' | 'select' | 'back';
 
 interface UseAudioProps {
   enabled: boolean;
+  userHasInteracted?: boolean; // Set to true after boot sequence
 }
 
 // Audio file paths (in public/audio/)
@@ -17,10 +18,10 @@ const MUSIC_FILE = '/audio/background.mp3';
 const MUSIC_VOLUME = 0.3;
 const SFX_VOLUME = 0.5;
 
-export function useAudio({ enabled }: UseAudioProps) {
+export function useAudio({ enabled, userHasInteracted = false }: UseAudioProps) {
   const audioCache = useRef<Map<SoundType, HTMLAudioElement>>(new Map());
   const musicRef = useRef<HTMLAudioElement | null>(null);
-  const userInteracted = useRef(false);
+  const userInteracted = useRef(userHasInteracted);
 
   // Initialize background music
   useEffect(() => {
@@ -48,6 +49,11 @@ export function useAudio({ enabled }: UseAudioProps) {
         });
       }
     };
+
+    // Update ref if prop changes (e.g., after boot sequence)
+    if (userHasInteracted) {
+      userInteracted.current = true;
+    }
 
     tryPlayMusic();
 

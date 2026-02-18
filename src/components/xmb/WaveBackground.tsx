@@ -1,48 +1,89 @@
-import { Application, Graphics } from "pixi.js";
+import { Application, Graphics, BlurFilter } from "pixi.js";
 import { useEffect, useRef } from "react";
 import type { ThemeColor } from "../../types";
 
 interface WaveBackgroundProps {
   theme: ThemeColor;
+  showRibbons?: boolean;
 }
 
-// PS3-style color themes
-const themeColors: Record<ThemeColor, { gradient: string; waves: number[] }> = {
+// PS3-style color themes - radial gradient from bottom-right corner
+const themeColors: Record<ThemeColor, { primary: string; secondary: string; ribbons: number[] }> = {
   blue: {
-    gradient: "linear-gradient(180deg, #0a0a1a 0%, #0d1b2a 50%, #1b3a5f 100%)",
-    waves: [0x0d1b2a, 0x1b3a5f, 0x274c77, 0x3d6a99, 0x4a7fa8],
+    primary: "#1a4a7a",
+    secondary: "#0a2040",
+    ribbons: [0x4a8ac8, 0x6aaae8, 0x8acaff],
   },
   red: {
-    gradient: "linear-gradient(180deg, #1a0a0a 0%, #2a0d0d 50%, #5f1b1b 100%)",
-    waves: [0x2a0d0d, 0x5f1b1b, 0x772727, 0x993d3d, 0xa84a4a],
+    primary: "#8a3020",
+    secondary: "#401510",
+    ribbons: [0xc86a5a, 0xe88a7a, 0xffaa9a],
   },
   green: {
-    gradient: "linear-gradient(180deg, #0a1a0a 0%, #0d2a0d 50%, #1b5f1b 100%)",
-    waves: [0x0d2a0d, 0x1b5f1b, 0x277727, 0x3d993d, 0x4aa84a],
+    primary: "#1a6a3a",
+    secondary: "#103520",
+    ribbons: [0x5ac88a, 0x7ae8aa, 0x9affca],
   },
   purple: {
-    gradient: "linear-gradient(180deg, #120a1a 0%, #1d0d2a 50%, #3d1b5f 100%)",
-    waves: [0x1d0d2a, 0x3d1b5f, 0x522777, 0x6d3d99, 0x7a4aa8],
+    primary: "#5a2a7a",
+    secondary: "#2d1540",
+    ribbons: [0x9a6ac8, 0xba8ae8, 0xdaaaff],
   },
   orange: {
-    gradient: "linear-gradient(180deg, #1a120a 0%, #2a1d0d 50%, #5f3d1b 100%)",
-    waves: [0x2a1d0d, 0x5f3d1b, 0x775227, 0x996d3d, 0xa87a4a],
+    primary: "#8a5a1a",
+    secondary: "#402d10",
+    ribbons: [0xc89a5a, 0xe8ba7a, 0xffda9a],
   },
   pink: {
-    gradient: "linear-gradient(180deg, #1a0a14 0%, #2a0d1d 50%, #5f1b4a 100%)",
-    waves: [0x2a0d1d, 0x5f1b4a, 0x772760, 0x993d7a, 0xa84a8a],
+    primary: "#7a2a5a",
+    secondary: "#40152d",
+    ribbons: [0xc86a9a, 0xe88aba, 0xffaada],
   },
 };
 
-export function WaveBackground({ theme }: WaveBackgroundProps) {
+// Sparkle particle
+interface Sparkle {
+  x: number;
+  y: number;
+  size: number;
+  alpha: number;
+  alphaSpeed: number;
+  alphaDirection: number;
+}
+
+// Ribbon control point for organic movement
+interface RibbonPoint {
+  baseY: number;
+  offsetY: number;
+  phase: number;
+  speed: number;
+  amplitude: number;
+}
+
+// Ribbon configuration
+interface Ribbon {
+  points: RibbonPoint[];
+  color: number;
+  alpha: number;
+  thickness: number;
+  blur: number;
+}
+
+export function WaveBackground({ theme, showRibbons = true }: WaveBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<Application | null>(null);
   const themeRef = useRef<ThemeColor>(theme);
+  const showRibbonsRef = useRef(showRibbons);
+  const ribbonOpacityRef = useRef(0);
 
-  // Keep themeRef in sync with prop
+  // Keep refs in sync with props
   useEffect(() => {
     themeRef.current = theme;
   }, [theme]);
+
+  useEffect(() => {
+    showRibbonsRef.current = showRibbons;
+  }, [showRibbons]);
 
   // Initialize PixiJS only once
   useEffect(() => {
@@ -65,48 +106,187 @@ export function WaveBackground({ theme }: WaveBackgroundProps) {
       container.appendChild(app.canvas);
       appRef.current = app;
 
-      // Wave configuration
-      const waveCount = 5;
-      const waves: Graphics[] = [];
+      const width = app.screen.width;
+      const height = app.screen.height;
 
-      // Create wave graphics
-      for (let i = 0; i < waveCount; i++) {
-        const wave = new Graphics();
-        app.stage.addChild(wave);
-        waves.push(wave);
+      // Create sparkles
+      const sparkleCount = 80;
+      const sparkles: Sparkle[] = [];
+      for (let i = 0; i < sparkleCount; i++) {
+        sparkles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: 0.5 + Math.random() * 1.5,
+          alpha: Math.random(),
+          alphaSpeed: 0.005 + Math.random() * 0.015,
+          alphaDirection: Math.random() > 0.5 ? 1 : -1,
+        });
+      }
+      const sparkleGraphics = new Graphics();
+      app.stage.addChild(sparkleGraphics);
+
+      // Create ribbons (5 strands that form a collective flowing ribbon)
+      const ribbonCount = 5;
+      const ribbons: Ribbon[] = [];
+      const ribbonGraphics: Graphics[] = [];
+
+      // Base Y position for the ribbon cluster (around 40% from top)
+      const ribbonCenterY = height * 0.42;
+
+      for (let i = 0; i < ribbonCount; i++) {
+        // Create control points along the ribbon
+        const pointCount = 10;
+        const points: RibbonPoint[] = [];
+
+        // Each ribbon strand is offset slightly from center, creating intertwined effect
+        const strandOffset = (i - (ribbonCount - 1) / 2) * 12; // -24, -12, 0, 12, 24
+
+        for (let j = 0; j < pointCount; j++) {
+          points.push({
+            baseY: ribbonCenterY + strandOffset,
+            offsetY: 0,
+            // Offset phases so ribbons interweave
+            phase: (j / pointCount) * Math.PI * 2 + i * 1.2,
+            speed: 0.25 + (i % 2) * 0.1, // Alternating speeds for interweaving
+            amplitude: 40 + Math.random() * 30,
+          });
+        }
+
+        ribbons.push({
+          points,
+          color: 0xffffff, // Will be updated based on theme
+          alpha: 0.08 + (i === 2 ? 0.04 : 0), // Center ribbon slightly brighter
+          thickness: 60 + (i === 2 ? 20 : 0), // Center ribbon thicker
+          blur: 6 + Math.abs(i - 2) * 2, // Center ribbon sharper
+        });
+
+        const g = new Graphics();
+        const blurFilter = new BlurFilter({ strength: ribbons[i].blur });
+        g.filters = [blurFilter];
+        app.stage.addChild(g);
+        ribbonGraphics.push(g);
       }
 
       // Animation variables
       let time = 0;
 
-      // Animation loop - reads theme from ref so it always gets current value
+      // Cubic bezier helper for smooth ribbon curves
+      const catmullRom = (
+        p0: number,
+        p1: number,
+        p2: number,
+        p3: number,
+        t: number
+      ): number => {
+        const t2 = t * t;
+        const t3 = t2 * t;
+        return (
+          0.5 *
+          (2 * p1 +
+            (-p0 + p2) * t +
+            (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 +
+            (-p0 + 3 * p1 - 3 * p2 + p3) * t3)
+        );
+      };
+
+      // Animation loop
       const animate = () => {
-        time += 0.005;
-        const width = app.screen.width;
-        const height = app.screen.height;
+        time += 0.008;
+        const currentWidth = app.screen.width;
+        const currentHeight = app.screen.height;
         const colors = themeColors[themeRef.current];
 
-        waves.forEach((wave, index) => {
-          wave.clear();
-
-          const amplitude = 50 + index * 20;
-          const frequency = 0.003 + index * 0.001;
-          const speed = 1 + index * 0.2;
-          const yOffset = height * 0.3 + index * (height * 0.12);
-
-          wave.fill({ color: colors.waves[index], alpha: 0.3 + index * 0.1 });
-          wave.moveTo(0, height);
-
-          // Draw wave path
-          for (let x = 0; x <= width; x += 5) {
-            const y =
-              yOffset + Math.sin(x * frequency + time * speed) * amplitude + Math.sin(x * frequency * 0.5 + time * speed * 0.7) * (amplitude * 0.5);
-            wave.lineTo(x, y);
+        // Update and draw sparkles
+        sparkleGraphics.clear();
+        sparkles.forEach((sparkle) => {
+          // Twinkle effect
+          sparkle.alpha += sparkle.alphaSpeed * sparkle.alphaDirection;
+          if (sparkle.alpha >= 1) {
+            sparkle.alpha = 1;
+            sparkle.alphaDirection = -1;
+          } else if (sparkle.alpha <= 0) {
+            sparkle.alpha = 0;
+            sparkle.alphaDirection = 1;
+            // Reposition when fully faded
+            sparkle.x = Math.random() * currentWidth;
+            sparkle.y = Math.random() * currentHeight;
           }
 
-          wave.lineTo(width, height);
-          wave.lineTo(0, height);
-          wave.fill();
+          sparkleGraphics.circle(sparkle.x, sparkle.y, sparkle.size);
+          sparkleGraphics.fill({ color: 0xffffff, alpha: sparkle.alpha * 0.6 });
+        });
+
+        // Fade ribbons in/out based on showRibbons prop
+        if (showRibbonsRef.current && ribbonOpacityRef.current < 1) {
+          ribbonOpacityRef.current = Math.min(1, ribbonOpacityRef.current + 0.02);
+        } else if (!showRibbonsRef.current && ribbonOpacityRef.current > 0) {
+          ribbonOpacityRef.current = Math.max(0, ribbonOpacityRef.current - 0.02);
+        }
+
+        // Update and draw ribbons
+        ribbons.forEach((ribbon, ribbonIndex) => {
+          const g = ribbonGraphics[ribbonIndex];
+          g.clear();
+
+          // Skip drawing if ribbons are fully hidden
+          if (ribbonOpacityRef.current <= 0) return;
+
+          // Update control points
+          ribbon.points.forEach((point) => {
+            point.offsetY =
+              Math.sin(time * point.speed + point.phase) * point.amplitude +
+              Math.sin(time * point.speed * 0.7 + point.phase * 1.3) * (point.amplitude * 0.5);
+          });
+
+          // Get ribbon color from theme (cycle through available colors)
+          const ribbonColor = colors.ribbons[ribbonIndex % colors.ribbons.length];
+
+          // Draw ribbon as a smooth filled shape
+          const segments = 100;
+
+          // Build top and bottom edge points
+          const topEdge: { x: number; y: number }[] = [];
+          const bottomEdge: { x: number; y: number }[] = [];
+
+          for (let i = 0; i <= segments; i++) {
+            const t = i / segments;
+            const totalT = t * (ribbon.points.length - 1);
+            const segmentIndex = Math.floor(totalT);
+            const localT = totalT - segmentIndex;
+
+            // Get 4 control points for Catmull-Rom
+            const p0 = ribbon.points[Math.max(0, segmentIndex - 1)];
+            const p1 = ribbon.points[segmentIndex];
+            const p2 = ribbon.points[Math.min(ribbon.points.length - 1, segmentIndex + 1)];
+            const p3 = ribbon.points[Math.min(ribbon.points.length - 1, segmentIndex + 2)];
+
+            const x = i * (currentWidth / segments);
+            const baseY = catmullRom(p0.baseY, p1.baseY, p2.baseY, p3.baseY, localT);
+            const offsetY = catmullRom(p0.offsetY, p1.offsetY, p2.offsetY, p3.offsetY, localT);
+            const y = baseY + offsetY;
+
+            // Ribbon thickness varies along its length for organic look
+            const thicknessVar = ribbon.thickness * (0.8 + 0.4 * Math.sin(t * Math.PI));
+
+            topEdge.push({ x, y: y - thicknessVar / 2 });
+            bottomEdge.push({ x, y: y + thicknessVar / 2 });
+          }
+
+          // Draw the ribbon shape
+          g.moveTo(topEdge[0].x, topEdge[0].y);
+
+          // Top edge (left to right)
+          for (let i = 1; i < topEdge.length; i++) {
+            g.lineTo(topEdge[i].x, topEdge[i].y);
+          }
+
+          // Bottom edge (right to left)
+          for (let i = bottomEdge.length - 1; i >= 0; i--) {
+            g.lineTo(bottomEdge[i].x, bottomEdge[i].y);
+          }
+
+          g.closePath();
+          g.fill({ color: ribbonColor, alpha: ribbon.alpha * ribbonOpacityRef.current });
         });
       };
 
@@ -144,8 +324,9 @@ export function WaveBackground({ theme }: WaveBackgroundProps) {
         left: 0,
         width: "100%",
         height: "100%",
-        background: colors.gradient,
-        transition: "background 0.3s ease-out",
+        // Radial gradient from bottom-right corner
+        background: `radial-gradient(ellipse 120% 80% at 100% 100%, ${colors.primary} 0%, ${colors.secondary} 40%, #000000 80%)`,
+        transition: "background 0.5s ease-out",
         zIndex: -1,
       }}
     />
