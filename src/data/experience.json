@@ -10,7 +10,8 @@
       "Enterprise AI solutions",
       "Global team leadership"
     ],
-    "technologies": ["AI Strategy", "Enterprise Solutions", "Solution Architecture"]
+    "technologies": ["AI Strategy", "Enterprise Solutions", "Solution Architecture"],
+    "icon": "rocket"
   },
   {
     "id": "confiz-ssa",
@@ -24,7 +25,8 @@
       "Engineering Council lead",
       "US client relationships"
     ],
-    "technologies": ["Generative AI", "Engineering Leadership", "Platform Migrations"]
+    "technologies": ["Generative AI", "Engineering Leadership", "Platform Migrations"],
+    "icon": "brain"
   },
   {
     "id": "confiz-sa",
@@ -38,7 +40,8 @@
       "40% faster reporting",
       "25% AI adoption boost"
     ],
-    "technologies": ["AI Solutions", "Real-time Analytics", "OLAP", "Enterprise Systems"]
+    "technologies": ["AI Solutions", "Real-time Analytics", "OLAP", "Enterprise Systems"],
+    "icon": "trending-up"
   },
   {
     "id": "confiz-asa",
@@ -52,7 +55,8 @@
       "50% API load handling",
       "95% feature adoption"
     ],
-    "technologies": ["Microservices", "Platform Architecture", "DevOps", "Security"]
+    "technologies": ["Microservices", "Platform Architecture", "DevOps", "Security"],
+    "icon": "server"
   },
   {
     "id": "curemd-asa",
@@ -66,7 +70,8 @@
       "400+ hrs debt reduced",
       "300+ dev code quality"
     ],
-    "technologies": ["FHIR", "Healthcare Integration", "Clean Architecture", "API Modernization"]
+    "technologies": ["FHIR", "Healthcare Integration", "Clean Architecture", "API Modernization"],
+    "icon": "link"
   },
   {
     "id": "curemd-lse",
@@ -80,7 +85,8 @@
       "50% faster feedback",
       "700+ user systems"
     ],
-    "technologies": ["Automation", "Azure DevOps", "Developer Experience", "Frontend Frameworks"]
+    "technologies": ["Automation", "Azure DevOps", "Developer Experience", "Frontend Frameworks"],
+    "icon": "code"
   },
   {
     "id": "curemd-pba",
@@ -94,7 +100,8 @@
       "20% faster deployments",
       "1,800+ providers served"
     ],
-    "technologies": ["Agile", "CI/CD", "Process Transformation", "Healthcare Compliance"]
+    "technologies": ["Agile", "CI/CD", "Process Transformation", "Healthcare Compliance"],
+    "icon": "target"
   },
   {
     "id": "curemd-aa",
@@ -108,6 +115,7 @@
       "30+ team members trained",
       "SharePoint migration"
     ],
-    "technologies": ["Healthcare Systems", "EHR", "Automation", "Training"]
+    "technologies": ["Healthcare Systems", "EHR", "Automation", "Training"],
+    "icon": "stethoscope"
   }
 ]

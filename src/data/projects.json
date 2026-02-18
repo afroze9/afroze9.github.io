@@ -6,7 +6,8 @@
     "description": "Enterprise platform integrating generative AI into software development lifecycle, enabling automated code review, documentation, and testing.",
     "technologies": ["Azure OpenAI", "LangChain", "React", "Python", "Kubernetes"],
     "role": "Solution Architect",
-    "category": "featured"
+    "category": "featured",
+    "icon": "bot"
   },
   {
     "id": "healthcare-analytics",
@@ -15,7 +16,8 @@
     "description": "Real-time analytics platform processing millions of patient records, providing actionable insights for healthcare providers.",
     "technologies": ["Azure Synapse", "Power BI", "React", "Python", "Databricks"],
     "role": "Technical Lead",
-    "category": "featured"
+    "category": "featured",
+    "icon": "activity"
   },
   {
     "id": "patient-engagement",
@@ -24,7 +26,8 @@
     "description": "Multi-channel patient engagement platform with appointment scheduling, telehealth, and secure messaging capabilities.",
     "technologies": ["React Native", ".NET Core", "Azure", "SignalR", "Twilio"],
     "role": "Technical Lead",
-    "category": "featured"
+    "category": "featured",
+    "icon": "message-square"
   },
   {
     "id": "fintech-payments",
@@ -33,7 +36,8 @@
     "description": "High-throughput payment processing system handling 100K+ daily transactions with real-time fraud detection.",
     "technologies": ["Node.js", "Kafka", "Redis", "PostgreSQL", "AWS"],
     "role": "Solution Architect",
-    "category": "featured"
+    "category": "featured",
+    "icon": "credit-card"
   },
   {
     "id": "cloud-migration",
@@ -42,7 +46,8 @@
     "description": "Led migration of legacy on-premise systems to Azure cloud, achieving 40% cost reduction and improved scalability.",
     "technologies": ["Azure", "Terraform", "Docker", "Kubernetes", ".NET"],
     "role": "Solution Architect",
-    "category": "additional"
+    "category": "additional",
+    "icon": "cloud"
   },
   {
     "id": "ehr-integration",
@@ -51,7 +56,8 @@
     "description": "FHIR-compliant integration platform connecting 30+ EHR systems for seamless health data exchange.",
     "technologies": ["HL7 FHIR", "Azure API Management", ".NET Core", "SQL Server"],
     "role": "Technical Lead",
-    "category": "additional"
+    "category": "additional",
+    "icon": "link"
   },
   {
     "id": "telehealth-platform",
@@ -60,7 +66,8 @@
     "description": "HIPAA-compliant video consultation platform built during COVID-19, scaling to support 10K concurrent sessions.",
     "technologies": ["WebRTC", "React", "Node.js", "Azure Media Services"],
     "role": "Technical Lead",
-    "category": "additional"
+    "category": "additional",
+    "icon": "video"
   },
   {
     "id": "revenue-cycle",
@@ -69,7 +76,8 @@
     "description": "Automated billing and claims processing system reducing claim denials by 35% through intelligent validation.",
     "technologies": [".NET", "SQL Server", "Azure Functions", "Power Automate"],
     "role": "Senior Developer",
-    "category": "additional"
+    "category": "additional",
+    "icon": "dollar-sign"
   },
   {
     "id": "clinical-decision",
@@ -78,7 +86,8 @@
     "description": "AI-powered clinical decision support system providing real-time alerts and recommendations for providers.",
     "technologies": ["Python", "ML.NET", "React", "Azure ML", "FHIR"],
     "role": "Senior Developer",
-    "category": "additional"
+    "category": "additional",
+    "icon": "stethoscope"
   },
   {
     "id": "mobile-health",
@@ -87,7 +96,8 @@
     "description": "Cross-platform mobile application for patient health tracking, medication reminders, and provider communication.",
     "technologies": ["React Native", "Node.js", "Firebase", "HealthKit"],
     "role": "Developer",
-    "category": "additional"
+    "category": "additional",
+    "icon": "smartphone"
   },
   {
     "id": "practice-dashboard",
@@ -96,7 +106,8 @@
     "description": "Real-time operational dashboard for healthcare practices showing KPIs, schedules, and financial metrics.",
     "technologies": ["Angular", "D3.js", ".NET Core", "SignalR", "SQL Server"],
     "role": "Developer",
-    "category": "additional"
+    "category": "additional",
+    "icon": "layout-dashboard"
   },
   {
     "id": "patient-portal",
@@ -105,7 +116,8 @@
     "description": "Redesigned patient portal with improved UX, self-scheduling, and integrated payment processing.",
     "technologies": ["React", "ASP.NET MVC", "Stripe", "SQL Server"],
     "role": "Developer",
-    "category": "additional"
+    "category": "additional",
+    "icon": "user-circle"
   },
   {
     "id": "document-management",
@@ -114,7 +126,8 @@
     "description": "Secure document storage and retrieval system with OCR capabilities for healthcare records.",
     "technologies": ["ASP.NET", "Azure Blob Storage", "Tesseract OCR", "SQL Server"],
     "role": "Developer",
-    "category": "additional"
+    "category": "additional",
+    "icon": "file-search"
   },
   {
     "id": "reporting-engine",
@@ -123,7 +136,8 @@
     "description": "Flexible reporting system allowing healthcare practices to create custom reports without IT involvement.",
     "technologies": ["C#", "Crystal Reports", "SQL Server", "SSRS"],
     "role": "Developer",
-    "category": "additional"
+    "category": "additional",
+    "icon": "bar-chart"
   },
   {
     "id": "appointment-scheduler",
@@ -132,7 +146,8 @@
     "description": "Intelligent scheduling system optimizing provider calendars and reducing patient wait times.",
     "technologies": ["ASP.NET MVC", "jQuery", "SQL Server", "SignalR"],
     "role": "Developer",
-    "category": "additional"
+    "category": "additional",
+    "icon": "calendar"
   },
   {
     "id": "ehr-training",
@@ -141,7 +156,8 @@
     "description": "Interactive training platform for healthcare staff to learn EHR systems through guided simulations.",
     "technologies": ["ASP.NET", "JavaScript", "SQL Server"],
     "role": "Developer",
-    "category": "additional"
+    "category": "additional",
+    "icon": "graduation-cap"
   },
   {
     "id": "workflow-automation",
@@ -150,6 +166,7 @@
     "description": "Workflow automation tools reducing manual data entry and improving clinical documentation efficiency.",
     "technologies": ["C#", "Windows Forms", "SQL Server"],
     "role": "Analyst/Developer",
-    "category": "additional"
+    "category": "additional",
+    "icon": "workflow"
   }
 ]

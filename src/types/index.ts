@@ -44,6 +44,7 @@ export interface Experience {
   description: string;
   achievements: string[];
   technologies: string[];
+  icon?: string;
 }
 
 // Project types
@@ -55,6 +56,7 @@ export interface Project {
   technologies: string[];
   role: string;
   category: 'featured' | 'additional';
+  icon?: string;
 }
 
 // Skills types
@@ -81,6 +83,7 @@ export interface OpenSourceProject {
   url: string;
   language: string;
   tags: string[];
+  icon?: string;
 }
 
 // Blog post types

@@ -11,6 +11,44 @@ import {
   RefreshCw,
   FileText,
   Code,
+  // Experience icons
+  Award,
+  TrendingUp,
+  Target,
+  Rocket,
+  // Project icons
+  Bot,
+  Activity,
+  MessageSquare,
+  CreditCard,
+  Server,
+  Link,
+  Video,
+  DollarSign,
+  Stethoscope,
+  Smartphone,
+  LayoutDashboard,
+  UserCircle,
+  FileSearch,
+  BarChart3,
+  Calendar,
+  GraduationCap,
+  Workflow,
+  // Open source icons
+  GitBranch,
+  Shield,
+  Kanban,
+  Sparkles,
+  // Writing icons
+  FileCode,
+  // Settings icons
+  Palette,
+  Volume2,
+  Info,
+  // Profile icons
+  BookOpen,
+  Mail,
+  Heart,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -25,17 +63,64 @@ interface XMBIconProps {
 
 // Lucide icon mapping
 const iconMap: Record<string, LucideIcon> = {
+  // Category icons
   user: User,
   briefcase: Briefcase,
   folder: Folder,
   pencil: Pencil,
   gear: Settings,
+  code: Code,
+
+  // Skills icons
   brain: Brain,
   cloud: Cloud,
   users: Users,
   refresh: RefreshCw,
+
+  // Experience icons
+  award: Award,
+  'trending-up': TrendingUp,
+  target: Target,
+  rocket: Rocket,
+
+  // Project icons
+  bot: Bot,
+  activity: Activity,
+  'message-square': MessageSquare,
+  'credit-card': CreditCard,
+  server: Server,
+  link: Link,
+  video: Video,
+  'dollar-sign': DollarSign,
+  stethoscope: Stethoscope,
+  smartphone: Smartphone,
+  'layout-dashboard': LayoutDashboard,
+  'user-circle': UserCircle,
+  'file-search': FileSearch,
+  'bar-chart': BarChart3,
+  calendar: Calendar,
+  'graduation-cap': GraduationCap,
+  workflow: Workflow,
+
+  // Open source icons
+  'git-branch': GitBranch,
+  shield: Shield,
+  kanban: Kanban,
+  sparkles: Sparkles,
+
+  // Writing icons
+  'file-code': FileCode,
   file: FileText,
-  code: Code,
+
+  // Settings icons
+  palette: Palette,
+  volume: Volume2,
+  info: Info,
+
+  // Profile icons
+  'book-open': BookOpen,
+  mail: Mail,
+  heart: Heart,
 };
 
 export function XMBIcon({
