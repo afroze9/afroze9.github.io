@@ -1,29 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
-import type { ThemeColor } from "../../types";
 import "./BootSequence.css";
 
 interface BootSequenceProps {
   onComplete: () => void;
   profileName: string;
   profileTitle: string;
-  theme?: ThemeColor;
 }
 
 type BootPhase = "black" | "warning" | "logo" | "loading" | "profile" | "complete";
 
 const FADE_DURATION = 500; // ms for fade transitions
 
-// Theme colors for profile screen background (matching WaveBackground)
-const themeColors: Record<ThemeColor, { primary: string; secondary: string }> = {
-  blue: { primary: "#1a4a7a", secondary: "#0a2040" },
-  red: { primary: "#8a3020", secondary: "#401510" },
-  green: { primary: "#1a6a3a", secondary: "#103520" },
-  purple: { primary: "#5a2a7a", secondary: "#2d1540" },
-  orange: { primary: "#8a5a1a", secondary: "#402d10" },
-  pink: { primary: "#7a2a5a", secondary: "#40152d" },
-};
-
-export function BootSequence({ onComplete, profileName, profileTitle, theme = "blue" }: BootSequenceProps) {
+export function BootSequence({ onComplete, profileName, profileTitle }: BootSequenceProps) {
   const [phase, setPhase] = useState<BootPhase>("black");
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [profileSelected, setProfileSelected] = useState(false);
@@ -86,7 +74,13 @@ export function BootSequence({ onComplete, profileName, profileTitle, theme = "b
   }
 
   return (
-    <div className="boot-sequence">
+    <div
+      className="boot-sequence"
+      style={{
+        backgroundColor: phase === "profile" ? "transparent" : "#000",
+        transition: "background-color 0.5s ease-out",
+      }}
+    >
       {/* Phase content with fade */}
       <div className={`boot-phase ${isTransitioning ? "fade-out" : "fade-in"}`}>
         {/* Initial black screen */}
@@ -162,12 +156,7 @@ export function BootSequence({ onComplete, profileName, profileTitle, theme = "b
 
         {/* Profile selector */}
         {phase === "profile" && (
-          <div
-            className="boot-profile"
-            style={{
-              background: `radial-gradient(ellipse 120% 80% at 50% 120%, ${themeColors[theme].primary} 0%, ${themeColors[theme].secondary} 40%, #000 80%)`,
-            }}
-          >
+          <div className="boot-profile">
             <h1 className="profile-title">Select User</h1>
             <div className="profile-selector">
               <button className={`profile-card ${profileSelected ? "selected" : ""}`} onClick={handleProfileSelect}>

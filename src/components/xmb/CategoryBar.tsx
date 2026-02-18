@@ -6,6 +6,7 @@ interface CategoryBarProps {
   categories: XMBCategory[];
   selectedIndex: number;
   onCategoryClick?: (index: number) => void;
+  onWheel?: (delta: number) => void;
 }
 
 // Default values for export (used by ItemList)
@@ -13,8 +14,17 @@ export const INTERSECTION_X_PERCENT = 25;
 export const CATEGORY_ICON_SIZE = 100;
 export const CATEGORY_Y = 260;
 
-export function CategoryBar({ categories, selectedIndex, onCategoryClick }: CategoryBarProps) {
+export function CategoryBar({ categories, selectedIndex, onCategoryClick, onWheel }: CategoryBarProps) {
   const layout = useLayout();
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (onWheel) {
+      e.preventDefault();
+      // Prefer horizontal scroll (trackpad), fall back to vertical (mouse wheel)
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      onWheel(delta);
+    }
+  };
 
   const iconSize = layout.categoryIconSize;
   const spacing = layout.categorySpacing;
@@ -23,6 +33,7 @@ export function CategoryBar({ categories, selectedIndex, onCategoryClick }: Cate
 
   return (
     <div
+      onWheel={handleWheel}
       style={{
         position: 'absolute',
         top: yPosition,

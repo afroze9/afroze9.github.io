@@ -4,7 +4,6 @@ import { useAudio } from '../../hooks/useAudio';
 import { useFullscreen } from '../../hooks/useFullscreen';
 import { useSwipeGestures } from '../../hooks/useSwipeGestures';
 import { useMobile } from '../../hooks/useMobile';
-import { WaveBackground } from './WaveBackground';
 import { CategoryBar } from './CategoryBar';
 import { ItemList } from './ItemList';
 import { DetailPanel } from './DetailPanel';
@@ -24,6 +23,7 @@ import { writings } from '../../data/writings';
 
 interface XMBContainerProps {
   initialSettings?: Settings;
+  onThemeChange?: (theme: ThemeColor) => void;
 }
 
 // Theme display names
@@ -37,13 +37,13 @@ const themeNames: Record<ThemeColor, string> = {
 };
 
 // Entrance animation phases
-type EntrancePhase = 'background' | 'ribbons' | 'icons' | 'complete';
+type EntrancePhase = 'entering' | 'complete';
 
-export function XMBContainer({ initialSettings }: XMBContainerProps) {
+export function XMBContainer({ initialSettings, onThemeChange }: XMBContainerProps) {
   const [settings, setSettings] = useState<Settings>(
     () => initialSettings || loadSettings()
   );
-  const [entrancePhase, setEntrancePhase] = useState<EntrancePhase>('background');
+  const [entrancePhase, setEntrancePhase] = useState<EntrancePhase>('entering');
 
   // Parse initial navigation from URL hash
   // Don't open detail panel immediately - wait for entrance animation
@@ -66,19 +66,16 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
     updateUrl(categoryId, itemId, detailOpen);
   }, []);
 
-  // Staged entrance animation
+  // Fade in XMB icons (wave background is already visible from boot profile screen)
   useEffect(() => {
-    const timers: ReturnType<typeof setTimeout>[] = [];
-
-    // Background is already visible, start ribbons after a short delay
-    timers.push(setTimeout(() => setEntrancePhase('ribbons'), 300));
-    // Show icons after ribbons have started
-    timers.push(setTimeout(() => setEntrancePhase('icons'), 800));
-    // Mark entrance complete
-    timers.push(setTimeout(() => setEntrancePhase('complete'), 1500));
-
-    return () => timers.forEach(clearTimeout);
+    const timer = setTimeout(() => setEntrancePhase('complete'), 700);
+    return () => clearTimeout(timer);
   }, []);
+
+  // Sync theme changes back to App.tsx so the shared WaveBackground updates
+  useEffect(() => {
+    onThemeChange?.(settings.theme);
+  }, [settings.theme, onThemeChange]);
 
   // Save settings to localStorage whenever they change
   useEffect(() => {
@@ -288,22 +285,24 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
-      <WaveBackground
-        theme={settings.theme}
-        showRibbons={entrancePhase !== 'background'}
-      />
-
-      {/* Icons fade in after ribbons */}
+      {/* Icons fade in on mount */}
       <div
         style={{
-          opacity: entrancePhase === 'background' || entrancePhase === 'ribbons' ? 0 : 1,
-          transition: 'opacity 0.6s ease-out',
+          opacity: entrancePhase === 'entering' ? 0 : 1,
+          transition: 'opacity 0.5s ease-out',
         }}
       >
         <CategoryBar
           categories={categories}
           selectedIndex={state.selectedCategoryIndex}
           onCategoryClick={goToCategory}
+          onWheel={(delta) => {
+            if (delta > 0) {
+              navigateRight();
+            } else if (delta < 0) {
+              navigateLeft();
+            }
+          }}
         />
 
         {currentCategory && (

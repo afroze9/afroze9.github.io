@@ -327,7 +327,7 @@ export function WaveBackground({ theme, showRibbons = true }: WaveBackgroundProp
         // Radial gradient from bottom-right corner
         background: `radial-gradient(ellipse 120% 80% at 100% 100%, ${colors.primary} 0%, ${colors.secondary} 40%, #000000 80%)`,
         transition: "background 0.5s ease-out",
-        zIndex: -1,
+        zIndex: 0,
       }}
     />
   );
