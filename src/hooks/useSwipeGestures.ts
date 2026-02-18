@@ -1,47 +1,29 @@
 import { useEffect, useRef, useCallback } from 'react';
 
-interface SwipeInfo {
-  distance: number; // pixels swiped
-  velocity: number; // pixels per millisecond
-  count: number; // suggested number of items to move (1-5)
-}
-
 interface SwipeHandlers {
-  onSwipeLeft?: (info: SwipeInfo) => void;
-  onSwipeRight?: (info: SwipeInfo) => void;
-  onSwipeUp?: (info: SwipeInfo) => void;
-  onSwipeDown?: (info: SwipeInfo) => void;
+  onSwipeLeft?: () => void;
+  onSwipeRight?: () => void;
+  onSwipeUp?: () => void;
+  onSwipeDown?: () => void;
   onTap?: () => void;
 }
 
 interface SwipeOptions {
-  threshold?: number; // minimum distance to trigger swipe
-  velocityThreshold?: number; // minimum velocity for quick swipes
+  threshold?: number; // minimum distance to trigger initial swipe
+  itemThreshold?: number; // distance to move one item while dragging
   enabled?: boolean;
-}
-
-// Calculate how many items to move based on swipe distance and velocity
-function calculateSwipeCount(distance: number, velocity: number): number {
-  // Base count on distance (every 100px = 1 item)
-  const distanceCount = Math.floor(distance / 100);
-
-  // Bonus for velocity (fast swipes move more)
-  const velocityBonus = velocity > 1.5 ? 2 : velocity > 0.8 ? 1 : 0;
-
-  // Combine and clamp to 1-5 range
-  const count = Math.max(1, Math.min(5, distanceCount + velocityBonus));
-
-  return count;
 }
 
 export function useSwipeGestures(
   handlers: SwipeHandlers,
   options: SwipeOptions = {}
 ) {
-  const { threshold = 50, velocityThreshold = 0.3, enabled = true } = options;
+  const { threshold = 30, itemThreshold = 60, enabled = true } = options;
 
-  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
-  const touchMoveRef = useRef<{ x: number; y: number } | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lastTriggerRef = useRef<{ x: number; y: number } | null>(null);
+  const directionLockedRef = useRef<'horizontal' | 'vertical' | null>(null);
+  const hasMovedRef = useRef(false);
 
   const handleTouchStart = useCallback((e: TouchEvent) => {
     if (!enabled) return;
@@ -49,81 +31,89 @@ export function useSwipeGestures(
     touchStartRef.current = {
       x: touch.clientX,
       y: touch.clientY,
-      time: Date.now(),
     };
-    touchMoveRef.current = null;
-  }, [enabled]);
-
-  const handleTouchMove = useCallback((e: TouchEvent) => {
-    if (!enabled || !touchStartRef.current) return;
-    const touch = e.touches[0];
-    touchMoveRef.current = {
+    lastTriggerRef.current = {
       x: touch.clientX,
       y: touch.clientY,
     };
+    directionLockedRef.current = null;
+    hasMovedRef.current = false;
   }, [enabled]);
 
-  const handleTouchEnd = useCallback(() => {
-    if (!enabled || !touchStartRef.current) return;
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!enabled || !touchStartRef.current || !lastTriggerRef.current) return;
 
-    const start = touchStartRef.current;
-    const end = touchMoveRef.current || start;
-    const elapsed = Date.now() - start.time;
+    const touch = e.touches[0];
+    const startDeltaX = touch.clientX - touchStartRef.current.x;
+    const startDeltaY = touch.clientY - touchStartRef.current.y;
+    const absStartX = Math.abs(startDeltaX);
+    const absStartY = Math.abs(startDeltaY);
 
-    const deltaX = end.x - start.x;
-    const deltaY = end.y - start.y;
-    const absX = Math.abs(deltaX);
-    const absY = Math.abs(deltaY);
-
-    // Calculate velocity (pixels per millisecond)
-    const velocityX = absX / elapsed;
-    const velocityY = absY / elapsed;
-
-    // Check for tap (minimal movement)
-    if (absX < 10 && absY < 10) {
-      handlers.onTap?.();
-      touchStartRef.current = null;
-      touchMoveRef.current = null;
-      return;
+    // Lock direction after initial movement threshold
+    if (directionLockedRef.current === null && (absStartX > threshold || absStartY > threshold)) {
+      directionLockedRef.current = absStartX > absStartY ? 'horizontal' : 'vertical';
     }
 
-    // Determine if it's a valid swipe
-    const isHorizontalSwipe = absX > absY;
-    const swipeDistance = isHorizontalSwipe ? absX : absY;
-    const swipeVelocity = isHorizontalSwipe ? velocityX : velocityY;
+    // Calculate delta from last trigger point
+    const deltaX = touch.clientX - lastTriggerRef.current.x;
+    const deltaY = touch.clientY - lastTriggerRef.current.y;
 
-    // Check if swipe meets threshold or velocity requirement
-    if (swipeDistance >= threshold || swipeVelocity >= velocityThreshold) {
-      const count = calculateSwipeCount(swipeDistance, swipeVelocity);
-      const info: SwipeInfo = {
-        distance: swipeDistance,
-        velocity: swipeVelocity,
-        count,
-      };
-
-      if (isHorizontalSwipe) {
+    if (directionLockedRef.current === 'horizontal') {
+      // Horizontal swipe - trigger on itemThreshold
+      if (Math.abs(deltaX) >= itemThreshold) {
         if (deltaX > 0) {
-          handlers.onSwipeRight?.(info);
+          handlers.onSwipeRight?.();
         } else {
-          handlers.onSwipeLeft?.(info);
+          handlers.onSwipeLeft?.();
         }
-      } else {
+        // Update trigger point
+        lastTriggerRef.current = {
+          x: touch.clientX,
+          y: lastTriggerRef.current.y,
+        };
+        hasMovedRef.current = true;
+      }
+    } else if (directionLockedRef.current === 'vertical') {
+      // Vertical swipe - trigger on itemThreshold
+      if (Math.abs(deltaY) >= itemThreshold) {
         if (deltaY > 0) {
-          handlers.onSwipeDown?.(info);
+          handlers.onSwipeDown?.();
         } else {
-          handlers.onSwipeUp?.(info);
+          handlers.onSwipeUp?.();
         }
+        // Update trigger point
+        lastTriggerRef.current = {
+          x: lastTriggerRef.current.x,
+          y: touch.clientY,
+        };
+        hasMovedRef.current = true;
+      }
+    }
+  }, [enabled, threshold, itemThreshold, handlers]);
+
+  const handleTouchEnd = useCallback((e: TouchEvent) => {
+    if (!enabled || !touchStartRef.current) return;
+
+    // If we haven't moved during drag, check for tap
+    if (!hasMovedRef.current) {
+      const touch = e.changedTouches[0];
+      const deltaX = Math.abs(touch.clientX - touchStartRef.current.x);
+      const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
+
+      if (deltaX < 10 && deltaY < 10) {
+        handlers.onTap?.();
       }
     }
 
     touchStartRef.current = null;
-    touchMoveRef.current = null;
-  }, [enabled, threshold, velocityThreshold, handlers]);
+    lastTriggerRef.current = null;
+    directionLockedRef.current = null;
+    hasMovedRef.current = false;
+  }, [enabled, handlers]);
 
   useEffect(() => {
     if (!enabled) return;
 
-    // Use passive: false to allow preventDefault if needed
     document.addEventListener('touchstart', handleTouchStart, { passive: true });
     document.addEventListener('touchmove', handleTouchMove, { passive: true });
     document.addEventListener('touchend', handleTouchEnd, { passive: true });

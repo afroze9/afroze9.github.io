@@ -247,12 +247,11 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
   }, [entrancePhase, select]);
 
   // Swipe gestures for mobile navigation
+  // Items move continuously as you drag (every 60px triggers a move)
   useSwipeGestures(
     {
       onSwipeLeft: () => {
-        if (state.detailPanelOpen) {
-          // Swipe left in detail panel does nothing or could scroll
-        } else {
+        if (!state.detailPanelOpen) {
           navigateRight(); // Swipe left = go to next category (right)
         }
       },
@@ -263,21 +262,21 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
           navigateLeft(); // Swipe right = go to previous category (left)
         }
       },
-      onSwipeUp: (info) => {
+      onSwipeUp: () => {
         if (!state.detailPanelOpen) {
-          navigateDown(info.count); // Swipe up = go to next item(s) (down)
+          navigateDown(); // Swipe up = go to next item (down)
         }
       },
-      onSwipeDown: (info) => {
+      onSwipeDown: () => {
         if (!state.detailPanelOpen) {
-          navigateUp(info.count); // Swipe down = go to previous item(s) (up)
+          navigateUp(); // Swipe down = go to previous item (up)
         }
       },
       onTap: () => {
         // Tap handled by click events on items
       },
     },
-    { enabled: isMobile && entrancePhase === 'complete' }
+    { enabled: isMobile && entrancePhase === 'complete', itemThreshold: 60 }
   );
 
   return (
