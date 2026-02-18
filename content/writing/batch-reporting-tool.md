@@ -5,47 +5,41 @@ description: "How a straightforward automation script transformed a tedious heal
 tags: [healthcare, automation, python]
 ---
 
-# A Simple Batch Reporting Tool That Saved Hours of Manual Work
 
-In healthcare IT, there's a constant tension between the need for comprehensive reporting and the limited time available to generate those reports. This is the story of how a simple batch reporting tool transformed a tedious manual process into an automated workflow.
+## The Background
 
-## The Problem
+Back in 2015, I was working on a Medical Health Record product for healthcare providers in the US. Cloud services were still in their infancy, old systems were still deployed to on-prem servers, or sometimes on servers in datacenters / server farms. This product was one of those. It ran on Windows Server machines; the code was written in fun languages like VB6, and newer components used C#/.NET along with self-hosted SQL Server Instances (along with the mandatory bunch of dozen or so windows services who no one knew what they did).
 
-Every month, our team spent approximately 15 hours generating compliance reports across 30+ healthcare practices. The process involved:
+Since the app was used throughout the US, instead of having a centralized deployment, they utilized server farms across multiple states to serve users in their regions.
+As a side-effect of this, there wasn't a central database of users, there wasn't a centralized Auth system. Each server kept its own list of users and each instance was accessible via its own subdomain. And each instance of the App/DB combo hosted around 40-50 tenants.
 
-1. Logging into each practice's database
-2. Running a series of SQL queries
-3. Exporting results to Excel
-4. Formatting the data according to compliance requirements
-5. Generating PDF summaries
-6. Distributing reports via email
+Because of this decentralized architecture, there were a number of issues:
+- If you were a support representative, and you had to help someone on call with their account, you would need a login for each tenant on each server (think 100s of logins) and maintain them somewhere (usually insecure ways like text files in notepad or sticky notes)
+- The account managers sometimes needed to run reports that weren't accessible via the UI. Requesting a new report was a long laborious process that would take months to pass through the backlog, get implemented and finally deployed. For urget reports, some L3 reps were allowed to request access to and run custom SQL queries directly on the tenants' databases!!!
+- You could have multiple users with the same username in different regions (not relevant here but it causes issues later)
 
-It was error-prone, time-consuming, and frankly, mind-numbing work.
+Keen eyed folks must have realized by now how terrible that is from a security perspective. The higher ups at one point figured it out too.
 
-## The Solution
+So what they ended up doing was, to create a central application, that had access to connect to the auth systems on each of the server instances.
+You logged into that app and it would show you a list of all the tenants that you had access to, and would let you magically log into any of them without the need to remember/enter a bunch of credentials. (Problem # 1 solved).
 
-Rather than building a complex reporting platform, I created a simple Python script that automated the entire workflow. The key design decisions were:
+Then someone else had the idea that, why not use the same app/portal to run ad-hoc reports on each tenant.
+The idea was that since these ad-hoc reports didn't need to be perfect, the portal team would have a shorter turn-around time in publishing reports and making them available.
+The users would then select a tenant, select a report, add some parameters, and download a spreadsheet containing the extracted data. (Problem # 2 Solved)
 
-- **Keep it simple**: No fancy UI, just command-line execution
-- **Make it configurable**: Practice details stored in a YAML config file
-- **Ensure reliability**: Comprehensive logging and error handling
-- **Enable flexibility**: Modular design allowing easy addition of new report types
 
-## The Results
+## The Fun Part
 
-The batch reporting tool reduced monthly reporting time from 15 hours to 20 minutes. More importantly:
+This is where my part of the story begins. I was hired as an account manager into this company. I was assigned around 10 customers the second week and my role was to listen to their concerns any time the called, sent an email, logged a ticket etc. I had to figure out their concerns, pass them on to the accounts receivable / billing teams and generally follow up on their issues.
 
-- **Zero errors**: Eliminated manual data entry mistakes
-- **Consistency**: Every report followed the exact same format
-- **Auditability**: Complete logs of every report generation
-- **Scalability**: Adding new practices took minutes, not hours
+To do all of this, specifically the Accounts Receivable stuff, I had to run a lot of customized SQL reports, format them so they looked all nice and shiny, and email them out to the clients.
 
-## Lessons Learned
+Considering 10 customers, I had to:
+- Run 3 different reports per customer daily
+- Run 2 different reports per customer weekly
+- Run 5 different reports per customer monthly
 
-Sometimes the best solution isn't the most sophisticated one. This project reinforced several principles I carry with me:
+In short I was spending half my day just repititively generating reports.
+There had to be a better way to do this.
 
-1. **Understand the problem deeply before coding** - I spent more time observing the manual process than writing code
-2. **Automate the boring stuff** - Free up human time for work that requires human judgment
-3. **Build for the next person** - Clear documentation and simple design made handoff seamless
-
-The tool is still running today, years after I built it. That's the mark of good automation - it becomes invisible infrastructure that just works.
+I was newly getting into .NET at that time for some hobby projects.

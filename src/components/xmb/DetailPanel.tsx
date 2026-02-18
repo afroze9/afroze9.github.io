@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 
 interface DetailPanelProps {
@@ -7,9 +8,69 @@ interface DetailPanelProps {
   onClose: () => void;
 }
 
+const SCROLL_AMOUNT = 100; // pixels per arrow key press
+const PAGE_SCROLL_AMOUNT = 400; // pixels per page up/down
+
 export function DetailPanel({ isOpen, title, children, onClose }: DetailPanelProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // Handle keyboard scrolling when panel is open
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const panel = panelRef.current;
+      if (!panel) return;
+
+      switch (e.key) {
+        case 'ArrowUp':
+          e.preventDefault();
+          e.stopPropagation();
+          panel.scrollBy({ top: -SCROLL_AMOUNT, behavior: 'smooth' });
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          e.stopPropagation();
+          panel.scrollBy({ top: SCROLL_AMOUNT, behavior: 'smooth' });
+          break;
+        case 'PageUp':
+          e.preventDefault();
+          e.stopPropagation();
+          panel.scrollBy({ top: -PAGE_SCROLL_AMOUNT, behavior: 'smooth' });
+          break;
+        case 'PageDown':
+          e.preventDefault();
+          e.stopPropagation();
+          panel.scrollBy({ top: PAGE_SCROLL_AMOUNT, behavior: 'smooth' });
+          break;
+        case 'Home':
+          e.preventDefault();
+          e.stopPropagation();
+          panel.scrollTo({ top: 0, behavior: 'smooth' });
+          break;
+        case 'End':
+          e.preventDefault();
+          e.stopPropagation();
+          panel.scrollTo({ top: panel.scrollHeight, behavior: 'smooth' });
+          break;
+      }
+    };
+
+    // Use capture to intercept before other handlers
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
+  }, [isOpen]);
+
+  // Reset scroll position when panel opens
+  useEffect(() => {
+    if (isOpen && panelRef.current) {
+      panelRef.current.scrollTop = 0;
+    }
+  }, [isOpen, title]);
+
   return (
     <div
+      ref={panelRef}
       style={{
         position: 'fixed',
         top: 0,
@@ -67,6 +128,20 @@ export function DetailPanel({ isOpen, title, children, onClose }: DetailPanelPro
             Content coming soon...
           </p>
         )}
+      </div>
+
+      {/* Scroll hint */}
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '20px',
+          color: 'rgba(255,255,255,0.4)',
+          fontSize: '11px',
+          textAlign: 'right',
+        }}
+      >
+        ↑↓ Scroll · PgUp/PgDn · Home/End
       </div>
     </div>
   );

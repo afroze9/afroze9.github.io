@@ -1,6 +1,6 @@
-import { useRef, useEffect } from 'react';
-import { Application, Graphics } from 'pixi.js';
-import type { ThemeColor } from '../../types';
+import { Application, Graphics } from "pixi.js";
+import { useEffect, useRef } from "react";
+import type { ThemeColor } from "../../types";
 
 interface WaveBackgroundProps {
   theme: ThemeColor;
@@ -9,27 +9,27 @@ interface WaveBackgroundProps {
 // PS3-style color themes
 const themeColors: Record<ThemeColor, { gradient: string; waves: number[] }> = {
   blue: {
-    gradient: 'linear-gradient(180deg, #0a0a1a 0%, #0d1b2a 50%, #1b3a5f 100%)',
+    gradient: "linear-gradient(180deg, #0a0a1a 0%, #0d1b2a 50%, #1b3a5f 100%)",
     waves: [0x0d1b2a, 0x1b3a5f, 0x274c77, 0x3d6a99, 0x4a7fa8],
   },
   red: {
-    gradient: 'linear-gradient(180deg, #1a0a0a 0%, #2a0d0d 50%, #5f1b1b 100%)',
+    gradient: "linear-gradient(180deg, #1a0a0a 0%, #2a0d0d 50%, #5f1b1b 100%)",
     waves: [0x2a0d0d, 0x5f1b1b, 0x772727, 0x993d3d, 0xa84a4a],
   },
   green: {
-    gradient: 'linear-gradient(180deg, #0a1a0a 0%, #0d2a0d 50%, #1b5f1b 100%)',
+    gradient: "linear-gradient(180deg, #0a1a0a 0%, #0d2a0d 50%, #1b5f1b 100%)",
     waves: [0x0d2a0d, 0x1b5f1b, 0x277727, 0x3d993d, 0x4aa84a],
   },
   purple: {
-    gradient: 'linear-gradient(180deg, #120a1a 0%, #1d0d2a 50%, #3d1b5f 100%)',
+    gradient: "linear-gradient(180deg, #120a1a 0%, #1d0d2a 50%, #3d1b5f 100%)",
     waves: [0x1d0d2a, 0x3d1b5f, 0x522777, 0x6d3d99, 0x7a4aa8],
   },
   orange: {
-    gradient: 'linear-gradient(180deg, #1a120a 0%, #2a1d0d 50%, #5f3d1b 100%)',
+    gradient: "linear-gradient(180deg, #1a120a 0%, #2a1d0d 50%, #5f3d1b 100%)",
     waves: [0x2a1d0d, 0x5f3d1b, 0x775227, 0x996d3d, 0xa87a4a],
   },
   pink: {
-    gradient: 'linear-gradient(180deg, #1a0a14 0%, #2a0d1d 50%, #5f1b4a 100%)',
+    gradient: "linear-gradient(180deg, #1a0a14 0%, #2a0d1d 50%, #5f1b4a 100%)",
     waves: [0x2a0d1d, 0x5f1b4a, 0x772760, 0x993d7a, 0xa84a8a],
   },
 };
@@ -100,9 +100,7 @@ export function WaveBackground({ theme }: WaveBackgroundProps) {
           // Draw wave path
           for (let x = 0; x <= width; x += 5) {
             const y =
-              yOffset +
-              Math.sin(x * frequency + time * speed) * amplitude +
-              Math.sin(x * frequency * 0.5 + time * speed * 0.7) * (amplitude * 0.5);
+              yOffset + Math.sin(x * frequency + time * speed) * amplitude + Math.sin(x * frequency * 0.5 + time * speed * 0.7) * (amplitude * 0.5);
             wave.lineTo(x, y);
           }
 
@@ -124,10 +122,10 @@ export function WaveBackground({ theme }: WaveBackgroundProps) {
       }
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       if (appRef.current) {
         appRef.current.destroy(true, { children: true });
         appRef.current = null;
@@ -141,13 +139,13 @@ export function WaveBackground({ theme }: WaveBackgroundProps) {
     <div
       ref={containerRef}
       style={{
-        position: 'fixed',
+        position: "fixed",
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100%',
+        width: "100%",
+        height: "100%",
         background: colors.gradient,
-        transition: 'background 0.3s ease-out',
+        transition: "background 0.3s ease-out",
         zIndex: -1,
       }}
     />

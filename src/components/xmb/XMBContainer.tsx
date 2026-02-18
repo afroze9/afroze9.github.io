@@ -1,10 +1,12 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useXMBNavigation } from '../../hooks/useXMBNavigation';
+import { useAudio } from '../../hooks/useAudio';
 import { WaveBackground } from './WaveBackground';
 import { CategoryBar } from './CategoryBar';
 import { ItemList } from './ItemList';
 import { DetailPanel } from './DetailPanel';
 import { ThemeSelector } from './ThemeSelector';
+import { ContentRenderer } from './ContentRenderer';
 import { loadSettings, saveSettings } from '../../utils/storage';
 import type { XMBCategory, Profile, Experience, Project, Skill, Settings, ThemeColor } from '../../types';
 
@@ -13,6 +15,7 @@ import profileData from '../../data/profile.json';
 import experienceData from '../../data/experience.json';
 import projectsData from '../../data/projects.json';
 import skillsData from '../../data/skills.json';
+import { writings } from '../../data/writings';
 
 interface XMBContainerProps {
   initialSettings?: Settings;
@@ -37,6 +40,11 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
   useEffect(() => {
     saveSettings(settings);
   }, [settings]);
+
+  // Audio system
+  const { playNavigate, playSelect, playBack } = useAudio({
+    enabled: settings.soundEnabled,
+  });
 
   // Build categories from data
   const categories: XMBCategory[] = useMemo(() => {
@@ -90,14 +98,12 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
         id: 'writing',
         label: 'Writing',
         icon: 'pencil',
-        items: [
-          {
-            id: 'batch-reporting-tool',
-            label: 'A Simple Batch Reporting Tool',
-            subtitle: 'Healthcare automation case study',
-            data: { slug: 'batch-reporting-tool' },
-          },
-        ],
+        items: writings.map((w) => ({
+          id: w.id,
+          label: w.title,
+          subtitle: w.description.slice(0, 40) + '...',
+          data: { type: 'writing', ...w },
+        })),
       },
       {
         id: 'settings',
@@ -128,6 +134,10 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
     currentCategory,
     currentItemIndex,
     currentItem,
+    goToCategory,
+    goToItem,
+    navigateUp,
+    navigateDown,
     back,
   } = useXMBNavigation({
     categories,
@@ -142,6 +152,9 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
         }
       }
     },
+    onNavigate: playNavigate,
+    onConfirm: playSelect,
+    onBack: playBack,
   });
 
   return (
@@ -155,13 +168,25 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
     >
       <WaveBackground theme={settings.theme} />
 
-      <CategoryBar categories={categories} selectedIndex={state.selectedCategoryIndex} />
+      <CategoryBar
+        categories={categories}
+        selectedIndex={state.selectedCategoryIndex}
+        onCategoryClick={goToCategory}
+      />
 
       {currentCategory && (
         <ItemList
           items={currentCategory.items}
           selectedIndex={currentItemIndex}
           categoryIcon={currentCategory.icon}
+          onItemClick={goToItem}
+          onWheel={(deltaY) => {
+            if (deltaY > 0) {
+              navigateDown();
+            } else if (deltaY < 0) {
+              navigateUp();
+            }
+          }}
         />
       )}
 
@@ -175,10 +200,8 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
             currentTheme={settings.theme}
             onSelect={(theme) => setSettings((prev) => ({ ...prev, theme }))}
           />
-        ) : currentItem?.data ? (
-          <pre style={{ whiteSpace: 'pre-wrap', fontSize: '14px' }}>
-            {JSON.stringify(currentItem.data, null, 2)}
-          </pre>
+        ) : currentItem ? (
+          <ContentRenderer itemId={currentItem.id} data={currentItem.data} />
         ) : null}
       </DetailPanel>
 
@@ -194,7 +217,7 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
           textAlign: 'center',
         }}
       >
-        ← → Navigate Categories | ↑ ↓ Navigate Items | Enter Select | Esc Back
+        ← → Navigate Categories | ↑ ↓ Navigate Items | Enter Select | Esc Back | Click or Scroll to Navigate
       </div>
     </div>
   );

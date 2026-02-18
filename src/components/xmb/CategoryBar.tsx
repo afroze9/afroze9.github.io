@@ -4,6 +4,7 @@ import { XMBIcon } from './XMBIcon';
 interface CategoryBarProps {
   categories: XMBCategory[];
   selectedIndex: number;
+  onCategoryClick?: (index: number) => void;
 }
 
 // Fixed X position for the selected category (left-ish, like PS3)
@@ -13,7 +14,7 @@ const CATEGORY_ICON_SIZE = 100; // Size of category icon (larger)
 const CATEGORY_SPACING = 160; // px between category centers
 const CATEGORY_Y = 260; // Fixed Y position for horizontal bar center
 
-export function CategoryBar({ categories, selectedIndex }: CategoryBarProps) {
+export function CategoryBar({ categories, selectedIndex, onCategoryClick }: CategoryBarProps) {
   return (
     <div
       style={{
@@ -33,6 +34,7 @@ export function CategoryBar({ categories, selectedIndex }: CategoryBarProps) {
         return (
           <div
             key={category.id}
+            onClick={() => onCategoryClick?.(index)}
             style={{
               position: 'absolute',
               // Position so the CENTER of this icon is at INTERSECTION_X + half icon width + offset
@@ -41,6 +43,8 @@ export function CategoryBar({ categories, selectedIndex }: CategoryBarProps) {
               transform: 'translate(-50%, -50%)',
               transition: 'left 0.3s ease-out, opacity 0.3s ease-out',
               opacity: isSelected ? 1 : 0.7,
+              pointerEvents: 'auto',
+              cursor: 'pointer',
             }}
           >
             <XMBIcon

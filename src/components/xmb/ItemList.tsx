@@ -23,6 +23,8 @@ interface ItemListProps {
   items: XMBItem[];
   selectedIndex: number;
   categoryIcon: string;
+  onItemClick?: (index: number) => void;
+  onWheel?: (deltaY: number) => void;
 }
 
 // Use same size as category icons for consistency
@@ -75,7 +77,13 @@ if (typeof document !== "undefined") {
   }
 }
 
-export function ItemList({ items, selectedIndex, categoryIcon }: ItemListProps) {
+export function ItemList({
+  items,
+  selectedIndex,
+  categoryIcon,
+  onItemClick,
+  onWheel,
+}: ItemListProps) {
   if (items.length === 0) {
     return null;
   }
@@ -99,16 +107,24 @@ export function ItemList({ items, selectedIndex, categoryIcon }: ItemListProps) 
     }
   };
 
+  const handleWheel = (e: React.WheelEvent) => {
+    if (onWheel) {
+      e.preventDefault();
+      onWheel(e.deltaY);
+    }
+  };
+
   return (
     <div
+      onWheel={handleWheel}
       style={{
         position: "absolute",
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        pointerEvents: "none",
         overflow: "hidden",
+        pointerEvents: "none",
       }}
     >
       {items.map((item, index) => {
@@ -120,6 +136,7 @@ export function ItemList({ items, selectedIndex, categoryIcon }: ItemListProps) 
         return (
           <div
             key={item.id}
+            onClick={() => onItemClick?.(index)}
             style={{
               position: "absolute",
               left: `${INTERSECTION_X_PERCENT}%`,
@@ -129,6 +146,8 @@ export function ItemList({ items, selectedIndex, categoryIcon }: ItemListProps) 
               alignItems: "center",
               opacity: isSelected ? 1 : 0.6,
               height: ITEM_ICON_SELECTED_SIZE, // Fixed height for alignment
+              cursor: "pointer",
+              pointerEvents: "auto",
             }}
           >
             {/* Icon container - fixed width to keep icons centered */}
