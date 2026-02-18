@@ -22,7 +22,7 @@ export function parseHash(hash: string): DeepLink | null {
   }
 
   const categoryId = parts[0] as XMBCategoryId;
-  const validCategories: XMBCategoryId[] = ['profile', 'experience', 'projects', 'writing', 'settings'];
+  const validCategories: XMBCategoryId[] = ['profile', 'experience', 'projects', 'opensource', 'writing', 'settings'];
 
   if (!validCategories.includes(categoryId)) {
     return null;

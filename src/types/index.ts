@@ -73,6 +73,16 @@ export interface Impact {
   description: string;
 }
 
+// Open Source types
+export interface OpenSourceProject {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  language: string;
+  tags: string[];
+}
+
 // Blog post types
 export interface BlogPostFrontmatter {
   title: string;
@@ -88,7 +98,7 @@ export interface BlogPost {
 }
 
 // XMB types
-export type XMBCategoryId = 'profile' | 'experience' | 'projects' | 'writing' | 'settings';
+export type XMBCategoryId = 'profile' | 'experience' | 'projects' | 'opensource' | 'writing' | 'settings';
 
 export interface XMBItem {
   id: string;

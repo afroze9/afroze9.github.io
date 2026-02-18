@@ -33,6 +33,7 @@ export function useXMBNavigation({
         profile: 0,
         experience: 0,
         projects: 0,
+        opensource: 0,
         writing: 0,
         settings: 0,
       },

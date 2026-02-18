@@ -10,6 +10,7 @@ import {
   Users,
   RefreshCw,
   FileText,
+  Code,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -34,6 +35,7 @@ const iconMap: Record<string, LucideIcon> = {
   users: Users,
   refresh: RefreshCw,
   file: FileText,
+  code: Code,
 };
 
 export function XMBIcon({

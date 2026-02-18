@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import type { Profile, Experience, Project, Skill, Education, ContactLinks } from '../../types';
+import type { Profile, Experience, Project, Skill, Education, ContactLinks, OpenSourceProject } from '../../types';
 import { getWritingContent, type WritingMeta } from '../../data/writings';
 
 interface ContentRendererProps {
@@ -39,6 +39,10 @@ function isPhilosophy(data: unknown): data is string[] {
 
 function isWriting(data: unknown): data is { type: 'writing' } & WritingMeta {
   return typeof data === 'object' && data !== null && 'type' in data && (data as { type: string }).type === 'writing';
+}
+
+function isOpenSource(data: unknown): data is OpenSourceProject {
+  return typeof data === 'object' && data !== null && 'url' in data && 'language' in data && 'tags' in data;
 }
 
 // Markdown wrapper with consistent styling
@@ -250,6 +254,35 @@ Afroze Amjad · 2024
   return <MarkdownContent content={markdown} />;
 }
 
+// Open Source content
+function OpenSourceContent({ data }: { data: OpenSourceProject }) {
+  const markdown = `
+${data.description}
+
+### Language
+${data.language}
+
+### Repository
+[View on GitHub](${data.url})
+  `.trim();
+
+  return (
+    <div>
+      <MarkdownContent content={markdown} />
+      <div style={{ marginTop: '16px' }}>
+        <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: 'rgba(255,255,255,0.7)' }}>
+          Tags
+        </h3>
+        <div>
+          {data.tags.map((tag) => (
+            <Tag key={tag} label={tag} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Writing/article content
 function WritingContent({ data }: { data: WritingMeta }) {
   const content = getWritingContent(data.id);
@@ -304,6 +337,10 @@ export function ContentRenderer({ itemId, data }: ContentRendererProps) {
 
   if (isProject(data)) {
     return <ProjectContent data={data} />;
+  }
+
+  if (isOpenSource(data)) {
+    return <OpenSourceContent data={data} />;
   }
 
   if (isSkill(data)) {

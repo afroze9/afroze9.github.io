@@ -9,13 +9,14 @@ import { ThemeSelector } from './ThemeSelector';
 import { ContentRenderer } from './ContentRenderer';
 import { loadSettings, saveSettings } from '../../utils/storage';
 import { parseHash, updateUrl } from '../../utils/routing';
-import type { XMBCategory, Profile, Experience, Project, Skill, Settings, ThemeColor, XMBCategoryId } from '../../types';
+import type { XMBCategory, Profile, Experience, Project, Skill, OpenSourceProject, Settings, ThemeColor, XMBCategoryId } from '../../types';
 
 // Import data
 import profileData from '../../data/profile.json';
 import experienceData from '../../data/experience.json';
 import projectsData from '../../data/projects.json';
 import skillsData from '../../data/skills.json';
+import opensourceData from '../../data/opensource.json';
 import { writings } from '../../data/writings';
 
 interface XMBContainerProps {
@@ -134,6 +135,17 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
           label: project.name,
           subtitle: `${project.role} · ${project.year}`,
           data: project,
+        })),
+      },
+      {
+        id: 'opensource',
+        label: 'Open Source',
+        icon: 'code',
+        items: (opensourceData as OpenSourceProject[]).map((repo) => ({
+          id: repo.id,
+          label: repo.name,
+          subtitle: `${repo.language} · ${repo.tags[0]}`,
+          data: repo,
         })),
       },
       {
