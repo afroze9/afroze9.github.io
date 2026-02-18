@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { useXMBNavigation } from '../../hooks/useXMBNavigation';
 import { useAudio } from '../../hooks/useAudio';
 import { WaveBackground } from './WaveBackground';
@@ -53,11 +53,10 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
     return null;
   }, []);
 
-  // Track if we should open detail panel after entrance
-  const [pendingDetailOpen, setPendingDetailOpen] = useState(() => {
-    const parsed = parseHash(window.location.hash);
-    return parsed?.openDetail ?? false;
-  });
+  // Track if we should open detail panel after entrance (use ref to avoid setState in effect)
+  const pendingDetailOpenRef = useRef(
+    parseHash(window.location.hash)?.openDetail ?? false
+  );
 
   // Update URL when navigation changes
   const handleNavigationChange = useCallback((categoryId: XMBCategoryId, itemId: string, detailOpen: boolean) => {
@@ -216,11 +215,11 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
 
   // Open detail panel after entrance animation if URL requested it
   useEffect(() => {
-    if (entrancePhase === 'complete' && pendingDetailOpen) {
-      setPendingDetailOpen(false);
+    if (entrancePhase === 'complete' && pendingDetailOpenRef.current) {
+      pendingDetailOpenRef.current = false;
       select();
     }
-  }, [entrancePhase, pendingDetailOpen, select]);
+  }, [entrancePhase, select]);
 
   return (
     <div
