@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useXMBNavigation } from '../../hooks/useXMBNavigation';
 import { useAudio } from '../../hooks/useAudio';
 import { WaveBackground } from './WaveBackground';
@@ -8,7 +8,8 @@ import { DetailPanel } from './DetailPanel';
 import { ThemeSelector } from './ThemeSelector';
 import { ContentRenderer } from './ContentRenderer';
 import { loadSettings, saveSettings } from '../../utils/storage';
-import type { XMBCategory, Profile, Experience, Project, Skill, Settings, ThemeColor } from '../../types';
+import { parseHash, updateUrl } from '../../utils/routing';
+import type { XMBCategory, Profile, Experience, Project, Skill, Settings, ThemeColor, XMBCategoryId } from '../../types';
 
 // Import data
 import profileData from '../../data/profile.json';
@@ -39,6 +40,28 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
     () => initialSettings || loadSettings()
   );
   const [entrancePhase, setEntrancePhase] = useState<EntrancePhase>('background');
+
+  // Parse initial navigation from URL hash
+  // Don't open detail panel immediately - wait for entrance animation
+  const initialNavigation = useMemo(() => {
+    const parsed = parseHash(window.location.hash);
+    if (parsed) {
+      // Navigate to category/item but don't open detail panel yet
+      return { ...parsed, openDetail: false };
+    }
+    return null;
+  }, []);
+
+  // Track if we should open detail panel after entrance
+  const [pendingDetailOpen, setPendingDetailOpen] = useState(() => {
+    const parsed = parseHash(window.location.hash);
+    return parsed?.openDetail ?? false;
+  });
+
+  // Update URL when navigation changes
+  const handleNavigationChange = useCallback((categoryId: XMBCategoryId, itemId: string, detailOpen: boolean) => {
+    updateUrl(categoryId, itemId, detailOpen);
+  }, []);
 
   // Staged entrance animation
   useEffect(() => {
@@ -158,8 +181,10 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
     navigateUp,
     navigateDown,
     back,
+    select,
   } = useXMBNavigation({
     categories,
+    initialNavigation,
     onSelect: (categoryId, itemId) => {
       // Handle settings toggles (except theme which uses the panel)
       if (categoryId === 'settings') {
@@ -174,7 +199,16 @@ export function XMBContainer({ initialSettings }: XMBContainerProps) {
     onNavigate: playNavigate,
     onConfirm: playSelect,
     onBack: playBack,
+    onNavigationChange: handleNavigationChange,
   });
+
+  // Open detail panel after entrance animation if URL requested it
+  useEffect(() => {
+    if (entrancePhase === 'complete' && pendingDetailOpen) {
+      setPendingDetailOpen(false);
+      select();
+    }
+  }, [entrancePhase, pendingDetailOpen, select]);
 
   return (
     <div

@@ -1,32 +1,65 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { XMBNavigationState, XMBCategoryId, XMBCategory } from '../types';
 
+export interface InitialNavigation {
+  categoryId: XMBCategoryId;
+  itemId?: string;
+  openDetail?: boolean;
+}
+
 interface UseXMBNavigationProps {
   categories: XMBCategory[];
+  initialNavigation?: InitialNavigation | null;
   onSelect?: (categoryId: XMBCategoryId, itemId: string) => void;
   onNavigate?: () => void;
   onConfirm?: () => void;
   onBack?: () => void;
+  onNavigationChange?: (categoryId: XMBCategoryId, itemId: string, detailOpen: boolean) => void;
 }
 
 export function useXMBNavigation({
   categories,
+  initialNavigation,
   onSelect,
   onNavigate,
   onConfirm,
-  onBack: onBackSound
+  onBack: onBackSound,
+  onNavigationChange,
 }: UseXMBNavigationProps) {
-  const [state, setState] = useState<XMBNavigationState>(() => ({
-    selectedCategoryIndex: 0,
-    selectedItemIndices: {
-      profile: 0,
-      experience: 0,
-      projects: 0,
-      writing: 0,
-      settings: 0,
-    },
-    detailPanelOpen: false,
-  }));
+  const [state, setState] = useState<XMBNavigationState>(() => {
+    const baseState: XMBNavigationState = {
+      selectedCategoryIndex: 0,
+      selectedItemIndices: {
+        profile: 0,
+        experience: 0,
+        projects: 0,
+        writing: 0,
+        settings: 0,
+      },
+      detailPanelOpen: false,
+    };
+
+    // If there's initial navigation, apply it
+    if (initialNavigation && categories.length > 0) {
+      const categoryIndex = categories.findIndex(c => c.id === initialNavigation.categoryId);
+      if (categoryIndex >= 0) {
+        baseState.selectedCategoryIndex = categoryIndex;
+
+        if (initialNavigation.itemId) {
+          const category = categories[categoryIndex];
+          const itemIndex = category.items.findIndex(item => item.id === initialNavigation.itemId);
+          if (itemIndex >= 0) {
+            baseState.selectedItemIndices[initialNavigation.categoryId] = itemIndex;
+            if (initialNavigation.openDetail) {
+              baseState.detailPanelOpen = true;
+            }
+          }
+        }
+      }
+    }
+
+    return baseState;
+  });
 
   const currentCategory = categories[state.selectedCategoryIndex];
   const currentCategoryId = currentCategory?.id as XMBCategoryId;
@@ -154,6 +187,13 @@ export function useXMBNavigation({
       onBackSound?.();
     }
   }, [state.detailPanelOpen, onBackSound]);
+
+  // Notify parent of navigation changes (for URL updates)
+  useEffect(() => {
+    if (currentCategory && currentItem) {
+      onNavigationChange?.(currentCategoryId, currentItem.id, state.detailPanelOpen);
+    }
+  }, [currentCategory, currentItem, currentCategoryId, state.detailPanelOpen, onNavigationChange]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
