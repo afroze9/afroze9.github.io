@@ -72,6 +72,12 @@ const categoryColors: Record<string, string> = {
               <p class="role">{project.data.role}</p>
             </header>
 
+            {project.data.image && (
+              <div class="card-image">
+                <img src={project.data.image} alt={`${project.data.title} screenshot`} loading="lazy" />
+              </div>
+            )}
+
             <div class="card-body">
               <div class="section">
                 <span class="label">Challenge</span>
@@ -270,6 +276,18 @@ const categoryColors: Record<string, string> = {
 
   .featured-card .card-content {
     padding: var(--space-2xl);
+  }
+
+  .card-image {
+    border-radius: 6px;
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  .card-image img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   .card-header {

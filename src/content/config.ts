@@ -12,6 +12,7 @@ const projectsCollection = defineCollection({
     role: z.string(),
     impact: z.string(),
     technologies: z.array(z.string()).optional(),
+    image: z.string().optional(),
     featured: z.boolean().default(false),
     order: z.number().default(0),
   }),

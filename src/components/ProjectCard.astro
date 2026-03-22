@@ -8,10 +8,11 @@ interface Props {
   role: string;
   impact: string;
   technologies?: string[];
+  image?: string;
   featured?: boolean;
 }
 
-const { title, date, category, problem, solution, role, impact, technologies, featured } = Astro.props;
+const { title, date, category, problem, solution, role, impact, technologies, image, featured } = Astro.props;
 
 const categoryLabels: Record<string, string> = {
   ai: "AI / ML",
@@ -43,6 +44,12 @@ const categoryColors: Record<string, string> = {
       <h3>{title}</h3>
       <p class="role">{role}</p>
     </header>
+
+    {image && (
+      <div class="card-image">
+        <img src={image} alt={`${title} screenshot`} loading="lazy" />
+      </div>
+    )}
 
     <div class="card-body">
       <div class="section">
@@ -141,6 +148,18 @@ const categoryColors: Record<string, string> = {
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
     margin: 0;
+  }
+
+  .card-image {
+    border-radius: 4px;
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  .card-image img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   .card-body {
