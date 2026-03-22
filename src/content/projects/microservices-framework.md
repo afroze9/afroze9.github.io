@@ -9,5 +9,5 @@ role: "Architect"
 impact: "40% reduction in development time"
 technologies: ["ASP.NET Core", "Steeltoe", "PostgreSQL", "ELK", "Grafana", "Jaeger"]
 featured: true
-order: 4
+order: 6
 ---

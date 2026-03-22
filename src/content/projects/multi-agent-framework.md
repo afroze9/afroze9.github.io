@@ -9,5 +9,5 @@ role: "Technocal Lead"
 impact: "Reduction in New Agent Onboarding Time and Improved Governance"
 technologies: ["Amazon Bedrock", "AWS", "Python", "React", "Kubernetes"]
 featured: true
-order: 1
+order: 2
 ---

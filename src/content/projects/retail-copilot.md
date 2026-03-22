@@ -9,5 +9,5 @@ role: "Technical Lead"
 impact: "15% increase in sales conversions"
 technologies: ["Azure OpenAI", ".NET Core", "React", "Azure Cognitive Search"]
 featured: true
-order: 2
+order: 4
 ---

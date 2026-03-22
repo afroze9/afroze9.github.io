@@ -9,5 +9,5 @@ role: "Technical Lead"
 impact: "Near real-time analytics enabling faster campaign optimization decisions"
 technologies: ["Azure OpenAI", "Python", "React", "Event Hubs"]
 featured: true
-order: 1
+order: 3
 ---

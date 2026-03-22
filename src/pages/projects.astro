@@ -5,9 +5,8 @@ import { getCollection } from "astro:content";
 const description = "Project case studies by Afroze Amjad. AI copilots, cloud architecture, and enterprise platform solutions.";
 
 const projects = await getCollection("projects");
-const sortedProjects = projects.sort((a, b) => b.data.date.localeCompare(a.data.date));
-const featuredProjects = sortedProjects.filter(p => p.data.featured);
-const otherProjects = sortedProjects.filter(p => !p.data.featured);
+const featuredProjects = projects.filter(p => p.data.featured).sort((a, b) => a.data.order - b.data.order);
+const otherProjects = projects.filter(p => !p.data.featured).sort((a, b) => b.data.date.localeCompare(a.data.date));
 
 const categories = [
   { id: 'ai', label: 'AI / ML', color: 'var(--color-cat-ai)' },
