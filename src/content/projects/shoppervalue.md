@@ -9,5 +9,5 @@ role: "Architect"
 impact: "Enabled international expansion with multi-region support"
 technologies: ["Azure", "Event Hubs", ".NET Core", "Cosmos DB"]
 featured: true
-order: 3
+order: 5
 ---
