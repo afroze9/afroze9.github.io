@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TerraStudio Development Timeline</title>
+<style>
+  :root {
+    --bg: #0f172a; --bg2: #1e293b; --bg3: #334155;
+    --text: #e2e8f0; --text2: #94a3b8; --border: #475569;
+    --axis: #334155; --tick: #94a3b8; --grid: #475569;
+  }
+  .light {
+    --bg: #f8fafc; --bg2: #e2e8f0; --bg3: #cbd5e1;
+    --text: #1e293b; --text2: #64748b; --border: #cbd5e1;
+    --axis: #cbd5e1; --tick: #64748b; --grid: #94a3b8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+
+  .header { padding: 20px 32px 12px; background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .header h1 { font-size: 22px; font-weight: 700; }
+  .header h1 span { color: #3b82f6; }
+  .header .sub { color: var(--text2); font-size: 13px; margin-top: 2px; }
+
+  .controls { display: flex; gap: 8px; padding: 10px 32px; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; background: var(--bg2); }
+  .controls-label { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: .5px; margin-right: 4px; }
+  .ctrl {
+    display: flex; align-items: center; gap: 5px; padding: 4px 10px;
+    border-radius: 4px; cursor: pointer; font-size: 12px; user-select: none;
+    transition: opacity .15s; border: 1px solid transparent; color: var(--text);
+  }
+  .ctrl:hover { border-color: var(--border); }
+  .ctrl.off { opacity: .25; }
+  .ctrl-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ctrl-count { color: var(--text2); font-size: 11px; }
+  .ctrl-sep { width: 1px; height: 18px; background: var(--border); margin: 0 6px; }
+  .ctrl:not(.off).scale-active { border-color: var(--border); }
+
+  .timeline-wrap { position: relative; width: 100%; height: calc(100vh - 110px); overflow: hidden; cursor: grab; }
+  .timeline-wrap:active { cursor: grabbing; }
+
+  canvas { display: block; }
+
+  /* Tooltip */
+  .tip {
+    position: fixed; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px; max-width: 380px; z-index: 9999;
+    pointer-events: none; display: none; box-shadow: 0 8px 32px rgba(0,0,0,.5); font-size: 13px;
+  }
+  .tip-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .tip-badge { padding: 1px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+  .tip-hash { font-family: 'Cascadia Code','Fira Code',monospace; font-size: 11px; color: var(--text2); }
+  .tip-time { font-size: 11px; color: var(--text2); margin-bottom: 6px; }
+  .tip-msg { color: var(--text); line-height: 1.4; }
+  .tip-ver { margin-top: 6px; color: #3b82f6; font-weight: 600; font-size: 12px; }
+
+  .zoom-hint { position: absolute; bottom: 12px; right: 20px; font-size: 11px; color: var(--text2); pointer-events: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Terra<span>Studio</span> Development Timeline</h1>
+  <div class="sub">320 commits<span id="subtitle"> &middot; 33 days &middot; Feb 19 &ndash; Mar 23, 2026</span></div>
+</div>
+<div class="controls" id="controls"></div>
+<div class="timeline-wrap" id="wrap">
+  <canvas id="canvas"></canvas>
+  <div class="zoom-hint">Scroll to zoom &middot; Drag to pan</div>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const COMMITS=[
+{n:1,h:"85b01c8",dt:"2026-02-19T22:29",t:"docs",m:"initial architecture and implementation plan",v:null},
+{n:2,h:"c211b6d",dt:"2026-02-19T23:30",t:"feat",m:"scaffold monorepo and @terrastudio/types (Phase 1)",v:null},
+{n:3,h:"ff9658a",dt:"2026-02-19T23:35",t:"feat",m:"@terrastudio/core - plugin registry, HCL pipeline (Phase 2)",v:null},
+{n:4,h:"f2b4a35",dt:"2026-02-19T23:37",t:"feat",m:"azure-networking plugin: VNet, Subnet, NSG (Phase 3)",v:null},
+{n:5,h:"b4091a7",dt:"2026-02-19T23:43",t:"feat",m:"Tauri 2 desktop app with Svelte Flow canvas (Phase 4)",v:null},
+{n:6,h:"391ce37",dt:"2026-02-19T23:45",t:"fix",m:"add DefaultResourceNode so dropped nodes render",v:null},
+{n:7,h:"c1dc73e",dt:"2026-02-19T23:56",t:"fix",m:"add @tauri-apps/cli devDependency",v:null},
+{n:8,h:"15ae025",dt:"2026-02-19T23:58",t:"feat",m:"schema-driven PropertyRenderer, DeploymentBadge, keyboard delete (Phase 5)",v:null},
+{n:9,h:"6081f1d",dt:"2026-02-20T00:03",t:"fix",m:"resolve drag-and-drop from palette to canvas",v:null},
+{n:10,h:"909a090",dt:"2026-02-20T00:05",t:"fix",m:"move drag-drop handlers to DOM wrapper element",v:null},
+{n:11,h:"13245f7",dt:"2026-02-20T00:16",t:"fix",m:"enable HTML5 drag-drop in Tauri WebView2",v:null},
+{n:12,h:"8f56f98",dt:"2026-02-20T00:22",t:"fix",m:"resolve type errors and node position persistence",v:null},
+{n:13,h:"1ea7365",dt:"2026-02-20T00:27",t:"feat",m:"compute plugin, container nodes, cross-plugin connections (Phase 6)",v:null},
+{n:14,h:"8a99b00",dt:"2026-02-20T00:31",t:"fix",m:"container nodes explicit dimensions, subnet is container",v:null},
+{n:15,h:"efd40f1",dt:"2026-02-20T00:38",t:"fix",m:"flip container to canBeChildOf, fix nested nesting",v:null},
+{n:16,h:"83dd8db",dt:"2026-02-20T00:38",t:"fix",m:"add canBeChildOf to NSG schema (Resource Group)",v:null},
+{n:17,h:"6f76cdf",dt:"2026-02-20T00:55",t:"fix",m:"dynamic reparenting on drag and scaled container defaults",v:null},
+{n:18,h:"728812f",dt:"2026-02-20T00:57",t:"chore",m:"add AGPL-3.0 license, README, and package metadata",v:null},
+{n:19,h:"c62e07f",dt:"2026-02-20T00:58",t:"ci",m:"add GitHub Actions build workflow",v:null},
+{n:20,h:"a2d91e3",dt:"2026-02-20T01:05",t:"docs",m:"update roadmap with Phase 1-6 completion",v:null},
+{n:21,h:"dda591f",dt:"2026-02-20T01:27",t:"feat",m:"Phase 7 - project system and terraform execution",v:null},
+{n:22,h:"066b8ef",dt:"2026-02-20T01:36",t:"feat",m:"welcome screen with recent projects",v:null},
+{n:23,h:"5849ca0",dt:"2026-02-20T01:44",t:"feat",m:"Phase 8 - deployment status on diagram nodes",v:null},
+{n:24,h:"8ba1a74",dt:"2026-02-20T01:59",t:"feat",m:"Phase 9 - undo/redo, validation, dirty tracking, shortcuts",v:null},
+{n:25,h:"5749bba",dt:"2026-02-20T02:02",t:"fix",m:"undo/redo structuredClone error and select-all delete",v:null},
+{n:26,h:"02ae0f8",dt:"2026-02-20T02:06",t:"fix",m:"rewrite undo/redo to snapshot after mutations",v:null},
+{n:27,h:"2c9182f",dt:"2026-02-20T02:10",t:"fix",m:"debounce property edits for undo coalescing",v:null},
+{n:28,h:"56032cb",dt:"2026-02-20T02:20",t:"feat",m:"Phase 10 - diagram export (PNG, clipboard) and doc gen",v:null},
+{n:29,h:"e8ee0a9",dt:"2026-02-20T02:31",t:"fix",m:"align PNG export with official Svelte Flow approach",v:null},
+{n:30,h:"0b8cb20",dt:"2026-02-20T02:36",t:"docs",m:"add Phases 11-13 to roadmap",v:null},
+{n:31,h:"600cc26",dt:"2026-02-20T02:40",t:"docs",m:"add frameless UI, hover details, auto-CIDR to roadmap",v:null},
+{n:32,h:"faf1ed3",dt:"2026-02-20T10:08",t:"feat",m:"Phase 11 - frameless UI, collapsible palette, container styling",v:null},
+{n:33,h:"735e253",dt:"2026-02-20T10:20",t:"feat",m:"replace icons with official Azure SVGs",v:null},
+{n:34,h:"16263a4",dt:"2026-02-20T10:37",t:"feat",m:"Phase 12 - handle labels, edge labels, connection validation",v:null},
+{n:35,h:"1fa5ba8",dt:"2026-02-20T10:55",t:"refactor",m:"remove redundant containment edges, derive parent refs",v:null},
+{n:36,h:"b904e2d",dt:"2026-02-20T11:16",t:"feat",m:"add Storage Account, App Service, Key Vault resources + resolveTerraformType",v:null},
+{n:37,h:"259b6a7",dt:"2026-02-20T11:19",t:"feat",m:"add official Azure SVG icons for new resources",v:null},
+{n:38,h:"4d763c2",dt:"2026-02-20T11:23",t:"fix",m:"namespace SVG gradient IDs to prevent color collisions",v:null},
+{n:39,h:"e0b7ecc",dt:"2026-02-20T11:25",t:"fix",m:"use ResourceTypeId in diagram-converter getSchema parameter",v:null},
+{n:40,h:"44b566c",dt:"2026-02-20T11:42",t:"docs",m:"fix Gantt chart, add phases 13-15 to roadmap",v:null},
+{n:41,h:"81d1e14",dt:"2026-02-20T11:44",t:"docs",m:"use realistic dates in roadmap Gantt chart",v:null},
+{n:42,h:"4b72b9f",dt:"2026-02-20T11:47",t:"docs",m:"add monthly tick interval to Gantt chart",v:null},
+{n:43,h:"ba92756",dt:"2026-02-20T11:50",t:"docs",m:"compress roadmap Gantt to realistic daily dates",v:null},
+{n:44,h:"53e6afd",dt:"2026-02-20T13:58",t:"feat",m:"Phase 15 - resource output bindings with decoupled acceptsOutputs system",v:null},
+{n:45,h:"45563fb",dt:"2026-02-20T14:55",t:"feat",m:"Phase 16 - subscription container, variable management, tfvars generation",v:null},
+{n:46,h:"2e221db",dt:"2026-02-20T15:46",t:"feat",m:"VS Code-style UI restructure with activity bar, editor tabs, and menus",v:null},
+{n:47,h:"2480e4f",dt:"2026-02-20T16:06",t:"feat",m:"custom app icon, titlebar branding, and window state persistence",v:null},
+{n:48,h:"da920a1",dt:"2026-02-20T16:35",t:"feat",m:"Phase 17 - auto-CIDR assignment, overlap detection, and CIDR validation",v:null},
+{n:49,h:"6e12d14",dt:"2026-02-20T17:15",t:"feat",m:"auto-layout, edge styles, canvas toolbar, and container resize improvements",v:null},
+{n:50,h:"f73316c",dt:"2026-02-20T17:45",t:"feat",m:"dark/light mode, SVG export, and multi-theme system with 8 palettes",v:null},
+{n:51,h:"11dba59",dt:"2026-02-20T18:28",t:"feat",m:"storage resources, snap-to-grid, app settings panel, and official Azure icons",v:null},
+{n:52,h:"1b9b81d",dt:"2026-02-20T19:08",t:"feat",m:"add nightly builds and release-please versioning pipeline",v:null},
+{n:53,h:"2612bc5",dt:"2026-02-20T14:13",t:"chore",m:"release 0.1.1",v:null},
+{n:54,h:"c7ac345",dt:"2026-02-20T19:16",t:"fix",m:"build workspace packages before tauri-action in CI workflows",v:null},
+{n:55,h:"487ccbd",dt:"2026-02-20T19:26",t:"fix",m:"use NSIS instead of MSI for Windows nightly builds",v:null},
+{n:56,h:"68aba0d",dt:"2026-02-21T01:01",t:"feat",m:"restyle container nodes and add drag-drop containment validation",v:null},
+{n:57,h:"f8ca2a2",dt:"2026-02-21T01:33",t:"feat",m:"replace NSG edge connections with property-based reference system",v:null},
+{n:58,h:"30784d4",dt:"2026-02-21T01:44",t:"docs",m:"update documentation to reflect NSG reference properties and completed phases",v:null},
+{n:59,h:"0d46bb6",dt:"2026-02-21T22:59",t:"feat",m:"add 12 new Azure resources across 3 new plugins",v:null},
+{n:60,h:"020ae9a",dt:"2026-02-21T23:49",t:"fix",m:"migrate storage sub-resources from storage_account_name to storage_account_id",v:null},
+{n:61,h:"e50bee6",dt:"2026-02-21T23:49",t:"feat",m:"add hybrid grid layout algorithm as project setting",v:null},
+{n:62,h:"164c182",dt:"2026-02-21T23:50",t:"feat",m:"replace resource icons with official Azure SVGs",v:null},
+{n:63,h:"fdc0c2f",dt:"2026-02-21T23:51",t:"chore",m:"bump Tauri app version to 0.1.1",v:null},
+{n:64,h:"9f8a4b2",dt:"2026-02-22T00:17",t:"feat",m:"add canvas interactions - context menu, drag selection, copy/paste",v:null},
+{n:65,h:"51b1957",dt:"2026-02-22T01:37",t:"feat",m:"add project templates, unsaved changes protection, and VM improvements",v:null},
+{n:66,h:"e8cefe7",dt:"2026-02-22T01:50",t:"chore",m:"bump version to 0.2.1 and update README with screenshot",v:null},
+{n:67,h:"c21d788",dt:"2026-02-23T18:40",t:"feat",m:"add auto-regenerate toggle, property-as-variable, and RG containment",v:null},
+{n:68,h:"4cdb36e",dt:"2026-02-23T13:43",t:"chore",m:"release 0.1.2",v:null},
+{n:69,h:"96ab2a2",dt:"2026-02-23T21:32",t:"feat",m:"validation error highlights, variable-mode bypass, and real-time variables panel",v:null},
+{n:70,h:"b229c05",dt:"2026-02-23T21:43",t:"feat",m:"add sensitive field support and credential validation to schemas",v:null},
+{n:71,h:"7273dd8",dt:"2026-02-23T22:04",t:"feat",m:"add project-level naming convention system",v:null},
+{n:72,h:"fa91fef",dt:"2026-02-23T22:18",t:"feat",m:"new project wizard with naming convention, layout, and edge style",v:null},
+{n:73,h:"5b9502a",dt:"2026-02-23T22:25",t:"refactor",m:"move new project wizard inline into welcome screen",v:null},
+{n:74,h:"8c7751d",dt:"2026-02-23T23:19",t:"feat",m:"VS-style 3-step new project wizard with naming convention UI",v:null},
+{n:75,h:"bb48594",dt:"2026-02-23T18:24",t:"chore",m:"release 0.1.3",v:null},
+{n:76,h:"d1aab02",dt:"2026-02-24T00:13",t:"feat",m:"Azure subscription picker, minimap toggle, and tab context menu",v:"0.3.0"},
+{n:77,h:"89508ee",dt:"2026-02-24T00:15",t:"chore",m:"commit Cargo.lock for reproducible builds",v:null},
+{n:78,h:"77187b0",dt:"2026-02-24T00:21",t:"docs",m:"update implementation roadmap to reflect completed phases",v:null},
+{n:79,h:"19b3e38",dt:"2026-02-24T01:07",t:"feat",m:"unified collapsible sections and search across all sidebar panels",v:null},
+{n:80,h:"9adfe54",dt:"2026-02-24T01:12",t:"chore",m:"bump version to 0.3.1",v:null},
+{n:81,h:"d0cc051",dt:"2026-02-24T01:51",t:"feat",m:"keyboard shortcuts, Help menu with shortcuts/about modals",v:"0.3.2"},
+{n:82,h:"737f377",dt:"2026-02-24T13:48",t:"feat",m:"QoL improvements - destroy confirmation, close protection, notifications",v:"0.3.3"},
+{n:83,h:"571c5f1",dt:"2026-02-24T16:00",t:"feat",m:"Key Vault access control and collapsible property sections",v:"0.3.4"},
+{n:84,h:"ba7b5d8",dt:"2026-02-24T22:37",t:"fix",m:"add cafAbbreviation and namingConstraints to all resource schemas",v:null},
+{n:85,h:"89fd21c",dt:"2026-02-24T22:55",t:"feat",m:"template gallery completion and 3 new built-in templates",v:"0.3.3"},
+{n:86,h:"19853d6",dt:"2026-02-24T23:18",t:"feat",m:"add 8 Azure data & messaging resources",v:null},
+{n:87,h:"a00015d",dt:"2026-02-24T23:38",t:"feat",m:"add Azure SVG icons for all 8 new data & messaging resources",v:null},
+{n:88,h:"b159130",dt:"2026-02-24T23:46",t:"fix",m:"audit corrections for Redis Cache and Service Bus generators",v:null},
+{n:89,h:"f60e94c",dt:"2026-02-25T00:05",t:"feat",m:"add Route Table, Route, NAT Gateway, and Azure Bastion resources",v:null},
+{n:90,h:"f602bcf",dt:"2026-02-25T00:10",t:"feat",m:"add Azure SVG icons for Route Table, Route, NAT Gateway, and Bastion",v:null},
+{n:91,h:"012d381",dt:"2026-02-25T00:20",t:"feat",m:"add App Service Baseline (Zone-Redundant) template",v:null},
+{n:92,h:"3228fe6",dt:"2026-02-25T00:31",t:"feat",m:"add zone redundancy to App Service Plan",v:null},
+{n:93,h:"b17cc8c",dt:"2026-02-25T00:35",t:"feat",m:"add VNet integration to App Service",v:null},
+{n:94,h:"b5f3025",dt:"2026-02-25T00:40",t:"feat",m:"add subnet service delegation",v:null},
+{n:95,h:"b93650f",dt:"2026-02-25T00:46",t:"feat",m:"add VNet Integration resource",v:null},
+{n:96,h:"69f08ea",dt:"2026-02-25T01:09",t:"feat",m:"auto-spawn dashed reference edges for showAsEdge properties",v:null},
+{n:97,h:"77c3aaf",dt:"2026-02-25T01:19",t:"fix",m:"replace $state+effects ref-edge approach with $derived",v:null},
+{n:98,h:"6aabfcf",dt:"2026-02-25T01:24",t:"fix",m:"add ghost handles to all nodes for reference edge routing",v:null},
+{n:99,h:"a68a829",dt:"2026-02-26T00:49",t:"feat",m:"add edge type framework with connection point management",v:null},
+{n:100,h:"7da323c",dt:"2026-02-26T01:03",t:"feat",m:"add edge style settings with project-level defaults",v:null},
+{n:101,h:"45e5dc4",dt:"2026-02-26T01:10",t:"fix",m:"show actual default values in edge style dropdowns",v:null},
+{n:102,h:"2755d17",dt:"2026-02-26T01:15",t:"fix",m:"show correct category default colors in edge style pickers",v:null},
+{n:103,h:"41b8380",dt:"2026-02-26T01:17",t:"refactor",m:"use muted industry-standard edge color palette",v:null},
+{n:104,h:"4f7519f",dt:"2026-02-26T01:20",t:"feat",m:"edge styling system with project and per-edge overrides",v:"0.4.0"},
+{n:105,h:"c4d3395",dt:"2026-02-26T01:28",t:"fix",m:"auto layout now considers all edge categories",v:null},
+{n:106,h:"729a11c",dt:"2026-02-26T01:52",t:"feat",m:"handle-aware auto layout with edge weighting",v:"0.4.1"},
+{n:107,h:"63eef1f",dt:"2026-02-26T13:00",t:"feat",m:"edge styling enhancements and visibility toggles",v:"0.4.2"},
+{n:108,h:"6e19ab4",dt:"2026-02-26T14:21",t:"feat",m:"selectable reference edges with handle placement",v:"0.4.3"},
+{n:109,h:"50e4958",dt:"2026-02-26T15:13",t:"fix",m:"use unique tags for each nightly build",v:null},
+{n:110,h:"a2de0ef",dt:"2026-02-26T10:17",t:"chore",m:"release 0.1.4",v:null},
+{n:111,h:"49493b6",dt:"2026-02-26T15:29",t:"fix",m:"validate reference properties correctly",v:null},
+{n:112,h:"3912cdd",dt:"2026-02-26T15:38",t:"fix",m:"restore version to 0.4.3 and sync release-please manifest",v:null},
+{n:113,h:"db187f6",dt:"2026-02-26T10:40",t:"chore",m:"release 0.4.4",v:null},
+{n:114,h:"d066ef5",dt:"2026-02-26T17:32",t:"fix",m:"correct portable binary name in release and nightly workflows",v:null},
+{n:115,h:"79ae6cf",dt:"2026-02-26T20:23",t:"feat",m:"add cost estimation panel (Phase 21)",v:null},
+{n:116,h:"bb5c6ad",dt:"2026-02-26T22:01",t:"feat",m:"add cost estimation panel",v:"0.5.0"},
+{n:117,h:"ff61f97",dt:"2026-02-26T22:05",t:"fix",m:"move cost badges toggle into edge visibility dropdown",v:"0.5.1"},
+{n:118,h:"e9797ac",dt:"2026-02-26T22:13",t:"fix",m:"add explicit types to implicit-any arrow function parameters",v:null},
+{n:119,h:"4df8775",dt:"2026-02-26T22:32",t:"fix",m:"resolve remaining typecheck errors",v:null},
+{n:120,h:"a0f4e84",dt:"2026-02-26T22:40",t:"fix",m:"introduce IReactivePluginRegistry interface",v:null},
+{n:121,h:"0d54305",dt:"2026-02-26T22:41",t:"fix",m:"import IReactivePluginRegistry before using in declare statement",v:null},
+{n:122,h:"3e2c4a9",dt:"2026-02-26T22:46",t:"fix",m:"resolve all typecheck errors",v:null},
+{n:123,h:"e3d8a69",dt:"2026-02-26T17:46",t:"chore",m:"release 0.5.2",v:null},
+{n:124,h:"b7445ea",dt:"2026-02-26T23:23",t:"fix",m:"make showAsEdge reference handles positionable",v:null},
+{n:125,h:"ff7b866",dt:"2026-02-26T23:24",t:"docs",m:"update roadmap",v:null},
+{n:126,h:"f737a35",dt:"2026-02-27T14:57",t:"feat",m:"add MCP server for AI assistant integration",v:"0.6.0"},
+{n:127,h:"4be6d91",dt:"2026-02-27T16:09",t:"feat",m:"add structured logging with configurable log level",v:"0.7.0"},
+{n:128,h:"660c182",dt:"2026-02-27T16:53",t:"feat",m:"add canvas layout tools - alignment, auto-fit",v:"0.8.0"},
+{n:129,h:"fb8f136",dt:"2026-02-28T00:33",t:"feat",m:"add .tstudio file extension with OS file association",v:"0.9.0"},
+{n:130,h:"9819acb",dt:"2026-02-28T00:57",t:"feat",m:"add multi-window support",v:"0.10.0"},
+{n:131,h:"571ffb4",dt:"2026-02-28T14:46",t:"feat",m:"add MCP multi-window support",v:"0.11.0"},
+{n:132,h:"ce93d74",dt:"2026-02-28T14:54",t:"feat",m:"sync app settings across multiple windows",v:null},
+{n:133,h:"fee36bd",dt:"2026-02-28T15:53",t:"fix",m:"escape all user-supplied strings in HCL generation",v:null},
+{n:134,h:"104f21d",dt:"2026-02-28T16:49",t:"feat",m:"security hardening, user secrets, about dialog",v:"0.12.0"},
+{n:135,h:"489e35c",dt:"2026-02-28T19:16",t:"feat",m:"MCP query filtering, move/resize commands",v:"0.13.0"},
+{n:136,h:"643dfdb",dt:"2026-02-28T19:31",t:"fix",m:"HCL generator issues - os_type case sensitivity",v:null},
+{n:137,h:"d082c4e",dt:"2026-02-28T19:38",t:"fix",m:"show VNet integration as edge on canvas",v:null},
+{n:138,h:"b443623",dt:"2026-02-28T19:41",t:"fix",m:"add target handle to Subnet for VNet integration",v:null},
+{n:139,h:"544d8ac",dt:"2026-03-01T15:56",t:"feat",m:"Terraform module support - visual grouping, HCL generation",v:"0.14.0"},
+{n:140,h:"6f29216",dt:"2026-03-01T16:07",t:"fix",m:"module boundary visibility",v:null},
+{n:141,h:"f3aaedc",dt:"2026-03-01T16:29",t:"fix",m:"module boundary/collapsed node visibility, handle dedup",v:null},
+{n:142,h:"05c336f",dt:"2026-03-01T17:39",t:"fix",m:"module HCL dedup, locals scope, stdin hang",v:null},
+{n:143,h:"7b478db",dt:"2026-03-01T18:42",t:"feat",m:"module template reuse - define once, instantiate many",v:"0.15.0"},
+{n:144,h:"f46eaab",dt:"2026-03-02T22:36",t:"fix",m:"module instance expand/collapse",v:null},
+{n:145,h:"e626117",dt:"2026-03-02T23:11",t:"fix",m:"filter synthetic/transient nodes from all non-UI pipelines",v:null},
+{n:146,h:"8e183b6",dt:"2026-03-02T23:22",t:"feat",m:"enable variable toggle for select and boolean types",v:null},
+{n:147,h:"964f5d5",dt:"2026-03-03T00:34",t:"refactor",m:"convert all HCL generators to use getPropertyExpression",v:null},
+{n:148,h:"b64572b",dt:"2026-03-03T00:47",t:"feat",m:"enable variable toggle for array properties",v:null},
+{n:149,h:"2750398",dt:"2026-03-03T00:54",t:"fix",m:"proper list(string) variable handling in tfvars",v:null},
+{n:150,h:"4138bd5",dt:"2026-03-03T01:18",t:"fix",m:"native array variable storage, UI disable in variable mode",v:null},
+{n:151,h:"08a8c73",dt:"2026-03-03T01:39",t:"fix",m:"clear terraform state, terminal output on project close",v:null},
+{n:152,h:"ed7b3c3",dt:"2026-03-03T01:47",t:"fix",m:"New Project closes current project",v:null},
+{n:153,h:"8417e7f",dt:"2026-03-03T02:13",t:"docs",m:"update all documentation for module system",v:null},
+{n:154,h:"8106b49",dt:"2026-03-03T02:15",t:"feat",m:"universal variable toggle, array variables",v:"0.16.0"},
+{n:155,h:"af72c4c",dt:"2026-03-05T00:59",t:"test",m:"add vitest test infrastructure with v8 coverage",v:null},
+{n:156,h:"d84644a",dt:"2026-03-05T02:13",t:"feat",m:"add AKS resources, subnet edges, MCP layout warnings",v:null},
+{n:157,h:"aa9054e",dt:"2026-03-05T02:43",t:"feat",m:"add 13 Azure resources, make Key Vault a container",v:"0.17.0"},
+{n:158,h:"c09cacc",dt:"2026-03-05T02:58",t:"fix",m:"MySQL DB requiresResourceGroup, container layout warnings",v:"0.17.1"},
+{n:159,h:"4f60da0",dt:"2026-03-05T04:02",t:"feat",m:"visual subnet placement, implicit PEP generation",v:"0.18.0"},
+{n:160,h:"52f10b9",dt:"2026-03-05T04:09",t:"chore",m:"suppress build warnings",v:null},
+{n:161,h:"dbd36bf",dt:"2026-03-05T04:17",t:"chore",m:"sync release-please manifest to v0.18.0",v:null},
+{n:162,h:"30e0301",dt:"2026-03-05T04:32",t:"fix",m:"add repository field to desktop package.json",v:null},
+{n:163,h:"4e994e6",dt:"2026-03-04T23:33",t:"chore",m:"release 0.18.1",v:null},
+{n:164,h:"a6c272e",dt:"2026-03-05T22:26",t:"fix",m:"correct Linux portable binary name in release workflow",v:null},
+{n:165,h:"9b8e542",dt:"2026-03-05T22:39",t:"fix",m:"convert ASP to leaf node",v:null},
+{n:166,h:"2cab47a",dt:"2026-03-05T22:58",t:"fix",m:"use fixed 220px width for resource nodes",v:null},
+{n:167,h:"b71fdbd",dt:"2026-03-06T00:16",t:"feat",m:"compact node view with Visio-style icons",v:null},
+{n:168,h:"5c153ab",dt:"2026-03-06T00:20",t:"chore",m:"sync release-please manifest to v0.19.0",v:null},
+{n:169,h:"7f8420e",dt:"2026-03-05T19:24",t:"chore",m:"release 0.19.1",v:null},
+{n:170,h:"f5f21d2",dt:"2026-03-06T00:59",t:"feat",m:"add 7 new Azure resources with official icons",v:"0.20.0"},
+{n:171,h:"61cb3e1",dt:"2026-03-05T20:01",t:"chore",m:"release 0.20.1",v:null},
+{n:172,h:"07e9c58",dt:"2026-03-06T02:18",t:"feat",m:"add AWS plugin support",v:"0.21.0"},
+{n:173,h:"c01b46c",dt:"2026-03-06T17:26",t:"feat",m:"complete Azure cost estimation coverage",v:"0.22.0"},
+{n:174,h:"4f142fa",dt:"2026-03-06T17:29",t:"feat",m:"add AWS cost estimation",v:null},
+{n:175,h:"2a46b38",dt:"2026-03-06T17:43",t:"feat",m:"add costEstimation schema blocks",v:null},
+{n:176,h:"3c032fc",dt:"2026-03-06T17:46",t:"fix",m:"render nested object arrays in sidebar",v:null},
+{n:177,h:"8df798c",dt:"2026-03-06T17:59",t:"feat",m:"add 8 new AWS resources",v:"0.23.0"},
+{n:178,h:"fd39749",dt:"2026-03-06T18:15",t:"fix",m:"restrict variable toggle to button click only",v:null},
+{n:179,h:"f02ca21",dt:"2026-03-06T18:15",t:"feat",m:"replace AWS icons with official AWS Architecture icons",v:"0.23.0"},
+{n:180,h:"90fba48",dt:"2026-03-06T18:40",t:"feat",m:"add 6 new AWS resources",v:"0.24.0"},
+{n:181,h:"a29bce7",dt:"2026-03-06T18:48",t:"feat",m:"make EKS/ECS clusters containers",v:"0.25.0"},
+{n:182,h:"42d9181",dt:"2026-03-07T18:08",t:"feat",m:"add multi-tab bottom panel system + 11 feature specs",v:null},
+{n:183,h:"38aa17d",dt:"2026-03-07T18:46",t:"feat",m:"add canvas search in side panel",v:"0.26.0"},
+{n:184,h:"4d0ed78",dt:"2026-03-07T19:06",t:"feat",m:"add connection wizard + rework status bar",v:"0.27.0"},
+{n:185,h:"4177efb",dt:"2026-03-07T20:08",t:"feat",m:"add internationalization with 6 languages",v:"0.28.0"},
+{n:186,h:"59691bf",dt:"2026-03-07T20:32",t:"feat",m:"add validation dashboard with problems panel",v:"0.29.0"},
+{n:187,h:"109b6cf",dt:"2026-03-07T20:41",t:"fix",m:"improve WCAG AA contrast ratios",v:"0.29.1"},
+{n:188,h:"8669e8f",dt:"2026-03-08T02:37",t:"feat",m:"add High Contrast palette",v:"0.30.0"},
+{n:189,h:"3d2907f",dt:"2026-03-08T02:43",t:"feat",m:"add 7 new palettes",v:null},
+{n:190,h:"e724baf",dt:"2026-03-08T02:45",t:"feat",m:"status indicator icons + focus-visible rings",v:"0.31.0"},
+{n:191,h:"b1323ec",dt:"2026-03-08T03:31",t:"feat",m:"ARIA accessibility, font scale system",v:"0.32.0"},
+{n:192,h:"39cdae3",dt:"2026-03-08T03:37",t:"feat",m:"WCAG AA contrast audit + theme extensibility",v:null},
+{n:193,h:"9cce339",dt:"2026-03-08T03:40",t:"chore",m:"remove 6 completed spec files",v:null},
+{n:194,h:"e527433",dt:"2026-03-08T03:53",t:"feat",m:"add dependency graph view with DAG layout",v:"0.33.0"},
+{n:195,h:"e5ce3a9",dt:"2026-03-08T13:14",t:"fix",m:"i18n key typo, missing EC2 handle",v:null},
+{n:196,h:"3ba754b",dt:"2026-03-08T13:22",t:"fix",m:"add edge rendering, bezier curves to dep graph",v:null},
+{n:197,h:"8e5b648",dt:"2026-03-08T14:14",t:"feat",m:"add diagram annotation sticky notes",v:"0.34.0"},
+{n:198,h:"0a7ff08",dt:"2026-03-08T14:24",t:"feat",m:"smart resource duplication with numeric suffixes",v:"0.35.0"},
+{n:199,h:"489d7d9",dt:"2026-03-08T14:29",t:"fix",m:"smart duplication preserves zero-padding",v:null},
+{n:200,h:"b6b0969",dt:"2026-03-08T14:30",t:"chore",m:"remove completed dep graph spec",v:null},
+{n:201,h:"55fa8b1",dt:"2026-03-08T14:48",t:"feat",m:"terraform plan visualization with diff view",v:"0.36.0"},
+{n:202,h:"af9532c",dt:"2026-03-08T15:10",t:"feat",m:"cost breakdown by container and module",v:"0.37.0"},
+{n:203,h:"06a5e3c",dt:"2026-03-08T15:12",t:"fix",m:"exclude template modules from cost grouping",v:null},
+{n:204,h:"a91613a",dt:"2026-03-08T15:26",t:"fix",m:"block browser context menu and F5 refresh",v:null},
+{n:205,h:"c51c5e9",dt:"2026-03-08T15:52",t:"docs",m:"rewrite README with features and architecture",v:null},
+{n:206,h:"a9ab6d8",dt:"2026-03-08T15:58",t:"fix",m:"gate devtools API behind cfg(debug_assertions)",v:null},
+{n:207,h:"b8d4ee2",dt:"2026-03-08T10:58",t:"chore",m:"release 0.20.2",v:null},
+{n:208,h:"83bd151",dt:"2026-03-08T16:38",t:"chore",m:"sync release-please manifest to v0.37.0",v:null},
+{n:209,h:"7d4066f",dt:"2026-03-08T16:40",t:"chore",m:"restore version to 0.37.0",v:null},
+{n:210,h:"b0f117a",dt:"2026-03-08T11:41",t:"chore",m:"release 0.37.1",v:null},
+{n:211,h:"88f9a93",dt:"2026-03-08T17:25",t:"chore",m:"set up open-core license structure",v:null},
+{n:212,h:"74cbdce",dt:"2026-03-08T19:47",t:"fix",m:"replace 12 placeholder icons with official Azure SVGs",v:null},
+{n:213,h:"137f01f",dt:"2026-03-08T20:36",t:"feat",m:"add draw.io-inspired connection UX",v:null},
+{n:214,h:"42d94b5",dt:"2026-03-08T21:30",t:"feat",m:"connection UX improvements, grid snap, space-to-pan",v:"0.38.0"},
+{n:215,h:"9e04e79",dt:"2026-03-08T16:33",t:"chore",m:"release 0.38.1",v:null},
+{n:216,h:"94ba0fe",dt:"2026-03-08T22:38",t:"feat",m:"multi-subscription HCL generation + new Azure resources",v:"0.39.0"},
+{n:217,h:"673b729",dt:"2026-03-08T22:47",t:"fix",m:"function app dotnet-isolated runtime and key vault rbac",v:null},
+{n:218,h:"b26b08d",dt:"2026-03-08T23:02",t:"test",m:"add costEstimation conformance check for all schemas",v:null},
+{n:219,h:"69dcf07",dt:"2026-03-08T23:04",t:"chore",m:"baseline 4 new i18n violations",v:null},
+{n:220,h:"3aaf777",dt:"2026-03-08T23:52",t:"docs",m:"add version history changelog and update MCP port",v:"0.39.1"},
+{n:221,h:"c6fb94b",dt:"2026-03-09T03:22",t:"fix",m:"annotation positioning on load and cost panel crash",v:null},
+{n:222,h:"1abf26b",dt:"2026-03-12T11:53",t:"chore",m:"Merge pull request #27 (release-please)",v:null},
+{n:223,h:"5cd8e7e",dt:"2026-03-13T12:23",t:"fix",m:"remove redundant snap-on-drop that caused grid placement drift",v:null},
+{n:224,h:"084cd22",dt:"2026-03-13T12:30",t:"fix",m:"implement proper keyboard arrow key movement for canvas nodes",v:null},
+{n:225,h:"7faa211",dt:"2026-03-13T13:05",t:"fix",m:"simplify project creation to 2-step workflow",v:null},
+{n:226,h:"0f000e2",dt:"2026-03-13T13:34",t:"fix",m:"replace naming convention checkbox with toggle switch",v:null},
+{n:227,h:"0dc2670",dt:"2026-03-13T17:53",t:"fix",m:"canvas crosshair cursor and middle-click tab close",v:null},
+{n:228,h:"7b06a5d",dt:"2026-03-15T16:56",t:"feat",m:"add Display Name field for canvas nodes",v:"0.39.0"},
+{n:229,h:"9e11278",dt:"2026-03-15T17:02",t:"fix",m:"inherit env/region naming tokens from parent Resource Group",v:null},
+{n:230,h:"fcd0bea",dt:"2026-03-15T17:11",t:"fix",m:"remove redundant naming_region field and fix slug extraction feedback loop",v:null},
+{n:231,h:"30c5ece",dt:"2026-03-15T17:24",t:"fix",m:"decouple naming convention slug from computed name/label",v:null},
+{n:232,h:"47fc4ea",dt:"2026-03-15T17:32",t:"fix",m:"restore naming_region shortcode field on Resource Group",v:null},
+{n:233,h:"089e7a5",dt:"2026-03-15T17:38",t:"fix",m:"keep label in sync with naming slug, simplify canvas label derivation",v:null},
+{n:234,h:"da16c3b",dt:"2026-03-15T17:41",t:"fix",m:"propagate RG naming overrides to nodes without a stored namingSlug",v:null},
+{n:235,h:"f1bc179",dt:"2026-03-15T17:52",t:"fix",m:"derive naming region from RG location dropdown",v:"0.39.1"},
+{n:236,h:"f821a77",dt:"2026-03-15T18:09",t:"refactor",m:"generalize naming token inheritance as schema-declared NamingTokenSource",v:null},
+{n:237,h:"c00c425",dt:"2026-03-15T19:00",t:"docs",m:"add platform architecture plan for CLI + web + IPlatform",v:null},
+{n:238,h:"8e38f6f",dt:"2026-03-15T19:24",t:"feat",m:"extract @terrastudio/project package (Phase A of platform architecture)",v:null},
+{n:239,h:"3a85fa5",dt:"2026-03-15T19:31",t:"chore",m:"update lockfile for @terrastudio/project package",v:null},
+{n:240,h:"87c6f53",dt:"2026-03-15T19:50",t:"feat",m:"delete MCP bridge, scaffold @terrastudio/cli (Phase B)",v:null},
+{n:241,h:"59e3be9",dt:"2026-03-15T20:05",t:"feat",m:"implement full MCP command parity in @terrastudio/cli",v:null},
+{n:242,h:"23241e3",dt:"2026-03-15T20:14",t:"feat",m:"add shared validation layer to @terrastudio/project and CLI",v:null},
+{n:243,h:"2bc7e3c",dt:"2026-03-15T21:31",t:"feat",m:"Phase C \u2014 IProjectStorage interface + platform adapters",v:null},
+{n:244,h:"b91eead",dt:"2026-03-15T21:39",t:"chore",m:"centralize versioning and reorganize plugin packages",v:null},
+{n:245,h:"c669758",dt:"2026-03-15T21:45",t:"feat",m:"implement full HCL generation pipeline in CLI (tstudio hcl generate)",v:null},
+{n:246,h:"25ed887",dt:"2026-03-15T21:51",t:"feat",m:"add project create and terraform command group to CLI",v:null},
+{n:247,h:"7b0d76d",dt:"2026-03-15T21:57",t:"feat",m:"expand CLI resource and project config commands",v:null},
+{n:248,h:"216b68c",dt:"2026-03-15T22:03",t:"chore",m:"bump version to 0.40.0",v:"0.40.0"},
+{n:249,h:"882d0a8",dt:"2026-03-15T22:09",t:"feat",m:"add CLI standalone binary packaging and release workflow",v:null},
+{n:250,h:"e1561ce",dt:"2026-03-15T22:14",t:"feat",m:"add CLI install scripts and npm publish on release",v:null},
+{n:251,h:"2da3469",dt:"2026-03-15T22:16",t:"chore",m:"bump version to 0.41.0",v:"0.41.0"},
+{n:252,h:"c2e732b",dt:"2026-03-15T22:23",t:"chore",m:"sync release-please manifest to 0.41.0",v:"0.41.0"},
+{n:253,h:"229e6e2",dt:"2026-03-15T22:24",t:"chore",m:"release 0.41.1",v:"0.41.1"},
+{n:254,h:"e3d69b9",dt:"2026-03-15T22:45",t:"fix",m:"use direct pkg binary path to avoid conflict with npm pkg command",v:null},
+{n:255,h:"f3b746a",dt:"2026-03-15T22:46",t:"fix",m:"switch npm publish to OIDC trusted publishing (no token required)",v:null},
+{n:256,h:"ddfec77",dt:"2026-03-15T22:54",t:"fix",m:"rename npm package to @afroze9/terrastudio-cli",v:null},
+{n:257,h:"96a8859",dt:"2026-03-15T23:04",t:"fix",m:"support manual release trigger in addition to release-please",v:null},
+{n:258,h:"b8ee172",dt:"2026-03-15T23:22",t:"fix",m:"remove email address from package author fields",v:null},
+{n:259,h:"4929ca1",dt:"2026-03-15T23:22",t:"chore",m:"release 0.41.2",v:"0.41.2"},
+{n:260,h:"5737ff7",dt:"2026-03-15T23:32",t:"fix",m:"track CLI package in release-please and bump to 0.41.2",v:"0.41.2"},
+{n:261,h:"6c67ccd",dt:"2026-03-15T23:32",t:"chore",m:"release master",v:null},
+{n:262,h:"6a56c96",dt:"2026-03-15T23:39",t:"fix",m:"remove manual release trigger, restore clean release-please flow",v:null},
+{n:263,h:"90f1e1a",dt:"2026-03-15T23:47",t:"fix",m:"trigger build jobs when CLI package releases independently of desktop",v:null},
+{n:264,h:"89abe38",dt:"2026-03-15T23:53",t:"fix",m:"remove CLI from release-please tracking, gate all jobs on desktop release",v:null},
+{n:265,h:"4aa0f67",dt:"2026-03-15T23:59",t:"fix",m:"force release-please PR for pending fixes",v:null},
+{n:266,h:"0cf439a",dt:"2026-03-16T00:01",t:"fix",m:"unblock release-please after tagging v0.41.3",v:"0.41.3"},
+{n:267,h:"392d4b9",dt:"2026-03-16T00:03",t:"fix",m:"sync release-please manifest to v0.41.3",v:"0.41.3"},
+{n:268,h:"fc61cd0",dt:"2026-03-16T00:04",t:"fix",m:"trigger release after unblocking release-please",v:null},
+{n:269,h:"72b7716",dt:"2026-03-16T00:05",t:"chore",m:"release 0.41.4",v:"0.41.4"},
+{n:270,h:"e70c08d",dt:"2026-03-16T00:17",t:"fix",m:"use npm publish with job-level id-token for OIDC trusted publishing",v:null},
+{n:271,h:"03e2090",dt:"2026-03-16T00:30",t:"feat",m:"add structured logging across diagram, HCL gen, terraform, and project ops",v:null},
+{n:272,h:"9c5ef99",dt:"2026-03-16T00:34",t:"chore",m:"release 0.41.5",v:"0.41.5"},
+{n:273,h:"40d65d6",dt:"2026-03-16T00:42",t:"fix",m:"remove --provenance flag from npm publish (scoped package %2f encoding bug)",v:null},
+{n:274,h:"8c1f869",dt:"2026-03-16T00:48",t:"fix",m:"use Node 24 for npm publish to fix OIDC provenance 404 on scoped packages",v:null},
+{n:275,h:"27d7fc6",dt:"2026-03-16T00:49",t:"fix",m:"trigger release to verify npm OIDC publish with Node 24",v:null},
+{n:276,h:"5ef6b17",dt:"2026-03-16T00:49",t:"chore",m:"release 0.41.6",v:"0.41.6"},
+{n:277,h:"dde4960",dt:"2026-03-16T00:59",t:"fix",m:"add repository url to cli package.json for npm provenance verification",v:null},
+{n:278,h:"37ffab8",dt:"2026-03-16T00:59",t:"chore",m:"prompt release-please to open next PR",v:null},
+{n:279,h:"4cee821",dt:"2026-03-16T01:07",t:"fix",m:"bump version to 0.41.7 and align cli package version",v:"0.41.7"},
+{n:280,h:"f4aa2ef",dt:"2026-03-16T01:07",t:"chore",m:"release 0.41.7",v:"0.41.7"},
+{n:281,h:"7f4e3e7",dt:"2026-03-22T01:16",t:"feat",m:"add annotation plugin and remove old annotation system (#31)",v:null},
+{n:282,h:"5562c9a",dt:"2026-03-22T01:17",t:"chore",m:"release 0.41.8",v:"0.41.8"},
+{n:283,h:"f2ae436",dt:"2026-03-22T01:23",t:"docs",m:"add resource audit and evaluation criteria checklist",v:null},
+{n:284,h:"5897911",dt:"2026-03-22T01:49",t:"fix",m:"resolve critical resource audit findings (#59, #74, #75, #76, #82, #84, #85, #86)",v:null},
+{n:285,h:"6eef7a3",dt:"2026-03-22T01:54",t:"fix",m:"resolve high-priority resource audit findings (#77, #81, #83, #87)",v:null},
+{n:286,h:"90aeb5b",dt:"2026-03-22T02:02",t:"fix",m:"resolve high-priority resource audit findings (#63, #79, #80, #89)",v:null},
+{n:287,h:"bfa89a4",dt:"2026-03-22T02:07",t:"fix",m:"resolve high-priority resource audit findings (#62, #64, #90, #91)",v:null},
+{n:288,h:"2e607db",dt:"2026-03-22T02:12",t:"fix",m:"resolve high-priority resource audit findings (#60, #61, #88, #92)",v:null},
+{n:289,h:"929db70",dt:"2026-03-22T11:40",t:"fix",m:"resolve resource audit findings (#51, #65, #66, #67)",v:null},
+{n:290,h:"8a18169",dt:"2026-03-22T11:49",t:"fix",m:"resolve all remaining medium-priority resource audit findings",v:null},
+{n:291,h:"606e0d5",dt:"2026-03-22T12:11",t:"fix",m:"CLI crashes when bundled/installed due to import.meta.url in CJS (#48)",v:null},
+{n:292,h:"5aefb50",dt:"2026-03-22T12:19",t:"chore",m:"bump version to 0.42.0",v:"0.42.0"},
+{n:293,h:"66837b5",dt:"2026-03-22T12:23",t:"fix",m:"update release-please manifest to 0.42.0",v:"0.42.0"},
+{n:294,h:"c5a78ed",dt:"2026-03-22T12:25",t:"docs",m:"add release-please manifest to version bump checklist in CLAUDE.md",v:null},
+{n:295,h:"63391b9",dt:"2026-03-22T12:25",t:"chore",m:"release 0.42.1",v:"0.42.1"},
+{n:296,h:"b318d9e",dt:"2026-03-22T12:53",t:"fix",m:"build CLI binaries on native OS instead of cross-compiling (#48)",v:null},
+{n:297,h:"3380399",dt:"2026-03-22T12:54",t:"fix",m:"bump version to 0.42.2 \u2014 native CLI builds",v:"0.42.2"},
+{n:298,h:"6070ef6",dt:"2026-03-22T12:56",t:"chore",m:"release 0.42.3",v:"0.42.3"},
+{n:299,h:"31c8fcf",dt:"2026-03-22T13:17",t:"feat",m:"auto-detect project path in CLI when run from project directory",v:null},
+{n:300,h:"eb4e9dd",dt:"2026-03-22T13:18",t:"feat",m:"bump version to 0.42.4 \u2014 CLI auto-detect project path",v:"0.42.4"},
+{n:301,h:"75dd0e7",dt:"2026-03-22T13:19",t:"chore",m:"release 0.42.5",v:"0.42.5"},
+{n:302,h:"d4675dd",dt:"2026-03-22T13:45",t:"feat",m:"add node visual customization panel (#49)",v:null},
+{n:303,h:"d09b5e0",dt:"2026-03-22T13:50",t:"feat",m:"bump version to 0.43.0 \u2014 node visual customization panel",v:"0.43.0"},
+{n:304,h:"02c299d",dt:"2026-03-22T14:08",t:"feat",m:"add right-side activity bar with Properties and Visual Style panels (#49)",v:null},
+{n:305,h:"a3141ea",dt:"2026-03-22T14:24",t:"fix",m:"properties panel not filling right panel height",v:"0.43.1"},
+{n:306,h:"222be01",dt:"2026-03-22T15:08",t:"feat",m:"custom sticky note node with double-click creation (#49)",v:null},
+{n:307,h:"f051afe",dt:"2026-03-22T15:47",t:"feat",m:"node type visibility toggles (#33)",v:null},
+{n:308,h:"eee7334",dt:"2026-03-22T16:26",t:"fix",m:"handle repositioning when toggling outputs on/off (#34)",v:null},
+{n:309,h:"33cb6b6",dt:"2026-03-22T18:41",t:"feat",m:"add Azure AI plugin with 8 resources",v:null},
+{n:310,h:"91bf2cb",dt:"2026-03-23T21:59",t:"feat",m:"improve Azure AI plugin and fix CLI npm publish",v:"0.47.0"},
+{n:311,h:"b707553",dt:"2026-03-23T22:03",t:"chore",m:"release 0.47.1",v:"0.47.1"},
+{n:312,h:"1193187",dt:"2026-03-23T22:05",t:"chore",m:"Merge pull request #111 (release-please)",v:null},
+{n:313,h:"146c115",dt:"2026-03-23T22:06",t:"fix",m:"update lockfile after CLI dependency changes",v:null},
+{n:314,h:"cf5d5c4",dt:"2026-03-23T22:14",t:"chore",m:"bump version to 0.47.2 to retrigger release",v:"0.47.2"},
+{n:315,h:"49afeda",dt:"2026-03-23T22:16",t:"chore",m:"release 0.47.3",v:"0.47.3"},
+{n:316,h:"9ce7f30",dt:"2026-03-23T22:17",t:"chore",m:"Merge pull request #112 (release-please)",v:null},
+{n:317,h:"c93b822",dt:"2026-03-23T22:37",t:"feat",m:"interactive CLI wizard for project create and optional path",v:"0.48.0"},
+{n:318,h:"1cfbd57",dt:"2026-03-23T22:39",t:"chore",m:"release 0.48.1",v:"0.48.1"},
+{n:319,h:"fbdddd6",dt:"2026-03-23T22:39",t:"chore",m:"Merge pull request #113 (release-please)",v:null},
+{n:320,h:"5c9d694",dt:"2026-03-23T23:34",t:"fix",m:"drop macOS x86_64 release build",v:"0.48.2"},
+];
+
+const TYPES={
+  feat:{l:'Feature',c:'#3b82f6'},fix:{l:'Bug Fix',c:'#ef4444'},chore:{l:'Chore',c:'#6b7280'},
+  docs:{l:'Docs',c:'#22c55e'},refactor:{l:'Refactor',c:'#a855f7'},test:{l:'Test',c:'#14b8a6'},
+  ci:{l:'CI',c:'#eab308'}
+};
+
+// --- Scale definitions ---
+const HOUR = 3600000;
+const DAY = 86400000;
+const WEEK = 7 * DAY;
+const SCALES = [
+  { id: '6h',   label: '6 Hours', interval: 6 * HOUR },
+  { id: '1d',   label: '1 Day',   interval: DAY },
+  { id: '1w',   label: '1 Week',  interval: WEEK },
+  { id: '1mo',  label: '1 Month', interval: null }, // special handling
+];
+let currentScale = '1d';
+
+function getScaleTicks(vStart, vEnd) {
+  const scale = SCALES.find(s => s.id === currentScale);
+  const ticks = [];
+
+  if (scale.id === '1mo') {
+    // Month boundaries
+    let d = new Date(vStart);
+    d = new Date(d.getFullYear(), d.getMonth(), 1);
+    while (d.getTime() <= vEnd + 31 * DAY) {
+      ticks.push({
+        time: d.getTime(),
+        label: d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+      });
+      d = new Date(d.getFullYear(), d.getMonth() + 1, 1);
+    }
+    return ticks;
+  }
+
+  const interval = scale.interval;
+  // Align start to interval boundary
+  let t = Math.floor((vStart - DAY) / interval) * interval;
+  // For sub-day, align to a nice boundary from midnight
+  if (scale.id === '6h') {
+    const base = new Date(vStart);
+    base.setHours(0, 0, 0, 0);
+    t = base.getTime();
+    while (t < vStart - interval) t += interval;
+  }
+
+  while (t <= vEnd + interval) {
+    const d = new Date(t);
+    let label;
+    if (scale.id === '6h') {
+      label = d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', hour12: true });
+    } else if (scale.id === '1d') {
+      label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    } else if (scale.id === '1w') {
+      label = 'W' + getWeekLabel(d) + ' ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+    // Skip labels that would overlap (too many on screen)
+    const pixPerTick = (W - 80) / ((vEnd - vStart) / interval);
+    if (pixPerTick < 50) {
+      // Thin out: only show every Nth
+      const idx = ticks.length;
+      const skip = Math.ceil(50 / pixPerTick);
+      ticks.push({ time: t, label: (idx % skip === 0) ? label : null });
+    } else {
+      ticks.push({ time: t, label });
+    }
+    t += interval;
+  }
+  return ticks;
+}
+
+function getWeekLabel(d) {
+  const start = new Date(d.getFullYear(), 0, 1);
+  return Math.ceil(((d - start) / DAY + start.getDay() + 1) / 7);
+}
+
+// --- State ---
+const active = new Set(Object.keys(TYPES));
+const tMin = new Date('2026-02-19T00:00').getTime();
+const tMax = new Date('2026-03-10T00:00').getTime();
+let viewStart = tMin;
+let viewEnd = tMax;
+
+const wrap = document.getElementById('wrap');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const tip = document.getElementById('tip');
+const dpr = window.devicePixelRatio || 1;
+
+let W, H;
+function resize() {
+  W = wrap.clientWidth;
+  H = wrap.clientHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+window.addEventListener('resize', resize);
+
+// --- Coordinate helpers ---
+function timeToX(t) {
+  return 60 + (t - viewStart) / (viewEnd - viewStart) * (W - 80);
+}
+function xToTime(x) {
+  return viewStart + (x - 60) / (W - 80) * (viewEnd - viewStart);
+}
+
+// --- Filtered commits ---
+function visibleCommits() {
+  return COMMITS.filter(c => active.has(c.t));
+}
+
+// --- Drawing ---
+function getThemeColors() {
+  const s = getComputedStyle(document.documentElement);
+  return {
+    bg: s.getPropertyValue('--bg').trim(),
+    axis: s.getPropertyValue('--grid').trim(),
+    tickLine: s.getPropertyValue('--axis').trim(),
+    tickText: s.getPropertyValue('--tick').trim(),
+  };
+}
+
+function draw() {
+  const theme = getThemeColors();
+  ctx.clearRect(0, 0, W, H);
+  const midY = H / 2;
+  const commits = visibleCommits();
+
+  // Axis line
+  ctx.strokeStyle = theme.axis;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(60, midY);
+  ctx.lineTo(W - 20, midY);
+  ctx.stroke();
+
+  // Date ticks based on current scale
+  ctx.fillStyle = theme.tickText;
+  ctx.font = '11px system-ui, sans-serif';
+  ctx.textAlign = 'center';
+
+  const ticks = getScaleTicks(viewStart, viewEnd);
+  for (const { time, label } of ticks) {
+    const x = timeToX(time);
+    if (x < 55 || x > W - 15) continue;
+    ctx.strokeStyle = theme.tickLine;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x, midY - 8);
+    ctx.lineTo(x, midY + 8);
+    ctx.stroke();
+    if (showDates && label) {
+      ctx.fillStyle = theme.tickText;
+      ctx.fillText(label, x, midY + 24);
+    }
+  }
+
+  // Version markers
+  const versionCommits = commits.filter(c => c.v);
+  ctx.font = 'bold 9px system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  for (const c of versionCommits) {
+    const t = new Date(c.dt).getTime();
+    const x = timeToX(t);
+    if (x < 55 || x > W - 15) continue;
+    ctx.strokeStyle = 'rgba(59,130,246,0.25)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(x, midY - 60);
+    ctx.lineTo(x, midY - 14);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(59,130,246,0.7)';
+    ctx.fillText('v' + c.v, x, midY - 64);
+  }
+
+  // Commit dots - spread vertically to avoid overlap
+  // Group by proximity on x-axis and stack
+  const dotR = 6;
+  const sorted = commits.map(c => ({
+    ...c,
+    ts: new Date(c.dt).getTime(),
+    x: timeToX(new Date(c.dt).getTime()),
+  })).sort((a, b) => a.ts - b.ts);
+
+  // Stack dots that overlap
+  const placed = [];
+  for (const c of sorted) {
+    let y = midY;
+    let dir = -1; // start above
+    let step = 0;
+    while (true) {
+      const collision = placed.some(p =>
+        Math.abs(p.x - c.x) < dotR * 2.2 && Math.abs(p.y - y) < dotR * 2.2
+      );
+      if (!collision) break;
+      step++;
+      y = midY + dir * step * (dotR * 2.2);
+      dir = dir > 0 ? -(dir) : -(dir) + 1 > 0 ? 1 : -1; // alternate above/below
+      // Simpler: alternate above and below
+      if (step % 2 === 0) {
+        y = midY - (Math.ceil(step / 2)) * dotR * 2.2;
+      } else {
+        y = midY + (Math.ceil(step / 2)) * dotR * 2.2;
+      }
+    }
+    c.y = y;
+    placed.push(c);
+  }
+
+  // Store for hit testing
+  window._dots = placed;
+
+  // Draw dots
+  for (const c of placed) {
+    const info = TYPES[c.t] || TYPES.chore;
+    const r = c.v ? dotR + 2 : dotR;
+
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = info.c;
+    ctx.fill();
+
+    if (c.v) {
+      ctx.strokeStyle = document.documentElement.classList.contains('light') ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.7)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  }
+}
+
+// --- Tooltip ---
+let hoveredDot = null;
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  const dots = window._dots || [];
+
+  let found = null;
+  let bestDist = Infinity;
+  for (const d of dots) {
+    const dist = Math.hypot(d.x - mx, d.y - my);
+    const r = d.v ? 8 : 6;
+    if (dist < r + 4 && dist < bestDist) {
+      bestDist = dist;
+      found = d;
+    }
+  }
+
+  if (found) {
+    hoveredDot = found;
+    const info = TYPES[found.t] || TYPES.chore;
+    tip.innerHTML = `
+      <div class="tip-head">
+        <div class="tip-badge" style="background:${info.c}22;color:${info.c}">${info.l}</div>
+        <div class="tip-hash">#${found.n} &middot; ${found.h}</div>
+      </div>
+      <div class="tip-time">${found.dt.replace('T',' at ')}</div>
+      <div class="tip-msg">${found.m}</div>
+      ${found.v ? `<div class="tip-ver">Release v${found.v}</div>` : ''}
+    `;
+    tip.style.display = 'block';
+    let tx = e.clientX + 14, ty = e.clientY - 90;
+    if (tx + 380 > window.innerWidth) tx = e.clientX - 394;
+    if (ty < 8) ty = e.clientY + 20;
+    tip.style.left = tx + 'px';
+    tip.style.top = ty + 'px';
+    canvas.style.cursor = 'pointer';
+  } else {
+    hoveredDot = null;
+    tip.style.display = 'none';
+    canvas.style.cursor = isDragging ? 'grabbing' : 'grab';
+  }
+});
+canvas.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+
+// --- Pan & Zoom ---
+let isDragging = false;
+let dragStartX = 0;
+let dragStartView = 0;
+
+canvas.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  dragStartX = e.clientX;
+  dragStartView = viewStart;
+  canvas.style.cursor = 'grabbing';
+});
+window.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const dx = e.clientX - dragStartX;
+  const timePerPx = (viewEnd - viewStart) / (W - 80);
+  const dt = -dx * timePerPx;
+  const newStart = dragStartView + dt;
+  const range = viewEnd - viewStart;
+  viewStart = newStart;
+  viewEnd = newStart + range;
+  draw();
+});
+window.addEventListener('mouseup', () => {
+  isDragging = false;
+  if (!hoveredDot) canvas.style.cursor = 'grab';
+});
+
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const pivot = xToTime(mx);
+  const factor = e.deltaY > 0 ? 1.15 : 1 / 1.15;
+  const minRange = 4 * 3600000;   // 4 hours
+  const maxRange = 25 * 86400000; // 25 days
+
+  let newRange = (viewEnd - viewStart) * factor;
+  newRange = Math.max(minRange, Math.min(maxRange, newRange));
+
+  const ratio = (pivot - viewStart) / (viewEnd - viewStart);
+  viewStart = pivot - ratio * newRange;
+  viewEnd = viewStart + newRange;
+  draw();
+}, { passive: false });
+
+// --- Filter controls ---
+const counts = {};
+Object.keys(TYPES).forEach(k => counts[k] = 0);
+COMMITS.forEach(c => counts[c.t] = (counts[c.t] || 0) + 1);
+
+let showDates = true;
+
+const ctrl = document.getElementById('controls');
+ctrl.innerHTML = '<span class="controls-label">Filter:</span>';
+Object.entries(TYPES).forEach(([k, v]) => {
+  const el = document.createElement('div');
+  el.className = 'ctrl';
+  el.innerHTML = `<div class="ctrl-dot" style="background:${v.c}"></div>${v.l} <span class="ctrl-count">(${counts[k] || 0})</span>`;
+  el.onclick = () => {
+    if (active.has(k)) {
+      active.delete(k);
+      el.classList.add('off');
+    } else {
+      active.add(k);
+      el.classList.remove('off');
+    }
+    draw();
+  };
+  ctrl.appendChild(el);
+});
+
+// Date labels toggle
+const sep = document.createElement('div');
+sep.className = 'ctrl-sep';
+ctrl.appendChild(sep);
+
+const dateToggle = document.createElement('div');
+dateToggle.className = 'ctrl';
+dateToggle.innerHTML = '<span class="controls-label" style="margin:0">Dates</span>';
+const subtitle = document.getElementById('subtitle');
+const scaleEls = []; // collected after creation, toggled by Dates
+dateToggle.onclick = () => {
+  showDates = !showDates;
+  dateToggle.classList.toggle('off', !showDates);
+  subtitle.style.display = showDates ? '' : 'none';
+  scaleEls.forEach(el => el.style.display = showDates ? '' : 'none');
+  draw();
+};
+ctrl.appendChild(dateToggle);
+
+// Scale toggle buttons
+const sep2 = document.createElement('div');
+sep2.className = 'ctrl-sep';
+scaleEls.push(sep2);
+ctrl.appendChild(sep2);
+
+const scaleLabel = document.createElement('span');
+scaleLabel.className = 'controls-label';
+scaleLabel.textContent = 'Scale:';
+scaleEls.push(scaleLabel);
+ctrl.appendChild(scaleLabel);
+
+const scaleButtons = {};
+SCALES.forEach(s => {
+  const el = document.createElement('div');
+  el.className = 'ctrl' + (s.id === currentScale ? '' : ' off');
+  el.textContent = s.label;
+  el.onclick = () => {
+    currentScale = s.id;
+    Object.values(scaleButtons).forEach(b => b.classList.add('off'));
+    el.classList.remove('off');
+    // Zoom viewport to show a sensible range for this scale
+    const mid = (viewStart + viewEnd) / 2;
+    const ranges = { '6h': 2 * DAY, '1d': tMax - tMin, '1w': tMax - tMin, '1mo': tMax - tMin };
+    const newRange = ranges[s.id] || (tMax - tMin);
+    viewStart = mid - newRange / 2;
+    viewEnd = mid + newRange / 2;
+    draw();
+  };
+  scaleButtons[s.id] = el;
+  scaleEls.push(el);
+  ctrl.appendChild(el);
+});
+
+// Theme toggle
+const sep3 = document.createElement('div');
+sep3.className = 'ctrl-sep';
+ctrl.appendChild(sep3);
+
+const themeToggle = document.createElement('div');
+themeToggle.className = 'ctrl';
+themeToggle.innerHTML = '<span class="controls-label" style="margin:0">Light</span>';
+themeToggle.onclick = () => {
+  const isLight = document.documentElement.classList.toggle('light');
+  themeToggle.querySelector('.controls-label').textContent = isLight ? 'Dark' : 'Light';
+  draw();
+};
+ctrl.appendChild(themeToggle);
+
+// --- Init ---
+resize();
+</script>
+</body>
+</html>
