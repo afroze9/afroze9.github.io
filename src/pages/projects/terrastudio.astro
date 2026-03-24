@@ -1,0 +1,706 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const description = "TerraStudio — a visual infrastructure diagram builder. Drag-and-drop Azure and AWS resources, configure visually, and export production-ready Terraform code.";
+
+const features = [
+  {
+    icon: "canvas",
+    title: "Visual Drag & Drop",
+    description: "Build infrastructure diagrams on an interactive canvas. Drop Azure and AWS resources, connect them visually, and see your architecture take shape.",
+  },
+  {
+    icon: "terraform",
+    title: "Terraform Code Generation",
+    description: "Export production-ready HCL code from your diagrams. Modules, variables, and tfvars — generated automatically from your visual design.",
+  },
+  {
+    icon: "cost",
+    title: "Cost Estimation",
+    description: "See estimated monthly costs as you design. Breakdown by resource, container, and module — before you deploy a single resource.",
+  },
+  {
+    icon: "modules",
+    title: "Module System",
+    description: "Define reusable Terraform modules visually. Create a module template once, instantiate it across your diagram with different configurations.",
+  },
+  {
+    icon: "plugins",
+    title: "60+ Cloud Resources",
+    description: "Azure networking, compute, storage, databases, AI services, and AWS support. Each resource has schema-driven properties and official icons.",
+  },
+  {
+    icon: "cli",
+    title: "CLI & MCP Server",
+    description: "Headless project management via CLI. AI assistant integration through the built-in MCP server for automated infrastructure workflows.",
+  },
+];
+
+const stats = [
+  { value: "320+", label: "Commits" },
+  { value: "60+", label: "Resources" },
+  { value: "33", label: "Days Built" },
+  { value: "v0.48", label: "Latest" },
+];
+
+const techStack = [
+  { name: "Svelte", role: "UI Framework" },
+  { name: "TypeScript", role: "Language" },
+  { name: "Tauri 2", role: "Desktop Runtime" },
+  { name: "Rust", role: "Backend" },
+  { name: "Terraform", role: "IaC Target" },
+  { name: "Svelte Flow", role: "Canvas" },
+];
+
+const milestones = [
+  { version: "0.1", date: "Feb 20", title: "First canvas with drag-and-drop" },
+  { version: "0.4", date: "Feb 26", title: "Edge styling system" },
+  { version: "0.5", date: "Feb 26", title: "Cost estimation panel" },
+  { version: "0.6", date: "Feb 27", title: "MCP server for AI integration" },
+  { version: "0.15", date: "Mar 1", title: "Module template reuse" },
+  { version: "0.21", date: "Mar 6", title: "AWS plugin support" },
+  { version: "0.28", date: "Mar 7", title: "Internationalization — 6 languages" },
+  { version: "0.33", date: "Mar 8", title: "Dependency graph view" },
+  { version: "0.39", date: "Mar 8", title: "Multi-subscription HCL generation" },
+  { version: "0.48", date: "Mar 23", title: "Interactive CLI wizard" },
+];
+---
+
+<BaseLayout title="TerraStudio" description={description}>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">Open Source</div>
+    <h1>Terra<span class="accent">Studio</span></h1>
+    <p class="hero-tagline">Visual Infrastructure as Code</p>
+    <p class="hero-description">
+      Design cloud infrastructure by dragging and dropping resources onto a canvas.
+      Connect them visually, configure properties, and export production-ready Terraform code.
+    </p>
+
+    <div class="hero-actions">
+      <a id="download-btn" href="https://github.com/afroze9/TerraStudio/releases/latest" class="btn btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        <span id="download-label">Download</span>
+      </a>
+      <a href="https://github.com/afroze9/TerraStudio" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" fill="currentColor" class="btn-icon">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+        </svg>
+        GitHub
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      {stats.map((stat) => (
+        <div class="stat">
+          <span class="stat-value">{stat.value}</span>
+          <span class="stat-label">{stat.label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Screenshot -->
+  <section class="screenshot">
+    <div class="screenshot-frame">
+      <div class="screenshot-titlebar">
+        <div class="titlebar-dots">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+        </div>
+        <span class="titlebar-title">TerraStudio</span>
+      </div>
+      <img src="/projects/terrastudio-screenshot.png" alt="TerraStudio — visual infrastructure designer with Azure resources on canvas" loading="eager" />
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="section-header">
+      <h2>Features</h2>
+      <p>Everything you need to design and export cloud infrastructure</p>
+    </div>
+    <div class="features-grid">
+      {features.map((feature) => (
+        <div class="feature-card">
+          <div class="feature-icon" data-icon={feature.icon}>
+            {feature.icon === "canvas" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+              </svg>
+            )}
+            {feature.icon === "terraform" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+                <line x1="14" y1="4" x2="10" y2="20" />
+              </svg>
+            )}
+            {feature.icon === "cost" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
+            )}
+            {feature.icon === "modules" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="8" height="8" rx="1" />
+                <rect x="14" y="2" width="8" height="8" rx="1" />
+                <rect x="2" y="14" width="8" height="8" rx="1" />
+                <path d="M14 14h8v8h-8z" stroke-dasharray="2 2" />
+              </svg>
+            )}
+            {feature.icon === "plugins" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+              </svg>
+            )}
+            {feature.icon === "cli" && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="4 17 10 11 4 5" />
+                <line x1="12" y1="19" x2="20" y2="19" />
+              </svg>
+            )}
+          </div>
+          <h3>{feature.title}</h3>
+          <p>{feature.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Tech Stack -->
+  <section class="tech">
+    <div class="section-header">
+      <h2>Built With</h2>
+      <p>A modern desktop-first stack</p>
+    </div>
+    <div class="tech-grid">
+      {techStack.map((tech) => (
+        <div class="tech-item">
+          <span class="tech-name">{tech.name}</span>
+          <span class="tech-role">{tech.role}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Milestones -->
+  <section class="milestones">
+    <div class="section-header">
+      <h2>Development Timeline</h2>
+      <p>From first commit to v0.48 in 33 days</p>
+    </div>
+    <div class="milestone-track">
+      {milestones.map((m, i) => (
+        <div class="milestone-item">
+          <div class="milestone-marker">
+            <span class="milestone-dot"></span>
+            {i < milestones.length - 1 && <span class="milestone-line"></span>}
+          </div>
+          <div class="milestone-content">
+            <div class="milestone-meta">
+              <span class="milestone-version">v{m.version}</span>
+              <span class="milestone-date">{m.date}</span>
+            </div>
+            <p class="milestone-title">{m.title}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div class="timeline-cta">
+      <a href="/projects/terrastudio/timeline.html" target="_blank" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        View Interactive Timeline — 320 commits visualized
+      </a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-content">
+      <h2>Try TerraStudio</h2>
+      <p>Available for Windows, macOS, and Linux</p>
+      <div class="cta-actions">
+        <a href="https://github.com/afroze9/TerraStudio/releases/latest" class="btn btn-primary">
+          Download Latest Release
+        </a>
+        <a href="https://github.com/afroze9/TerraStudio" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+          View Source on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Detect OS and update download button
+  const btn = document.getElementById('download-btn');
+  const label = document.getElementById('download-label');
+  if (btn && label) {
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.includes('win')) {
+      label.textContent = 'Download for Windows';
+    } else if (ua.includes('mac')) {
+      label.textContent = 'Download for macOS';
+    } else if (ua.includes('linux')) {
+      label.textContent = 'Download for Linux';
+    }
+  }
+</script>
+
+<style>
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: var(--space-2xl) 0 var(--space-xl);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: var(--space-xs);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .accent {
+    color: var(--color-accent);
+  }
+
+  .hero-tagline {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .hero-description {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-muted);
+    max-width: 60ch;
+    margin: 0 auto var(--space-xl);
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-xl);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-base);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: var(--border-width) solid transparent;
+  }
+
+  .btn:hover {
+    text-decoration: none;
+  }
+
+  .btn-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .btn-primary {
+    background: var(--color-accent);
+    color: white;
+    border-color: var(--color-accent);
+  }
+
+  .btn-primary:hover {
+    background: var(--color-text);
+    border-color: var(--color-text);
+    color: white;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-text);
+    border-color: var(--color-border);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2xl);
+    padding-top: var(--space-lg);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-value {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+
+  /* Screenshot */
+  .screenshot {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .screenshot-frame {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+
+  :root[data-theme="dark"] .screenshot-frame,
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .screenshot-frame {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .screenshot-titlebar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: 10px 16px;
+    background: var(--color-accent-light);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .titlebar-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .titlebar-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+
+  .titlebar-title {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .screenshot-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Section Header */
+  .section-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .section-header h2 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-xs);
+  }
+
+  .section-header p {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin: 0;
+  }
+
+  /* Features */
+  .features {
+    margin-bottom: var(--space-2xl);
+    padding-top: var(--space-xl);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  @media (max-width: 768px) {
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .feature-card {
+    padding: var(--space-lg);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .feature-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-accent-light);
+    border-radius: 8px;
+    margin-bottom: var(--space-md);
+    color: var(--color-accent);
+  }
+
+  .feature-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .feature-card h3 {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-xs);
+  }
+
+  .feature-card p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Tech Stack */
+  .tech {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .tech-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .tech-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-accent-light);
+    border-radius: 8px;
+    min-width: 120px;
+  }
+
+  .tech-name {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+  }
+
+  .tech-role {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Milestones */
+  .milestones {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .milestone-track {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: var(--space-xl);
+  }
+
+  .milestone-item {
+    display: flex;
+    gap: var(--space-lg);
+    min-height: 56px;
+  }
+
+  .milestone-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 16px;
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+
+  .milestone-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    border: 2px solid var(--color-background);
+    box-shadow: 0 0 0 2px var(--color-accent);
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .milestone-line {
+    width: 2px;
+    flex: 1;
+    background: var(--color-border);
+    margin-top: -1px;
+  }
+
+  .milestone-content {
+    padding-bottom: var(--space-lg);
+    flex: 1;
+  }
+
+  .milestone-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: 2px;
+  }
+
+  .milestone-version {
+    font-size: 0.75rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+    background: var(--color-accent-light);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .milestone-date {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .milestone-title {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .timeline-cta {
+    text-align: center;
+  }
+
+  /* CTA */
+  .cta {
+    margin-bottom: var(--space-xl);
+  }
+
+  .cta-content {
+    text-align: center;
+    padding: var(--space-2xl);
+    background: var(--color-accent-light);
+    border-radius: 12px;
+  }
+
+  .cta-content h2 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .cta-content p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-lg);
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .hero h1 {
+      font-size: 2.25rem;
+    }
+
+    .hero-stats {
+      gap: var(--space-lg);
+    }
+
+    .stat-value {
+      font-size: var(--font-size-lg);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .cta-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>
