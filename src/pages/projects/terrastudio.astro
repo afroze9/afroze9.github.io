@@ -106,17 +106,7 @@ const milestones = [
 
   <!-- Screenshot -->
   <section class="screenshot">
-    <div class="screenshot-frame">
-      <div class="screenshot-titlebar">
-        <div class="titlebar-dots">
-          <span class="dot red"></span>
-          <span class="dot yellow"></span>
-          <span class="dot green"></span>
-        </div>
-        <span class="titlebar-title">TerraStudio</span>
-      </div>
-      <img src="/projects/terrastudio-screenshot.png" alt="TerraStudio — visual infrastructure designer with Azure resources on canvas" loading="eager" />
-    </div>
+    <img src="/projects/terrastudio-screenshot.png" alt="TerraStudio — visual infrastructure designer with Azure resources on canvas" loading="eager" />
   </section>
 
   <!-- Features -->
@@ -395,54 +385,13 @@ const milestones = [
     margin-bottom: var(--space-2xl);
   }
 
-  .screenshot-frame {
-    border: var(--border-width) solid var(--color-border);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  }
-
-  :root[data-theme="dark"] .screenshot-frame,
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .screenshot-frame {
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-    }
-  }
-
-  .screenshot-titlebar {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    padding: 10px 16px;
-    background: var(--color-accent-light);
-    border-bottom: var(--border-width) solid var(--color-border);
-  }
-
-  .titlebar-dots {
-    display: flex;
-    gap: 6px;
-  }
-
-  .titlebar-dots .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }
-
-  .dot.red { background: #ff5f56; }
-  .dot.yellow { background: #ffbd2e; }
-  .dot.green { background: #27c93f; }
-
-  .titlebar-title {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    font-weight: var(--font-weight-medium);
-  }
-
-  .screenshot-frame img {
+  .screenshot img {
     width: 100%;
     height: auto;
     display: block;
+    border-radius: 12px;
+    border: var(--border-width) solid var(--color-border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   }
 
   /* Section Header */
