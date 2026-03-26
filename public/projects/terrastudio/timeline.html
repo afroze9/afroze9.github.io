@@ -522,7 +522,7 @@ function resize() {
     canvas.style.width = W + 'px';
     canvas.style.height = H + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    draw();
+    render();
   }
 }
 window.addEventListener('resize', resize);
@@ -633,6 +633,8 @@ function drawVertical() {
     ctx.fillText('v' + c.v, c.x + 10, c.y + 3);
   }
 }
+
+function render() { if (isMobile) drawVertical(); else draw(); }
 
 // --- Drawing ---
 function getThemeColors() {
@@ -822,7 +824,7 @@ window.addEventListener('mousemove', (e) => {
   const range = viewEnd - viewStart;
   viewStart = newStart;
   viewEnd = newStart + range;
-  draw();
+  render();
 });
 window.addEventListener('mouseup', () => {
   isDragging = false;
@@ -845,7 +847,7 @@ canvas.addEventListener('wheel', (e) => {
   const ratio = (pivot - viewStart) / (viewEnd - viewStart);
   viewStart = pivot - ratio * newRange;
   viewEnd = viewStart + newRange;
-  draw();
+  render();
 }, { passive: false });
 
 // --- Filter controls ---
@@ -869,7 +871,7 @@ Object.entries(TYPES).forEach(([k, v]) => {
       active.add(k);
       el.classList.remove('off');
     }
-    draw();
+    render();
   };
   ctrl.appendChild(el);
 });
@@ -889,7 +891,7 @@ dateToggle.onclick = () => {
   dateToggle.classList.toggle('off', !showDates);
   subtitle.style.display = showDates ? '' : 'none';
   scaleEls.forEach(el => el.style.display = showDates ? '' : 'none');
-  draw();
+  render();
 };
 ctrl.appendChild(dateToggle);
 
@@ -920,7 +922,7 @@ SCALES.forEach(s => {
     const newRange = ranges[s.id] || (tMax - tMin);
     viewStart = mid - newRange / 2;
     viewEnd = mid + newRange / 2;
-    draw();
+    render();
   };
   scaleButtons[s.id] = el;
   scaleEls.push(el);
@@ -938,7 +940,7 @@ themeToggle.innerHTML = '<span class="controls-label" style="margin:0">Light</sp
 themeToggle.onclick = () => {
   const isLight = document.documentElement.classList.toggle('light');
   themeToggle.querySelector('.controls-label').textContent = isLight ? 'Dark' : 'Light';
-  draw();
+  render();
 };
 ctrl.appendChild(themeToggle);
 
