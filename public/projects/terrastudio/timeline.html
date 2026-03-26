@@ -56,6 +56,21 @@
   .tip-ver { margin-top: 6px; color: #3b82f6; font-weight: 600; font-size: 12px; }
 
   .zoom-hint { position: absolute; bottom: 12px; right: 20px; font-size: 11px; color: var(--text2); pointer-events: none; }
+
+  @media (max-width: 768px) {
+    .header { padding: 12px 16px 8px; }
+    .header h1 { font-size: 16px; }
+    .header .sub { font-size: 11px; }
+    .controls { padding: 6px 12px; gap: 4px; }
+    .ctrl { font-size: 10px; padding: 3px 6px; gap: 3px; }
+    .ctrl-dot { width: 8px; height: 8px; }
+    .ctrl-count { font-size: 9px; }
+    .ctrl-sep { height: 14px; margin: 0 3px; }
+    .controls-label { font-size: 8px; }
+    .timeline-wrap { height: calc(100vh - 90px); overflow: auto; cursor: default; }
+    .zoom-hint { display: none; }
+    .tip { max-width: 260px; font-size: 11px; }
+  }
 </style>
 </head>
 <body>
@@ -486,15 +501,29 @@ const tip = document.getElementById('tip');
 const dpr = window.devicePixelRatio || 1;
 
 let W, H;
+const isMobile = window.innerWidth <= 768;
+
 function resize() {
-  W = wrap.clientWidth;
-  H = wrap.clientHeight;
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
-  canvas.style.width = W + 'px';
-  canvas.style.height = H + 'px';
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  draw();
+  if (isMobile) {
+    // On mobile, make canvas tall enough for vertical layout
+    W = wrap.clientWidth;
+    H = Math.max(wrap.clientHeight, 2400);
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    drawVertical();
+  } else {
+    W = wrap.clientWidth;
+    H = wrap.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw();
+  }
 }
 window.addEventListener('resize', resize);
 
@@ -509,6 +538,100 @@ function xToTime(x) {
 // --- Filtered commits ---
 function visibleCommits() {
   return COMMITS.filter(c => active.has(c.t));
+}
+
+// --- Vertical drawing (mobile) ---
+function timeToY(t) {
+  return 40 + (t - viewStart) / (viewEnd - viewStart) * (H - 60);
+}
+
+function drawVertical() {
+  const theme = getThemeColors();
+  ctx.clearRect(0, 0, W, H);
+  const midX = 40;
+  const commits = visibleCommits();
+
+  // Vertical axis line
+  ctx.strokeStyle = theme.axis;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(midX, 40);
+  ctx.lineTo(midX, H - 20);
+  ctx.stroke();
+
+  // Date ticks
+  ctx.fillStyle = theme.tickText;
+  ctx.font = '10px system-ui, sans-serif';
+  ctx.textAlign = 'left';
+
+  const ticks = getScaleTicks(viewStart, viewEnd);
+  for (const { time, label } of ticks) {
+    const y = timeToY(time);
+    if (y < 35 || y > H - 15) continue;
+    ctx.strokeStyle = theme.tickLine;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(midX - 6, y);
+    ctx.lineTo(midX + 6, y);
+    ctx.stroke();
+    if (showDates && label) {
+      ctx.fillStyle = theme.tickText;
+      ctx.save();
+      ctx.textAlign = 'right';
+      ctx.fillText(label, midX - 10, y + 3);
+      ctx.restore();
+    }
+  }
+
+  // Commit dots — stack horizontally to the right
+  const dotR = 5;
+  const sorted = commits.map(c => ({
+    ...c,
+    ts: new Date(c.dt).getTime(),
+    y: timeToY(new Date(c.dt).getTime()),
+  })).sort((a, b) => a.ts - b.ts);
+
+  const placed = [];
+  for (const c of sorted) {
+    let x = midX + 24;
+    let step = 0;
+    while (true) {
+      const collision = placed.some(p =>
+        Math.abs(p.y - c.y) < dotR * 2.2 && Math.abs(p.x - x) < dotR * 2.2
+      );
+      if (!collision) break;
+      step++;
+      x = midX + 24 + step * dotR * 2.2;
+    }
+    c.x = x;
+    placed.push(c);
+  }
+
+  window._dots = placed;
+
+  // Draw dots
+  for (const c of placed) {
+    const info = TYPES[c.t] || TYPES.chore;
+    const r = c.v ? dotR + 1.5 : dotR;
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = info.c;
+    ctx.fill();
+    if (c.v) {
+      ctx.strokeStyle = document.documentElement.classList.contains('light') ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  }
+
+  // Version labels
+  ctx.font = 'bold 8px system-ui, sans-serif';
+  ctx.textAlign = 'left';
+  const versionCommits = placed.filter(c => c.v);
+  for (const c of versionCommits) {
+    ctx.fillStyle = 'rgba(59,130,246,0.7)';
+    ctx.fillText('v' + c.v, c.x + 10, c.y + 3);
+  }
 }
 
 // --- Drawing ---
@@ -684,6 +807,7 @@ let dragStartX = 0;
 let dragStartView = 0;
 
 canvas.addEventListener('mousedown', (e) => {
+  if (isMobile) return;
   isDragging = true;
   dragStartX = e.clientX;
   dragStartView = viewStart;
@@ -706,6 +830,7 @@ window.addEventListener('mouseup', () => {
 });
 
 canvas.addEventListener('wheel', (e) => {
+  if (isMobile) return;
   e.preventDefault();
   const rect = canvas.getBoundingClientRect();
   const mx = e.clientX - rect.left;
@@ -816,6 +941,56 @@ themeToggle.onclick = () => {
   draw();
 };
 ctrl.appendChild(themeToggle);
+
+// --- Touch support (mobile) ---
+let touchStartY = 0;
+let touchStartView = 0;
+canvas.addEventListener('touchstart', (e) => {
+  if (e.touches.length === 1) {
+    touchStartY = e.touches[0].clientY;
+    touchStartView = viewStart;
+  }
+}, { passive: true });
+canvas.addEventListener('touchmove', (e) => {
+  if (!isMobile || e.touches.length !== 1) return;
+  // On mobile vertical mode, swiping is handled by native scroll
+}, { passive: true });
+
+// Tooltip on tap (mobile)
+canvas.addEventListener('click', (e) => {
+  if (!isMobile) return;
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  const dots = window._dots || [];
+  let found = null;
+  let bestDist = Infinity;
+  for (const d of dots) {
+    const dist = Math.hypot(d.x - mx, d.y - my);
+    if (dist < 12 && dist < bestDist) {
+      bestDist = dist;
+      found = d;
+    }
+  }
+  if (found) {
+    const info = TYPES[found.t] || TYPES.chore;
+    tip.innerHTML = `
+      <div class="tip-head">
+        <div class="tip-badge" style="background:${info.c}22;color:${info.c}">${info.l}</div>
+        <div class="tip-hash">#${found.n} &middot; ${found.h}</div>
+      </div>
+      <div class="tip-time">${found.dt.replace('T',' at ')}</div>
+      <div class="tip-msg">${found.m}</div>
+      ${found.v ? `<div class="tip-ver">Release v${found.v}</div>` : ''}
+    `;
+    tip.style.display = 'block';
+    tip.style.left = Math.min(e.clientX + 10, window.innerWidth - 270) + 'px';
+    tip.style.top = (e.clientY - 100) + 'px';
+    setTimeout(() => { tip.style.display = 'none'; }, 3000);
+  } else {
+    tip.style.display = 'none';
+  }
+});
 
 // --- Init ---
 resize();
