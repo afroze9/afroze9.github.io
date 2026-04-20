@@ -22,18 +22,131 @@ Same underlying Graph API calls. Same auth. Same data. The only thing that chang
 
 So I wrote a Python script that runs the same seven read-only tasks through four configurations:
 
-- **CLI**: Claude calls graph-cli through the Bash tool, minimal prompt ("use graph-cli via Bash")
-- **CLI + hints**: same, but the system prompt contains a small cookbook of the commands for the benchmarked tasks (this is what our real workflow docs do)
-- **MCP**: Claude calls graph-cli's MCP server directly, minimal prompt
-- **MCP + hints**: same MCP surface, with a matching cookbook of tool names per task
+<div class="post-recs">
+  <article class="rec">
+    <div class="rec-head">
+      <span class="rec-code">CFG-01 · CLI</span>
+      <span class="rec-pip">◊</span>
+    </div>
+    <div class="rec-body">
+      <h3>Shell, minimal prompt</h3>
+      <p>Claude calls graph-cli through the Bash tool with just the instruction "use graph-cli via Bash". No priming.</p>
+    </div>
+  </article>
+  <article class="rec">
+    <div class="rec-head">
+      <span class="rec-code">CFG-02 · CLI + hints</span>
+      <span class="rec-pip">◊</span>
+    </div>
+    <div class="rec-body">
+      <h3>Shell, with cookbook</h3>
+      <p>Same as CFG-01, plus a small cookbook of the commands for the benchmarked tasks in the system prompt. This is what our real workflow docs do.</p>
+    </div>
+  </article>
+  <article class="rec">
+    <div class="rec-head">
+      <span class="rec-code">CFG-03 · MCP</span>
+      <span class="rec-pip">◊</span>
+    </div>
+    <div class="rec-body">
+      <h3>MCP server, minimal prompt</h3>
+      <p>Claude calls graph-cli's built-in MCP server directly. Tool schemas are auto-exposed, no extra priming.</p>
+    </div>
+  </article>
+  <article class="rec">
+    <div class="rec-head">
+      <span class="rec-code">CFG-04 · MCP + hints</span>
+      <span class="rec-pip">◊</span>
+    </div>
+    <div class="rec-body">
+      <h3>MCP server, with cookbook</h3>
+      <p>Same MCP surface as CFG-03, plus a matching cookbook of tool names per task.</p>
+    </div>
+  </article>
+</div>
 
-Three runs per task per configuration, 84 runs total. Everything measured from Claude's usage envelope (`--output-format json` gives you input tokens, output tokens, cache reads, cost, duration, turn count).
+Three runs per task per configuration. Everything measured from Claude's usage envelope (`--output-format json` gives you input tokens, output tokens, cache reads, cost, duration, turn count).
+
+<div class="post-stats">
+  <div class="ps-head">
+    <span class="ps-code">§ METHODOLOGY</span>
+    <span class="ps-rule"></span>
+    <span class="ps-scale">N = 3 per cell</span>
+  </div>
+  <div class="ps-grid ps-grid-4">
+    <div class="ps-dim">
+      <span class="ps-val">4</span>
+      <span class="ps-line"></span>
+      <span class="ps-lbl">Configs</span>
+    </div>
+    <div class="ps-dim">
+      <span class="ps-val">7</span>
+      <span class="ps-line"></span>
+      <span class="ps-lbl">Tasks</span>
+    </div>
+    <div class="ps-dim">
+      <span class="ps-val">3</span>
+      <span class="ps-line"></span>
+      <span class="ps-lbl">Runs / cell</span>
+    </div>
+    <div class="ps-dim">
+      <span class="ps-val">84</span>
+      <span class="ps-line"></span>
+      <span class="ps-lbl">Total Runs</span>
+    </div>
+  </div>
+</div>
 
 ## What I Found
 
 Here's the totals picture:
 
-![](./assets/token-bench-totals.png)
+<div class="chart-grid chart-grid-2x2" role="figure" aria-label="Aggregate totals across 7 tasks by configuration">
+  <div class="stat-bars">
+    <div class="sb-head">
+      <span class="sb-code">§ TOTAL COST</span>
+      <span class="sb-rule"></span>
+      <span class="sb-scale">USD</span>
+    </div>
+    <div class="sb-row"><span class="sb-label">CLI</span><span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 83.3%"></span></span><span class="sb-value">$3.54</span></div>
+    <div class="sb-row"><span class="sb-label">CLI + h</span><span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 57.6%"></span></span><span class="sb-value">$2.45</span></div>
+    <div class="sb-row"><span class="sb-label">MCP</span><span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 100%"></span></span><span class="sb-value">$4.25</span></div>
+    <div class="sb-row"><span class="sb-label">MCP + h</span><span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 92.9%"></span></span><span class="sb-value">$3.95</span></div>
+  </div>
+  <div class="stat-bars">
+    <div class="sb-head">
+      <span class="sb-code">§ TOTAL DURATION</span>
+      <span class="sb-rule"></span>
+      <span class="sb-scale">Seconds</span>
+    </div>
+    <div class="sb-row"><span class="sb-label">CLI</span><span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 100%"></span></span><span class="sb-value">665</span></div>
+    <div class="sb-row"><span class="sb-label">CLI + h</span><span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 68.0%"></span></span><span class="sb-value">452</span></div>
+    <div class="sb-row"><span class="sb-label">MCP</span><span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 62.7%"></span></span><span class="sb-value">417</span></div>
+    <div class="sb-row"><span class="sb-label">MCP + h</span><span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 61.9%"></span></span><span class="sb-value">412</span></div>
+  </div>
+  <div class="stat-bars">
+    <div class="sb-head">
+      <span class="sb-code">§ TOTAL TURNS</span>
+      <span class="sb-rule"></span>
+      <span class="sb-scale">Count</span>
+    </div>
+    <div class="sb-row"><span class="sb-label">CLI</span><span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 100%"></span></span><span class="sb-value">104</span></div>
+    <div class="sb-row"><span class="sb-label">CLI + h</span><span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 51.9%"></span></span><span class="sb-value">54</span></div>
+    <div class="sb-row"><span class="sb-label">MCP</span><span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 78.8%"></span></span><span class="sb-value">82</span></div>
+    <div class="sb-row"><span class="sb-label">MCP + h</span><span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 66.3%"></span></span><span class="sb-value">69</span></div>
+  </div>
+  <div class="stat-bars">
+    <div class="sb-head">
+      <span class="sb-code">§ OUTPUT TOKENS</span>
+      <span class="sb-rule"></span>
+      <span class="sb-scale">Total</span>
+    </div>
+    <div class="sb-row"><span class="sb-label">CLI</span><span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 100%"></span></span><span class="sb-value">16,644</span></div>
+    <div class="sb-row"><span class="sb-label">CLI + h</span><span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 56.6%"></span></span><span class="sb-value">9,423</span></div>
+    <div class="sb-row"><span class="sb-label">MCP</span><span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 82.6%"></span></span><span class="sb-value">13,745</span></div>
+    <div class="sb-row"><span class="sb-label">MCP + h</span><span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 67.7%"></span></span><span class="sb-value">11,267</span></div>
+  </div>
+</div>
 
 Four bars, four metrics. The most interesting thing isn't which configuration wins. It's that *no single configuration wins all four*.
 
@@ -65,16 +178,102 @@ Adding hints had very different effects on each surface:
 
 The reason is simple. MCP's schemas already do part of the job a cookbook does, so adding explicit guidance has less marginal benefit.
 
-![](./assets/token-bench-cost.png)
+<div class="chart-grid chart-grid-tasks" role="figure" aria-label="Cost per task by configuration, median of 3 runs">
+  <div class="cg-head">
+    <span class="cg-code">§ COST PER TASK</span>
+    <span class="cg-rule"></span>
+    <span class="cg-scale">USD · median of 3 runs · bars scaled to $0.302 max</span>
+  </div>
+  <div class="cg-legend">
+    <span class="cg-leg-item"><span class="cg-leg-swatch sb-fill--cli"></span>CLI</span>
+    <span class="cg-leg-item"><span class="cg-leg-swatch sb-fill--cli-h"></span>CLI + hints</span>
+    <span class="cg-leg-item"><span class="cg-leg-swatch sb-fill--mcp"></span>MCP</span>
+    <span class="cg-leg-item"><span class="cg-leg-swatch sb-fill--mcp-h"></span>MCP + hints</span>
+  </div>
+  <div class="cg-panels">
+    <div class="stat-bars">
+      <div class="sb-head"><span class="sb-code">user_me</span><span class="sb-rule"></span></div>
+      <div class="sb-row"><span class="sb-label">CLI</span><span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 33.8%"></span></span><span class="sb-value">$0.102</span></div>
+      <div class="sb-row"><span class="sb-label">CLI + h</span><span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 28.1%"></span></span><span class="sb-value">$0.085</span></div>
+      <div class="sb-row"><span class="sb-label">MCP</span><span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 50.3%"></span></span><span class="sb-value">$0.152</span></div>
+      <div class="sb-row"><span class="sb-label">MCP + h</span><span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 52.3%"></span></span><span class="sb-value">$0.158</span></div>
+    </div>
+    <div class="stat-bars">
+      <div class="sb-head"><span class="sb-code">calendar_today</span><span class="sb-rule"></span></div>
+      <div class="sb-row"><span class="sb-label">CLI</span><span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 58.3%"></span></span><span class="sb-value">$0.176</span></div>
+      <div class="sb-row"><span class="sb-label">CLI + h</span><span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 40.1%"></span></span><span class="sb-value">$0.121</span></div>
+      <div class="sb-row"><span class="sb-label">MCP</span><span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 62.9%"></span></span><span class="sb-value">$0.190</span></div>
+      <div class="sb-row"><span class="sb-label">MCP + h</span><span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 64.9%"></span></span><span class="sb-value">$0.196</span></div>
+    </div>
+    <div class="stat-bars">
+      <div class="sb-head"><span class="sb-code">mail_recent</span><span class="sb-rule"></span></div>
+      <div class="sb-row"><span class="sb-label">CLI</span><span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 31.1%"></span></span><span class="sb-value">$0.094</span></div>
+      <div class="sb-row"><span class="sb-label">CLI + h</span><span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 31.8%"></span></span><span class="sb-value">$0.096</span></div>
+      <div class="sb-row"><span class="sb-label">MCP</span><span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 54.3%"></span></span><span class="sb-value">$0.164</span></div>
+      <div class="sb-row"><span class="sb-label">MCP + h</span><span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 57.6%"></span></span><span class="sb-value">$0.174</span></div>
+    </div>
+    <div class="stat-bars">
+      <div class="sb-head"><span class="sb-code">mail_search</span><span class="sb-rule"></span></div>
+      <div class="sb-row"><span class="sb-label">CLI</span><span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 53.3%"></span></span><span class="sb-value">$0.161</span></div>
+      <div class="sb-row"><span class="sb-label">CLI + h</span><span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 41.7%"></span></span><span class="sb-value">$0.126</span></div>
+      <div class="sb-row"><span class="sb-label">MCP</span><span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 57.6%"></span></span><span class="sb-value">$0.174</span></div>
+      <div class="sb-row"><span class="sb-label">MCP + h</span><span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 59.9%"></span></span><span class="sb-value">$0.181</span></div>
+    </div>
+    <div class="stat-bars">
+      <div class="sb-head"><span class="sb-code">calendar_free_slot</span><span class="sb-rule"></span></div>
+      <div class="sb-row"><span class="sb-label">CLI</span><span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 42.7%"></span></span><span class="sb-value">$0.129</span></div>
+      <div class="sb-row"><span class="sb-label">CLI + h</span><span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 29.5%"></span></span><span class="sb-value">$0.089</span></div>
+      <div class="sb-row"><span class="sb-label">MCP</span><span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 71.9%"></span></span><span class="sb-value">$0.217</span></div>
+      <div class="sb-row"><span class="sb-label">MCP + h</span><span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 54.3%"></span></span><span class="sb-value">$0.164</span></div>
+    </div>
+    <div class="stat-bars">
+      <div class="sb-head"><span class="sb-code">chat_search_read</span><span class="sb-rule"></span></div>
+      <div class="sb-row"><span class="sb-label">CLI</span><span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 56.0%"></span></span><span class="sb-value">$0.169</span></div>
+      <div class="sb-row"><span class="sb-label">CLI + h</span><span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 37.1%"></span></span><span class="sb-value">$0.112</span></div>
+      <div class="sb-row"><span class="sb-label">MCP</span><span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 77.8%"></span></span><span class="sb-value">$0.235</span></div>
+      <div class="sb-row"><span class="sb-label">MCP + h</span><span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 60.6%"></span></span><span class="sb-value">$0.183</span></div>
+    </div>
+    <div class="stat-bars cg-panel-wide">
+      <div class="sb-head"><span class="sb-code">daily_briefing</span><span class="sb-rule"></span><span class="sb-scale">highest cost task</span></div>
+      <div class="sb-row"><span class="sb-label">CLI</span><span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 100%"></span></span><span class="sb-value">$0.302</span></div>
+      <div class="sb-row"><span class="sb-label">CLI + h</span><span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 60.6%"></span></span><span class="sb-value">$0.183</span></div>
+      <div class="sb-row"><span class="sb-label">MCP</span><span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 85.8%"></span></span><span class="sb-value">$0.259</span></div>
+      <div class="sb-row"><span class="sb-label">MCP + h</span><span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 81.1%"></span></span><span class="sb-value">$0.245</span></div>
+    </div>
+  </div>
+</div>
 
 ## The Per-Turn Numbers Were the Eye-Opener
 
 Divide total cost by total turns and you get a cost-per-turn figure that isolates per-turn overhead:
 
-- CLI: $0.034 per turn
-- CLI + hints: $0.045 per turn
-- MCP: $0.052 per turn
-- MCP + hints: $0.057 per turn
+<div class="stat-bars">
+  <div class="sb-head">
+    <span class="sb-code">§ COST PER TURN</span>
+    <span class="sb-rule"></span>
+    <span class="sb-scale">USD, bar relative to max</span>
+  </div>
+  <div class="sb-row">
+    <span class="sb-label">CLI</span>
+    <span class="sb-track"><span class="sb-fill sb-fill--cli" style="width: 59.6%"></span></span>
+    <span class="sb-value">$0.034</span>
+  </div>
+  <div class="sb-row">
+    <span class="sb-label">CLI + hints</span>
+    <span class="sb-track"><span class="sb-fill sb-fill--cli-h" style="width: 78.9%"></span></span>
+    <span class="sb-value">$0.045</span>
+  </div>
+  <div class="sb-row">
+    <span class="sb-label">MCP</span>
+    <span class="sb-track"><span class="sb-fill sb-fill--mcp" style="width: 91.2%"></span></span>
+    <span class="sb-value">$0.052</span>
+  </div>
+  <div class="sb-row">
+    <span class="sb-label">MCP + hints</span>
+    <span class="sb-track"><span class="sb-fill sb-fill--mcp-h" style="width: 100%"></span></span>
+    <span class="sb-value">$0.057</span>
+  </div>
+</div>
 
 MCP's per-turn cost is higher. Always. Even when it had fewer turns total, each turn was more expensive.
 
@@ -109,17 +308,30 @@ I'm sticking with CLI plus hints. My personal workflow automation is organized a
 
 The nice side effect of this setup is that the priming is human-writable markdown. I can read it, edit it, add a new command, or document an edge case. It evolves with the workflow. MCP's schemas are machine-generated from the tool's source and are fine for capability discovery, but they're not the right place to encode the kind of "when you're doing X, prefer Y because of Z" knowledge that makes an agent actually useful.
 
-MCP makes sense when:
-
-- Latency matters more than cost (synchronous user-facing flows)
-- The workload is lookup-heavy and doesn't need filter or transform
-- You don't have good workflow priming, or you want the tool to "just work" without per-project tuning
-
-MCP doesn't make sense when:
-
-- You're doing a lot of filter/aggregate operations over list responses
-- You've already got decent workflow docs that teach the CLI
-- Cost is a primary concern
+<div class="decision-matrix">
+  <article class="dm-col">
+    <div class="dm-head">
+      <span class="dm-code">§ MCP WINS WHEN</span>
+      <span class="dm-pip">◊</span>
+    </div>
+    <ul class="dm-list">
+      <li>Latency matters more than cost (synchronous user-facing flows)</li>
+      <li>The workload is lookup-heavy and doesn't need filter or transform</li>
+      <li>You don't have good workflow priming, or you want the tool to just work without per-project tuning</li>
+    </ul>
+  </article>
+  <article class="dm-col">
+    <div class="dm-head">
+      <span class="dm-code">§ CLI WINS WHEN</span>
+      <span class="dm-pip">◊</span>
+    </div>
+    <ul class="dm-list">
+      <li>You're doing a lot of filter or aggregate operations over list responses</li>
+      <li>You've already got decent workflow docs that teach the CLI</li>
+      <li>Cost is a primary concern</li>
+    </ul>
+  </article>
+</div>
 
 ## Closing Thought
 
