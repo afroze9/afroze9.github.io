@@ -1,57 +1,148 @@
 ---
-const currentYear = new Date().getFullYear();
+const now = new Date();
+const year = now.getFullYear();
+const date = now.toISOString().slice(0, 10).replace(/-/g, ".");
 ---
 
-<footer class="footer">
-  <div class="container">
-    <div class="footer-content">
-      <p class="copyright">Afroze Amjad {currentYear}</p>
-      <div class="links">
-        <a href="https://github.com/afroze9" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://linkedin.com/in/afroze-amjad" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="mailto:afrozeamjad@gmail.com">Email</a>
+<footer class="title-block-wrap">
+  <div class="title-block">
+    <div>
+      <div class="tb-lbl">Drawing Title</div>
+      <div class="tb-val">Portfolio · Index Sheet</div>
+    </div>
+    <div>
+      <div class="tb-lbl">Drawn By</div>
+      <div class="tb-val">A. Amjad</div>
+    </div>
+    <div>
+      <div class="tb-lbl">Date</div>
+      <div class="tb-val">{date}</div>
+    </div>
+    <div>
+      <div class="tb-lbl">Revision</div>
+      <div class="tb-val tb-rev">
+        <span>04</span>
+        <span class="stamp">Current</span>
       </div>
+    </div>
+  </div>
+
+  <div class="footer-meta">
+    <div class="links">
+      <a href="https://github.com/afroze9" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://linkedin.com/in/afroze-amjad" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="mailto:afrozeamjad@gmail.com">Email</a>
+    </div>
+    <div class="copyright">© {year} Afroze Amjad · All dimensions in outcomes</div>
+    <div class="scale-bar">
+      <span>Scale</span>
+      <span class="seg">
+        <span></span><span></span><span></span><span></span><span></span>
+      </span>
+      <span>0 · 10 · 20 · 30 · 40 · 50</span>
     </div>
   </div>
 </footer>
 
 <style>
-  .footer {
-    border-top: var(--border-width) solid var(--color-border);
-    padding: var(--space-lg) 0;
-    margin-top: auto;
+  .title-block-wrap {
+    margin-top: var(--space-2xl);
   }
 
-  .footer-content {
+  .title-block {
+    border: 1.5px solid var(--color-ink);
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+  }
+  .title-block > div {
+    padding: 14px 16px;
+    border-right: 1px solid var(--color-ink);
+  }
+  .title-block > div:last-child { border-right: none; }
+
+  .tb-lbl {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+    margin-bottom: 6px;
+  }
+  .tb-val {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+  .tb-rev {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
+    gap: 10px;
+    align-items: center;
   }
 
-  .copyright {
-    margin: 0;
+  .footer-meta {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 28px;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--color-ink-2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
   .links {
     display: flex;
-    gap: var(--space-lg);
+    gap: 18px;
   }
-
   .links a {
-    color: var(--color-text-muted);
+    color: var(--color-ink-2);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 1px;
   }
-
   .links a:hover {
-    color: var(--color-accent);
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
   }
 
-  @media (min-width: 640px) {
-    .footer-content {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
+  .copyright { flex: 1 1 auto; }
+
+  .scale-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--color-ink-2);
+    letter-spacing: 0.08em;
+  }
+  .scale-bar .seg {
+    display: inline-flex;
+  }
+  .scale-bar .seg > span {
+    width: 18px;
+    height: 8px;
+    border: 1px solid var(--color-ink);
+  }
+  .scale-bar .seg > span:nth-child(odd) {
+    background: var(--color-ink);
+  }
+
+  @media (max-width: 820px) {
+    .title-block { grid-template-columns: 1fr 1fr; }
+    .title-block > div {
+      border-right: none;
+      border-bottom: 1px solid var(--color-ink);
     }
+    .title-block > div:nth-child(odd) { border-right: 1px solid var(--color-ink); }
+    .title-block > div:nth-last-child(-n+2) { border-bottom: none; }
+    .footer-meta { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .copyright { order: 2; }
   }
 </style>

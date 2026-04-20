@@ -2,11 +2,11 @@
 const currentPath = Astro.url.pathname;
 
 const links = [
-  { href: "/", label: "Home" },
+  { href: "/", label: "Index" },
   { href: "/about/", label: "About" },
   { href: "/experience/", label: "Experience" },
   { href: "/projects/", label: "Projects" },
-  { href: "/opensource/", label: "Open Source" },
+  { href: "/opensource/", label: "OSS" },
   { href: "/writing/", label: "Writing" },
 ];
 
@@ -16,18 +16,21 @@ function isActive(href: string): boolean {
   }
   return currentPath.startsWith(href);
 }
+
+const pad = (n: number) => n.toString().padStart(2, "0");
 ---
 
-<nav class="navigation">
+<nav class="navigation" aria-label="Primary">
   <ul>
-    {links.map((link) => (
+    {links.map((link, i) => (
       <li>
         <a
           href={link.href}
           class:list={[{ active: isActive(link.href) }]}
           aria-current={isActive(link.href) ? "page" : undefined}
         >
-          {link.label}
+          <span class="num">[{pad(i + 1)}]</span>
+          <span class="label">{link.label}</span>
         </a>
       </li>
     ))}
@@ -41,34 +44,39 @@ function isActive(href: string): boolean {
     margin: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-sm) var(--space-lg);
+    gap: 4px 16px;
   }
-
-  .navigation li {
-    margin: 0;
-  }
+  .navigation li { margin: 0; }
 
   .navigation a {
-    color: var(--color-text-muted);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink);
     text-decoration: none;
-    font-size: var(--font-size-sm);
-    transition: color 0.15s ease;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 2px;
+    transition: border-color 0.12s ease, color 0.12s ease;
   }
-
-  .navigation a:hover {
-    color: var(--color-text);
-    text-decoration: none;
-  }
+  .navigation a:hover { border-bottom-color: var(--color-ink); }
 
   .navigation a.active {
-    color: var(--color-accent);
-    font-weight: var(--font-weight-medium);
+    color: var(--color-cyan);
+    border-bottom-color: var(--color-cyan);
   }
 
+  .navigation .num { color: var(--color-ink-3); }
+  .navigation a.active .num { color: var(--color-cyan); }
+
+  @media (max-width: 820px) {
+    .navigation ul { gap: 6px 14px; }
+  }
   @media (max-width: 480px) {
-    .navigation ul {
-      flex-direction: column;
-      gap: var(--space-sm);
-    }
+    .navigation ul { gap: 4px 12px; }
+    .navigation a { font-size: 10.5px; }
   }
 </style>

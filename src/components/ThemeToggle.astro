@@ -1,87 +1,75 @@
 ---
-// Theme toggle component with minimal inline JavaScript
+// Paper-mode toggle: cream drafting paper ↔ cyanotype blueprint.
 ---
 
-<button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
-  <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <circle cx="12" cy="12" r="5"/>
-    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-  </svg>
-  <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-  </svg>
-</button>
+<span class="mode" role="group" aria-label="Paper mode">
+  <button type="button" data-mode="light" aria-pressed="true">Cream</button>
+  <button type="button" data-mode="dark" aria-pressed="false">Blueprint</button>
+</span>
 
 <style>
-  .theme-toggle {
-    background: none;
+  .mode {
+    display: inline-flex;
+    align-items: stretch;
+    border: 1px solid var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .mode button {
+    background: transparent;
+    color: var(--color-ink-2);
     border: none;
-    padding: var(--space-xs);
+    padding: 5px 9px;
     cursor: pointer;
-    color: var(--color-text-muted);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    transition: color 0.2s ease;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
   }
-
-  .theme-toggle:hover {
-    color: var(--color-accent);
+  .mode button + button {
+    border-left: 1px solid var(--color-ink);
   }
-
-  .theme-toggle svg {
-    width: 20px;
-    height: 20px;
+  .mode button[aria-pressed="true"] {
+    background: var(--color-ink);
+    color: var(--color-desk);
   }
-
-  /* Show sun icon when in dark mode, moon when in light mode */
-  .icon-sun {
-    display: none;
-  }
-
-  .icon-moon {
-    display: block;
-  }
-
-  :global([data-theme="dark"]) .icon-sun {
-    display: block;
-  }
-
-  :global([data-theme="dark"]) .icon-moon {
-    display: none;
+  .mode button[aria-pressed="false"]:hover {
+    color: var(--color-ink);
   }
 </style>
 
 <script is:inline>
-  // Theme toggle functionality
-  (function() {
-    const toggle = document.getElementById('theme-toggle');
-    const root = document.documentElement;
+  (function () {
+    var root = document.documentElement;
+    var btns = document.querySelectorAll(".mode button");
 
-    // Get initial theme from localStorage or system preference
-    function getInitialTheme() {
-      const stored = localStorage.getItem('theme');
-      if (stored) return stored;
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    function apply(mode, persist) {
+      root.setAttribute("data-theme", mode);
+      btns.forEach(function (b) {
+        b.setAttribute("aria-pressed", b.dataset.mode === mode ? "true" : "false");
+      });
+      if (persist) {
+        try { localStorage.setItem("theme", mode); } catch (e) {}
+      }
     }
 
-    // Apply theme to document
-    function setTheme(theme) {
-      root.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
+    function initial() {
+      try {
+        var stored = localStorage.getItem("theme");
+        if (stored === "light" || stored === "dark") return stored;
+      } catch (e) {}
+      return window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
     }
 
-    // Initialize
-    setTheme(getInitialTheme());
-
-    // Toggle on click
-    toggle.addEventListener('click', () => {
-      const current = root.getAttribute('data-theme');
-      setTheme(current === 'dark' ? 'light' : 'dark');
+    btns.forEach(function (b) {
+      b.addEventListener("click", function () { apply(b.dataset.mode, true); });
     });
+
+    apply(initial(), false);
   })();
 </script>
