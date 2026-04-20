@@ -5,6 +5,8 @@ pubDate: 2026-04-20
 draft: false
 ---
 
+![](./assets/mcp-vs-cli-banner.svg)
+
 A few weeks back, there was a discussion at work about whether we should rewrite our CLI-based workflow tooling as MCP servers. A lot of smart people had strong opinions. Most of them, including a couple of leadership folks, believed MCP is straight-up better. Faster, cleaner, more structured, and therefore cheaper and more efficient for AI agents.
 
 I wasn't sure. On paper MCP sounds better for a bunch of reasons, but "sounds better" isn't a benchmark. So I ran one.
@@ -20,10 +22,10 @@ Same underlying Graph API calls. Same auth. Same data. The only thing that chang
 
 So I wrote a Python script that runs the same seven read-only tasks through four configurations:
 
-- **CLI** — Claude calls graph-cli through the Bash tool, minimal prompt ("use graph-cli via Bash")
-- **CLI + hints** — same, but the system prompt contains a small cookbook of the commands for the benchmarked tasks (this is what our real workflow docs do)
-- **MCP** — Claude calls graph-cli's MCP server directly, minimal prompt
-- **MCP + hints** — same MCP surface, with a matching cookbook of tool names per task
+- **CLI**: Claude calls graph-cli through the Bash tool, minimal prompt ("use graph-cli via Bash")
+- **CLI + hints**: same, but the system prompt contains a small cookbook of the commands for the benchmarked tasks (this is what our real workflow docs do)
+- **MCP**: Claude calls graph-cli's MCP server directly, minimal prompt
+- **MCP + hints**: same MCP surface, with a matching cookbook of tool names per task
 
 Three runs per task per configuration, 84 runs total. Everything measured from Claude's usage envelope (`--output-format json` gives you input tokens, output tokens, cache reads, cost, duration, turn count).
 
