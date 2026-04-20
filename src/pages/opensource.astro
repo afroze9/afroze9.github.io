@@ -12,6 +12,27 @@ const githubProjects = [
     topics: ["terraform", "infrastructure-as-code", "svelte", "tauri"],
   },
   {
+    name: "graph-cli",
+    description: "Command-line interface for Microsoft Graph. Access Outlook email, Teams chats, calendar, To Do tasks, presence, and SharePoint/OneDrive files from your terminal.",
+    language: "TypeScript",
+    url: "https://github.com/afroze9/graph-cli",
+    topics: ["microsoft-graph", "cli", "teams", "outlook"],
+  },
+  {
+    name: "atlas-cli",
+    description: "Terminal-native interface for Jira and Confluence. Manage issues, sprints, boards, and pages without leaving the shell.",
+    language: "TypeScript",
+    url: "https://github.com/afroze9/atlas-cli",
+    topics: ["jira", "confluence", "atlassian", "cli"],
+  },
+  {
+    name: "asana-cli",
+    description: "Command-line access to Asana projects, tasks, and workspaces. Built for keyboard-driven workflow management.",
+    language: "TypeScript",
+    url: "https://github.com/afroze9/asana-cli",
+    topics: ["asana", "productivity", "cli", "workflow"],
+  },
+  {
     name: "nexus",
     description: "Multi-tenant application framework with .NET microservices architecture. Features service discovery, API gateway, and distributed configuration.",
     language: "C#",
@@ -349,14 +370,14 @@ const pad = (n: number) => n.toString().padStart(2, "0");
     align-items: center;
     gap: 14px;
     padding: 10px 16px;
-    background: var(--color-ink);
-    color: var(--color-desk);
+    background: var(--color-chrome-bg);
+    color: var(--color-chrome-fg);
     font-family: var(--font-mono);
     font-size: 10.5px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
-  .repo-code { color: var(--color-cyan); flex: 0 0 auto; }
+  .repo-code { color: var(--color-chrome-accent); flex: 0 0 auto; }
   .repo-lang {
     display: inline-flex;
     align-items: center;
@@ -366,8 +387,8 @@ const pad = (n: number) => n.toString().padStart(2, "0");
   .lang-dot {
     width: 9px;
     height: 9px;
-    background: var(--lang-color, var(--color-desk));
-    border: 1px solid var(--color-desk);
+    background: var(--lang-color, var(--color-chrome-fg));
+    border: 1px solid var(--color-chrome-fg);
   }
   .repo-lang[data-lang="C#"] { --lang-color: #178600; }
   .repo-lang[data-lang="TypeScript"] { --lang-color: #3178c6; }
