@@ -16,24 +16,42 @@ const { title, description } = Astro.props;
 <html lang="en">
   <head>
     <SEO title={title} description={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Archivo+Narrow:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <Header />
-    <main class="container">
-      <slot />
-    </main>
-    <Footer />
+    <div class="sheet">
+      <span class="coord tl">A1</span>
+      <span class="coord tr">A4</span>
+      <span class="coord bl">D1</span>
+      <span class="coord br">D4</span>
+      <Header />
+      <main>
+        <slot />
+      </main>
+      <Footer />
+    </div>
   </body>
 </html>
 
 <style is:global>
   html,
   body {
-    height: 100%;
+    min-height: 100%;
   }
-
   body {
+    display: block;
+  }
+  .sheet {
     display: flex;
     flex-direction: column;
+    min-height: calc(100vh - 64px);
+  }
+  main {
+    flex: 1 0 auto;
   }
 </style>

@@ -1,5 +1,4 @@
 ---
-import SectionHeader from "../components/SectionHeader.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const description =
@@ -36,7 +35,8 @@ const journey = [
     title: "Software Architect",
     company: "Confiz",
     focus: "AI Solutions & Enterprise Systems",
-    description: "Delivering AI-powered solutions for Fortune 500 clients. Building real-time analytics engines and OLAP reporting systems.",
+    description:
+      "Delivering AI-powered solutions for Fortune 500 clients. Building real-time analytics engines and OLAP reporting systems.",
     achievements: ["15% sales conversion increase", "40% faster reporting", "25% AI adoption boost"],
   },
   {
@@ -62,7 +62,8 @@ const journey = [
     title: "Lead Software Engineer",
     company: "CureMD",
     focus: "Automation & Developer Experience",
-    description: "Building automation frameworks and developer tools. Creating Azure DevOps integrations and frontend frameworks.",
+    description:
+      "Building automation frameworks and developer tools. Creating Azure DevOps integrations and frontend frameworks.",
     achievements: ["100 hrs/mo saved", "50% faster feedback", "700+ user systems"],
   },
   {
@@ -70,7 +71,8 @@ const journey = [
     title: "Principal Business Analyst",
     company: "CureMD",
     focus: "Process Transformation",
-    description: "Driving Agile transformation and CI/CD adoption. Leading healthcare compliance submissions and system integrations.",
+    description:
+      "Driving Agile transformation and CI/CD adoption. Leading healthcare compliance submissions and system integrations.",
     achievements: ["Agile transformation", "20% faster deployments", "1,800+ providers served"],
   },
   {
@@ -78,326 +80,496 @@ const journey = [
     title: "Application Analyst",
     company: "CureMD",
     focus: "Healthcare Systems",
-    description: "Starting career in healthcare technology. Building automation tools and training teams on EHR systems.",
+    description:
+      "Starting career in healthcare technology. Building automation tools and training teams on EHR systems.",
     achievements: ["6,000+ hrs/mo saved", "30+ team members trained", "SharePoint migration"],
   },
 ];
+
+const skillGroups = [
+  {
+    title: "Languages",
+    code: "L",
+    skills: [
+      { name: "C#", level: 95 },
+      { name: "TypeScript", level: 90 },
+      { name: "Python", level: 85 },
+      { name: "Java", level: 80 },
+    ],
+  },
+  {
+    title: "Cloud & Infrastructure",
+    code: "C",
+    skills: [
+      { name: "Azure", level: 95 },
+      { name: "AWS", level: 80 },
+      { name: "Docker", level: 85 },
+      { name: "Terraform", level: 75 },
+    ],
+  },
+  {
+    title: "Frameworks",
+    code: "F",
+    skills: [
+      { name: ".NET Core", level: 95 },
+      { name: "React", level: 85 },
+      { name: "Node.js", level: 80 },
+      { name: "Angular", level: 75 },
+    ],
+  },
+  {
+    title: "Data",
+    code: "D",
+    skills: [
+      { name: "SQL Server", level: 90 },
+      { name: "PostgreSQL", level: 85 },
+      { name: "MongoDB", level: 75 },
+      { name: "Redis", level: 70 },
+    ],
+  },
+];
+
+const pad = (n: number) => n.toString().padStart(2, "0");
 ---
 
 <BaseLayout title="Experience" description={description}>
   <section class="intro">
+    <div class="kicker">◊ Sheet 2 of 4 · As-built record</div>
     <h1>Experience</h1>
-    <p>A decade of building systems that scale, leading teams that deliver, and solving problems that matter.</p>
+    <p class="lead">
+      A decade of building systems that scale, leading teams that deliver, and
+      solving problems that matter.
+    </p>
   </section>
 
-  <section class="highlights">
-    <div class="highlights-grid">
-      {
-        highlights.map((h) => (
-          <div class="highlight-item">
-            <span class="highlight-value">{h.value}</span>
-            <span class="highlight-label">{h.label}</span>
+  <section>
+    <header class="section-head">
+      <span class="tag">§ 01</span>
+      <h2>Summary</h2>
+      <span class="rule"></span>
+      <span class="scale">Detail A · Scale 1:1</span>
+    </header>
+    <div class="summary">
+      <div class="summary-lbl">As-built totals</div>
+      <div class="summary-grid">
+        {highlights.map((h) => (
+          <div class="summary-dim">
+            <span class="val">{h.value}</span>
+            <span class="line"></span>
+            <span class="lbl">{h.label}</span>
           </div>
-        ))
-      }
+        ))}
+      </div>
     </div>
   </section>
 
-  <section class="journey">
-    <h2>The Journey</h2>
-    <div class="journey-list">
-      {
-        journey.map((item, index) => (
-          <article class="journey-item">
-            <div class="journey-year">
-              <span class="year">{item.year}</span>
-              {index < journey.length - 1 && <div class="year-line" />}
+  <section>
+    <header class="section-head">
+      <span class="tag">§ 02</span>
+      <h2>The Journey</h2>
+      <span class="rule"></span>
+      <span class="scale">2014 — Present</span>
+    </header>
+    <div class="journey">
+      {journey.map((item, i) => (
+        <article class="j-row">
+          <div class="j-marker">
+            <span class="j-year">{item.year}</span>
+            <span class="j-node"></span>
+          </div>
+          <div class="j-card">
+            <div class="j-head">
+              <span class="j-code">ROLE-{pad(i + 1)}</span>
+              <span class="j-company">{item.company}</span>
             </div>
-            <div class="journey-content">
-              <header class="journey-header">
-                <h3>{item.title}</h3>
-                <div class="journey-meta">
-                  <span class="company">{item.company}</span>
-                  <span class="focus">{item.focus}</span>
-                </div>
-              </header>
-              <p class="journey-description">{item.description}</p>
-              <div class="journey-achievements">
+            <div class="j-body">
+              <h3>{item.title}</h3>
+              <div class="j-focus">
+                <span class="j-focus-lbl">§ Focus</span>
+                <span class="j-focus-val">{item.focus}</span>
+              </div>
+              <p class="j-desc">{item.description}</p>
+              <div class="j-tags">
                 {item.achievements.map((a) => (
-                  <span class="achievement">{a}</span>
+                  <span class="j-tag">{a}</span>
                 ))}
               </div>
             </div>
-          </article>
-        ))
-      }
+          </div>
+        </article>
+      ))}
     </div>
   </section>
 
-  <section class="skills">
-    <SectionHeader title="Technical Toolkit" />
-    <div class="skills-visual">
-      <div class="skill-group">
-        <h3>Languages</h3>
-        <div class="skill-bars">
-          <div class="skill-bar" style="--level: 95%"><span>C#</span></div>
-          <div class="skill-bar" style="--level: 90%"><span>TypeScript</span></div>
-          <div class="skill-bar" style="--level: 85%"><span>Python</span></div>
-          <div class="skill-bar" style="--level: 80%"><span>Java</span></div>
+  <section>
+    <header class="section-head">
+      <span class="tag">§ 03</span>
+      <h2>Technical Toolkit</h2>
+      <span class="rule"></span>
+      <span class="scale">Proficiency · 0 — 100</span>
+    </header>
+    <div class="toolkit">
+      {skillGroups.map((group, gi) => (
+        <div class="tk-group">
+          <div class="tk-head">
+            <span class="tk-code">TK-{pad(gi + 1)}.{group.code}</span>
+            <span class="tk-title">{group.title}</span>
+            <span class="tk-rule"></span>
+          </div>
+          <div class="tk-list">
+            {group.skills.map((s) => (
+              <div class="tk-row">
+                <span class="tk-name">{s.name}</span>
+                <span class="tk-gauge">
+                  <span class="tk-fill" style={`--pct: ${s.level}%`}></span>
+                  <span class="tk-tick" style="--at: 25%"></span>
+                  <span class="tk-tick" style="--at: 50%"></span>
+                  <span class="tk-tick" style="--at: 75%"></span>
+                </span>
+                <span class="tk-pct">{s.level}</span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-      <div class="skill-group">
-        <h3>Cloud & Infrastructure</h3>
-        <div class="skill-bars">
-          <div class="skill-bar" style="--level: 95%"><span>Azure</span></div>
-          <div class="skill-bar" style="--level: 80%"><span>AWS</span></div>
-          <div class="skill-bar" style="--level: 85%"><span>Docker</span></div>
-          <div class="skill-bar" style="--level: 75%"><span>Terraform</span></div>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>Frameworks</h3>
-        <div class="skill-bars">
-          <div class="skill-bar" style="--level: 95%"><span>.NET Core</span></div>
-          <div class="skill-bar" style="--level: 85%"><span>React</span></div>
-          <div class="skill-bar" style="--level: 80%"><span>Node.js</span></div>
-          <div class="skill-bar" style="--level: 75%"><span>Angular</span></div>
-        </div>
-      </div>
-      <div class="skill-group">
-        <h3>Data</h3>
-        <div class="skill-bars">
-          <div class="skill-bar" style="--level: 90%"><span>SQL Server</span></div>
-          <div class="skill-bar" style="--level: 85%"><span>PostgreSQL</span></div>
-          <div class="skill-bar" style="--level: 75%"><span>MongoDB</span></div>
-          <div class="skill-bar" style="--level: 70%"><span>Redis</span></div>
-        </div>
-      </div>
+      ))}
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .intro {
-    padding-top: var(--space-xl);
-    margin-bottom: var(--space-xl);
+  /* Intro */
+  .intro { padding-top: var(--space-md); margin-bottom: var(--space-xl); }
+  .intro .kicker {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-cyan);
+    margin-bottom: 12px;
   }
-
   .intro h1 {
-    margin-bottom: var(--space-sm);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(36px, 4.5vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    color: var(--color-ink);
   }
-
-  .intro p {
+  .intro .lead {
     font-size: var(--font-size-lg);
-    color: var(--color-text-muted);
+    color: var(--color-ink-2);
     max-width: 70ch;
     margin: 0;
+    line-height: 1.55;
   }
 
-  /* Highlights */
-  .highlights {
-    margin-bottom: var(--space-2xl);
-    padding: var(--space-lg);
-    background: var(--color-accent-light);
-    border-radius: 8px;
+  /* Summary block */
+  .summary {
+    padding: 24px 28px 22px;
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-paper-2);
+    position: relative;
   }
-
-  .highlights-grid {
+  .summary-lbl {
+    position: absolute;
+    top: -10px;
+    left: 18px;
+    background: var(--color-paper);
+    padding: 0 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  .summary-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-lg);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
   }
-
-  @media (min-width: 480px) {
-    .highlights-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
+  @media (max-width: 720px) {
+    .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
   }
-
-  .highlight-item {
-    text-align: center;
-  }
-
-  .highlight-value {
-    display: block;
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-accent);
-    line-height: 1;
-  }
-
-  .highlight-label {
-    display: block;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    margin-top: var(--space-xs);
-  }
-
-  /* Journey */
-  .journey {
-    margin-bottom: var(--space-2xl);
-  }
-
-  .journey h2 {
-    font-size: var(--font-size-lg);
-    margin-bottom: var(--space-lg);
-    padding-bottom: var(--space-sm);
-    border-bottom: 2px solid var(--color-accent);
-    display: inline-block;
-  }
-
-  .journey-list {
+  .summary-dim {
     display: flex;
     flex-direction: column;
+    gap: 4px;
+  }
+  .summary-dim .val {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+  .summary-dim .line {
+    height: 1px;
+    background: var(--color-ink);
+    position: relative;
+    margin: 8px 0 6px;
+  }
+  .summary-dim .line::before,
+  .summary-dim .line::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    width: 1px;
+    height: 9px;
+    background: var(--color-ink);
+  }
+  .summary-dim .line::before { left: 0; }
+  .summary-dim .line::after { right: 0; }
+  .summary-dim .lbl {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
   }
 
-  .journey-item {
+  /* Journey — timeline with year markers and drafting cards */
+  .journey {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  /* Single continuous dashed rule down the marker column */
+  .journey::before {
+    content: "";
+    position: absolute;
+    left: 43px; /* center of 86px marker column */
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-ink-3) 50%,
+      transparent 50%
+    );
+    background-size: 1px 8px;
+    background-repeat: repeat-y;
+    z-index: 0;
+  }
+  .j-row {
     display: grid;
-    grid-template-columns: 60px 1fr;
-    gap: var(--space-md);
+    grid-template-columns: 86px 1fr;
+    gap: 18px;
+    align-items: start;
+    position: relative;
   }
-
-  .journey-year {
+  .j-marker {
+    padding-top: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
   }
-
-  .year {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-accent);
-    background: var(--color-accent-light);
+  .j-year {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--color-cyan);
+    font-weight: 600;
     padding: 4px 8px;
-    border-radius: 4px;
+    border: 1px solid var(--color-ink);
+    background: var(--color-paper);
+  }
+  .j-node {
+    width: 8px;
+    height: 8px;
+    background: var(--color-ink);
+    transform: rotate(45deg);
   }
 
-  .year-line {
-    width: 2px;
-    flex-grow: 1;
-    background: var(--color-border);
-    margin: var(--space-sm) 0;
-  }
-
-  .journey-content {
-    padding-bottom: var(--space-xl);
-  }
-
-  .journey-item:last-child .journey-content {
-    padding-bottom: 0;
-  }
-
-  .journey-header {
-    margin-bottom: var(--space-sm);
-  }
-
-  .journey-header h3 {
-    font-size: var(--font-size-base);
-    margin-bottom: var(--space-xs);
-  }
-
-  .journey-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    font-size: var(--font-size-sm);
-  }
-
-  .company {
-    color: var(--color-text);
-    font-weight: var(--font-weight-medium);
-  }
-
-  .focus {
-    color: var(--color-text-muted);
-  }
-
-  .focus::before {
-    content: "•";
-    margin-right: var(--space-sm);
-  }
-
-  .journey-description {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-md);
-    line-height: 1.6;
-  }
-
-  .journey-achievements {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .achievement {
-    font-size: 0.7rem;
-    padding: 2px 8px;
-    background: var(--color-background);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: 4px;
-    color: var(--color-text);
-  }
-
-  /* Skills */
-  .skills {
-    margin-top: var(--space-2xl);
-  }
-
-  .skills-visual {
-    display: grid;
-    gap: var(--space-xl);
-  }
-
-  @media (min-width: 640px) {
-    .skills-visual {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  .skill-group h3 {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: var(--space-md);
-  }
-
-  .skill-bars {
+  .j-card {
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-paper);
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+  }
+  .j-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    background: var(--color-ink);
+    color: var(--color-desk);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .j-code { color: var(--color-cyan); }
+  .j-body {
+    padding: 18px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .j-body h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    line-height: 1.1;
+    margin: 0;
+  }
+  .j-focus {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--color-ink-3);
+  }
+  .j-focus-lbl {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-cyan);
+    flex-shrink: 0;
+  }
+  .j-focus-val {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--color-ink);
+  }
+  .j-desc {
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    color: var(--color-ink-2);
+    margin: 0;
+  }
+  .j-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 4px;
+  }
+  .j-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    padding: 3px 7px;
+    border: 1px solid var(--color-ink);
+    background: var(--color-paper-2);
   }
 
-  .skill-bar {
+  @media (max-width: 600px) {
+    .j-row { grid-template-columns: 64px 1fr; gap: 12px; }
+    .j-year { font-size: 11px; padding: 3px 6px; }
+    .journey::before { left: 32px; }
+  }
+
+  /* Toolkit — scale-bar proficiency gauges */
+  .toolkit {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+  @media (max-width: 720px) {
+    .toolkit { grid-template-columns: 1fr; }
+  }
+
+  .tk-group {
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-paper);
+  }
+  .tk-head {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--color-ink);
+    color: var(--color-desk);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .tk-code { color: var(--color-cyan); }
+  .tk-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-desk);
+  }
+  .tk-rule {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .tk-list {
+    padding: 16px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .tk-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 40px;
+    gap: 14px;
+    align-items: center;
+  }
+  .tk-name {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--color-ink);
+  }
+  .tk-gauge {
     position: relative;
-    height: 28px;
-    background: var(--color-border);
-    border-radius: 4px;
-    overflow: hidden;
+    height: 12px;
+    border: 1px solid var(--color-ink);
+    background: var(--color-paper-2);
   }
-
-  .skill-bar::before {
-    content: "";
+  .tk-fill {
     position: absolute;
     left: 0;
     top: 0;
-    height: 100%;
-    width: var(--level, 50%);
-    background: var(--color-accent);
-    border-radius: 4px;
+    bottom: 0;
+    width: var(--pct, 50%);
+    background-image: repeating-linear-gradient(
+      135deg,
+      var(--color-ink) 0,
+      var(--color-ink) 2px,
+      transparent 2px,
+      transparent 5px
+    );
+    background-color: var(--color-cyan);
+  }
+  .tk-tick {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    left: var(--at);
+    width: 1px;
+    background: var(--color-ink);
+  }
+  .tk-pct {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--color-cyan);
+    text-align: right;
   }
 
-  .skill-bar span {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    padding: 0 var(--space-sm);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-background);
+  @media (max-width: 480px) {
+    .tk-row { grid-template-columns: 70px 1fr 36px; gap: 10px; }
   }
 </style>

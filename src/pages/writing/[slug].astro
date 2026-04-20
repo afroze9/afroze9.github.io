@@ -104,25 +104,8 @@ const formattedDate = post.data.pubDate.toLocaleDateString("en-US", {
     line-height: 1.7;
   }
 
-  .post-content :global(code) {
-    font-family: var(--font-mono);
-    font-size: 0.9em;
-    background-color: var(--color-surface);
-    padding: 0.2em 0.4em;
-    border-radius: var(--border-radius);
-  }
-
   .post-content :global(pre) {
-    background-color: var(--color-surface);
-    padding: var(--space-md);
-    border-radius: var(--border-radius);
-    overflow-x: auto;
     margin-bottom: var(--space-md);
-  }
-
-  .post-content :global(pre code) {
-    background: none;
-    padding: 0;
   }
 
   .post-content :global(blockquote) {
