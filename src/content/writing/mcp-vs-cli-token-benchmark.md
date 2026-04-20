@@ -103,7 +103,9 @@ None of my benchmark tasks use piping. So the numbers in the table actually *und
 
 ## What I'd Actually Use
 
-For our workflows, the answer is clear: keep using CLI with workflow hints. We already do. Every folder under our work-automation repo has a CLAUDE.md that primes the model with the commands for common tasks. That's the condition under which CLI is both the cheapest *and* competitive on latency.
+I'm sticking with CLI plus hints. My personal workflow automation is organized as a repo with one folder per task type (email, calendar, chat, Jira, notes, and so on), and each folder has its own CLAUDE.md that lists the relevant commands and any conventions for that task. When Claude works in a folder, that file auto-loads into context. It's effectively the "CLI + hints" configuration from the benchmark, scoped per task type rather than applied globally, and it's the condition under which CLI comes out both cheapest *and* competitive on latency.
+
+The nice side effect of this setup is that the priming is human-writable markdown. I can read it, edit it, add a new command, or document an edge case. It evolves with the workflow. MCP's schemas are machine-generated from the tool's source and are fine for capability discovery, but they're not the right place to encode the kind of "when you're doing X, prefer Y because of Z" knowledge that makes an agent actually useful.
 
 MCP makes sense when:
 
