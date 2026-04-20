@@ -17,6 +17,12 @@
   --color-cyan: #2a7ea8;        /* blueprint cyan */
   --color-red: #a82a2a;         /* revision red */
 
+  /* Chrome — drafting head bars. Fixed across themes so head strips stay
+     dark-bar-with-light-text in both light and blueprint modes. */
+  --color-chrome-bg: #14233b;
+  --color-chrome-fg: #e3ddc8;
+  --color-chrome-accent: #7ed4ff;
+
   /* Grid */
   --grid: rgba(20, 35, 59, 0.05);
   --grid-bold: rgba(20, 35, 59, 0.09);
