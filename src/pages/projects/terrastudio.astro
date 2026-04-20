@@ -64,22 +64,27 @@ const milestones = [
   { version: "0.39", date: "Mar 8", title: "Multi-subscription HCL generation" },
   { version: "0.48", date: "Mar 23", title: "Interactive CLI wizard" },
 ];
+
+const pad = (n: number) => n.toString().padStart(2, "0");
 ---
 
 <BaseLayout title="TerraStudio" description={description}>
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-badge">Open Source</div>
-    <h1>Terra<span class="accent">Studio</span></h1>
-    <p class="hero-tagline">Visual Infrastructure as Code</p>
-    <p class="hero-description">
+  <!-- Intro / title block -->
+  <section class="intro">
+    <div class="kicker">◊ Detail Sheet · PRJ-01 · TerraStudio</div>
+    <div class="title-row">
+      <h1>Terra<span class="accent">Studio</span></h1>
+      <span class="badge">Open Source</span>
+    </div>
+    <p class="tagline">Visual Infrastructure as Code</p>
+    <p class="lead">
       Design cloud infrastructure by dragging and dropping resources onto a canvas.
       Connect them visually, configure properties, and export production-ready Terraform code.
     </p>
 
-    <div class="hero-actions">
+    <div class="actions">
       <a id="download-btn" href="https://github.com/afroze9/TerraStudio/releases/latest" class="btn btn-primary">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="btn-icon">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
           <polyline points="7 10 12 15 17 10" />
           <line x1="12" y1="15" x2="12" y2="3" />
@@ -94,88 +99,117 @@ const milestones = [
       </a>
     </div>
 
-    <div class="hero-stats">
-      {stats.map((stat) => (
-        <div class="stat">
-          <span class="stat-value">{stat.value}</span>
-          <span class="stat-label">{stat.label}</span>
-        </div>
-      ))}
+    <div class="summary">
+      <div class="summary-lbl">As-built totals</div>
+      <div class="summary-grid">
+        {stats.map((s) => (
+          <div class="summary-dim">
+            <span class="val">{s.value}</span>
+            <span class="line"></span>
+            <span class="lbl">{s.label}</span>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
   <!-- Screenshot -->
-  <section class="screenshot">
-    <img src="/projects/terrastudio-screenshot.png" alt="TerraStudio — visual infrastructure designer with Azure resources on canvas" loading="eager" />
+  <section>
+    <header class="section-head">
+      <span class="tag">§ 01</span>
+      <h2>Canvas View</h2>
+      <span class="rule"></span>
+      <span class="scale">Fig. A · Scale 1:1</span>
+    </header>
+    <figure class="screenshot">
+      <div class="screenshot-head">
+        <span class="sh-code">FIG-A · PRODUCT SCREENSHOT</span>
+        <span class="sh-meta">v0.48</span>
+      </div>
+      <div class="screenshot-body">
+        <img src="/projects/terrastudio-screenshot.png" alt="TerraStudio — visual infrastructure designer with Azure resources on canvas" loading="eager" />
+      </div>
+    </figure>
   </section>
 
   <!-- Features -->
-  <section class="features">
-    <div class="section-header">
+  <section>
+    <header class="section-head">
+      <span class="tag">§ 02</span>
       <h2>Features</h2>
-      <p>Everything you need to design and export cloud infrastructure</p>
-    </div>
+      <span class="rule"></span>
+      <span class="scale">6 modules · Scale 1:25</span>
+    </header>
     <div class="features-grid">
-      {features.map((feature) => (
-        <div class="feature-card">
-          <div class="feature-icon" data-icon={feature.icon}>
-            {feature.icon === "canvas" && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="7" height="7" rx="1" />
-                <rect x="14" y="3" width="7" height="7" rx="1" />
-                <rect x="3" y="14" width="7" height="7" rx="1" />
-                <rect x="14" y="14" width="7" height="7" rx="1" />
-              </svg>
-            )}
-            {feature.icon === "terraform" && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="16 18 22 12 16 6" />
-                <polyline points="8 6 2 12 8 18" />
-                <line x1="14" y1="4" x2="10" y2="20" />
-              </svg>
-            )}
-            {feature.icon === "cost" && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="1" x2="12" y2="23" />
-                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-              </svg>
-            )}
-            {feature.icon === "modules" && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="2" width="8" height="8" rx="1" />
-                <rect x="14" y="2" width="8" height="8" rx="1" />
-                <rect x="2" y="14" width="8" height="8" rx="1" />
-                <path d="M14 14h8v8h-8z" stroke-dasharray="2 2" />
-              </svg>
-            )}
-            {feature.icon === "plugins" && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
-              </svg>
-            )}
-            {feature.icon === "cli" && (
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="4 17 10 11 4 5" />
-                <line x1="12" y1="19" x2="20" y2="19" />
-              </svg>
-            )}
+      {features.map((feature, i) => (
+        <article class="feature">
+          <div class="feature-head">
+            <span class="feature-code">FT-{pad(i + 1)}</span>
+            <span class="feature-pip">◊</span>
           </div>
-          <h3>{feature.title}</h3>
-          <p>{feature.description}</p>
-        </div>
+          <div class="feature-body">
+            <div class="feature-icon">
+              {feature.icon === "canvas" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="3" y="3" width="7" height="7" />
+                  <rect x="14" y="3" width="7" height="7" />
+                  <rect x="3" y="14" width="7" height="7" />
+                  <rect x="14" y="14" width="7" height="7" />
+                </svg>
+              )}
+              {feature.icon === "terraform" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <polyline points="16 18 22 12 16 6" />
+                  <polyline points="8 6 2 12 8 18" />
+                  <line x1="14" y1="4" x2="10" y2="20" />
+                </svg>
+              )}
+              {feature.icon === "cost" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+              )}
+              {feature.icon === "modules" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="2" y="2" width="8" height="8" />
+                  <rect x="14" y="2" width="8" height="8" />
+                  <rect x="2" y="14" width="8" height="8" />
+                  <path d="M14 14h8v8h-8z" stroke-dasharray="2 2" />
+                </svg>
+              )}
+              {feature.icon === "plugins" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" />
+                </svg>
+              )}
+              {feature.icon === "cli" && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <polyline points="4 17 10 11 4 5" />
+                  <line x1="12" y1="19" x2="20" y2="19" />
+                </svg>
+              )}
+            </div>
+            <h3>{feature.title}</h3>
+            <p>{feature.description}</p>
+          </div>
+        </article>
       ))}
     </div>
   </section>
 
   <!-- Tech Stack -->
-  <section class="tech">
-    <div class="section-header">
+  <section>
+    <header class="section-head">
+      <span class="tag">§ 03</span>
       <h2>Built With</h2>
-      <p>A modern desktop-first stack</p>
-    </div>
+      <span class="rule"></span>
+      <span class="scale">Bill of materials</span>
+    </header>
     <div class="tech-grid">
-      {techStack.map((tech) => (
+      {techStack.map((tech, i) => (
         <div class="tech-item">
+          <span class="tech-code">M-{pad(i + 1)}</span>
           <span class="tech-name">{tech.name}</span>
           <span class="tech-role">{tech.role}</span>
         </div>
@@ -184,49 +218,56 @@ const milestones = [
   </section>
 
   <!-- Milestones -->
-  <section class="milestones">
-    <div class="section-header">
+  <section>
+    <header class="section-head">
+      <span class="tag">§ 04</span>
       <h2>Development Timeline</h2>
-      <p>From first commit to v0.48 in 33 days</p>
-    </div>
-    <div class="milestone-track">
+      <span class="rule"></span>
+      <span class="scale">First commit → v0.48 · 33 days</span>
+    </header>
+    <div class="milestones">
       {milestones.map((m, i) => (
-        <div class="milestone-item">
-          <div class="milestone-marker">
-            <span class="milestone-dot"></span>
-            {i < milestones.length - 1 && <span class="milestone-line"></span>}
+        <article class="m-row">
+          <div class="m-marker">
+            <span class="m-version">v{m.version}</span>
+            <span class="m-node"></span>
           </div>
-          <div class="milestone-content">
-            <div class="milestone-meta">
-              <span class="milestone-version">v{m.version}</span>
-              <span class="milestone-date">{m.date}</span>
+          <div class="m-card">
+            <div class="m-head">
+              <span class="m-code">REV-{pad(i + 1)}</span>
+              <span class="m-date">{m.date}</span>
             </div>
-            <p class="milestone-title">{m.title}</p>
+            <div class="m-body">
+              <p>{m.title}</p>
+            </div>
           </div>
-        </div>
+        </article>
       ))}
     </div>
     <div class="timeline-cta">
-      <a href="/projects/terrastudio/timeline.html" target="_blank" class="btn btn-secondary">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
-        </svg>
-        View Interactive Timeline — 320 commits visualized
+      <a href="/projects/terrastudio/timeline.html" target="_blank" class="cta-link">
+        <span>View Interactive Timeline — 320 commits visualized</span>
+        <span class="arrow">→</span>
       </a>
     </div>
   </section>
 
   <!-- CTA -->
-  <section class="cta">
-    <div class="cta-content">
-      <h2>Try TerraStudio</h2>
-      <p>Available for Windows, macOS, and Linux</p>
+  <section class="cta-block">
+    <div class="cta-head">
+      <span class="cta-tag">§ 05 · Distribution</span>
+      <span class="cta-rule"></span>
+    </div>
+    <div class="cta-body">
+      <div>
+        <h2>Try TerraStudio</h2>
+        <p>Available for Windows, macOS, and Linux.</p>
+      </div>
       <div class="cta-actions">
-        <a href="https://github.com/afroze9/TerraStudio/releases/latest" class="btn btn-primary">
+        <a href="https://github.com/afroze9/TerraStudio/releases/latest" class="cta-link solid">
           Download Latest Release
         </a>
-        <a href="https://github.com/afroze9/TerraStudio" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+        <a href="https://github.com/afroze9/TerraStudio" target="_blank" rel="noopener noreferrer" class="cta-link">
           View Source on GitHub
         </a>
       </div>
@@ -235,7 +276,6 @@ const milestones = [
 </BaseLayout>
 
 <script>
-  // Detect OS and update download button
   const btn = document.getElementById('download-btn');
   const label = document.getElementById('download-label');
   if (btn && label) {
@@ -251,405 +291,504 @@ const milestones = [
 </script>
 
 <style>
-  /* Hero */
-  .hero {
-    text-align: center;
-    padding: var(--space-2xl) 0 var(--space-xl);
-  }
-
-  .hero-badge {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: var(--font-weight-bold);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-accent);
-    background: var(--color-accent-light);
-    padding: 4px 12px;
-    border-radius: 4px;
-    margin-bottom: var(--space-lg);
-  }
-
-  .hero h1 {
-    font-size: 3rem;
-    margin-bottom: var(--space-xs);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-  }
-
-  .accent {
-    color: var(--color-accent);
-  }
-
-  .hero-tagline {
-    font-size: var(--font-size-xl);
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-md);
-    font-weight: var(--font-weight-medium);
-  }
-
-  .hero-description {
-    font-size: var(--font-size-lg);
-    color: var(--color-text-muted);
-    max-width: 60ch;
-    margin: 0 auto var(--space-xl);
-    line-height: 1.6;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: var(--space-md);
-    justify-content: center;
-    flex-wrap: wrap;
+  /* Intro */
+  .intro {
+    padding-top: var(--space-md);
     margin-bottom: var(--space-xl);
   }
+  .intro .kicker {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-cyan);
+    margin-bottom: 12px;
+  }
+  .intro .title-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .intro h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(36px, 4.8vw, 60px);
+    line-height: 1;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--color-ink);
+  }
+  .intro .accent { color: var(--color-cyan); }
+  .intro .badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-cyan);
+    padding: 4px 10px;
+    border: 1px solid var(--color-cyan);
+    background: var(--color-paper-2);
+  }
+  .intro .tagline {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+    margin: 0 0 14px;
+  }
+  .intro .lead {
+    font-size: var(--font-size-lg);
+    color: var(--color-ink-2);
+    max-width: 70ch;
+    margin: 0 0 24px;
+    line-height: 1.55;
+  }
 
+  /* Action buttons — drafting style: square borders, mono, hover = ink fill */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
   .btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-base);
+    padding: 10px 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     text-decoration: none;
-    transition: all 0.2s ease;
+    border: 1.5px solid var(--color-ink);
+    transition: background 0.12s ease, color 0.12s ease;
     cursor: pointer;
-    border: var(--border-width) solid transparent;
   }
-
-  .btn:hover {
-    text-decoration: none;
-  }
-
-  .btn-icon {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-  }
-
+  .btn-icon { width: 14px; height: 14px; flex-shrink: 0; }
   .btn-primary {
-    background: var(--color-accent);
-    color: white;
-    border-color: var(--color-accent);
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
-
   .btn-primary:hover {
-    background: var(--color-text);
-    border-color: var(--color-text);
-    color: white;
+    background: var(--color-cyan);
+    border-color: var(--color-cyan);
+    color: var(--color-paper);
+    border-bottom-color: var(--color-cyan);
   }
-
   .btn-secondary {
-    background: transparent;
-    color: var(--color-text);
-    border-color: var(--color-border);
+    background: var(--color-paper);
+    color: var(--color-ink);
   }
-
   .btn-secondary:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-bottom-color: var(--color-ink);
   }
 
-  .hero-stats {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-2xl);
-    padding-top: var(--space-lg);
-    border-top: var(--border-width) solid var(--color-border);
+  /* Summary — as-built totals strip */
+  .summary {
+    padding: 22px 26px 20px;
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-paper-2);
+    position: relative;
   }
-
-  .stat {
+  .summary-lbl {
+    position: absolute;
+    top: -10px;
+    left: 18px;
+    background: var(--color-paper);
+    padding: 0 8px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 720px) {
+    .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  }
+  .summary-dim {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 4px;
   }
-
-  .stat-value {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text);
+  .summary-dim .val {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 36px;
     line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
   }
-
-  .stat-label {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
+  .summary-dim .line {
+    height: 1px;
+    background: var(--color-ink);
+    position: relative;
+    margin: 8px 0 6px;
+  }
+  .summary-dim .line::before,
+  .summary-dim .line::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    width: 1px;
+    height: 9px;
+    background: var(--color-ink);
+  }
+  .summary-dim .line::before { left: 0; }
+  .summary-dim .line::after { right: 0; }
+  .summary-dim .lbl {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-top: 4px;
+    color: var(--color-ink-2);
   }
 
-  /* Screenshot */
+  /* Screenshot — framed figure with chrome head */
   .screenshot {
-    margin-bottom: var(--space-2xl);
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-paper);
+    margin: 0;
   }
-
-  .screenshot img {
+  .screenshot-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    background: var(--color-chrome-bg);
+    color: var(--color-chrome-fg);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .sh-code { color: var(--color-chrome-accent); }
+  .screenshot-body {
+    padding: 14px;
+    background: var(--color-paper-2);
+  }
+  .screenshot-body img {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 12px;
-    border: var(--border-width) solid var(--color-border);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  }
-
-  /* Section Header */
-  .section-header {
-    margin-bottom: var(--space-xl);
-  }
-
-  .section-header h2 {
-    font-size: var(--font-size-xl);
-    margin-bottom: var(--space-xs);
-  }
-
-  .section-header p {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    margin: 0;
+    border: 1px solid var(--color-ink);
   }
 
   /* Features */
-  .features {
-    margin-bottom: var(--space-2xl);
-    padding-top: var(--space-xl);
-  }
-
   .features-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-lg);
+    gap: 20px;
   }
+  @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .features-grid { grid-template-columns: 1fr; } }
 
-  @media (max-width: 768px) {
-    .features-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .features-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .feature-card {
-    padding: var(--space-lg);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: 8px;
-    transition: all 0.2s ease;
-  }
-
-  .feature-card:hover {
-    border-color: var(--color-accent);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-
-  .feature-icon {
-    width: 40px;
-    height: 40px;
+  .feature {
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-paper);
     display: flex;
+    flex-direction: column;
+  }
+  .feature-head {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    background: var(--color-accent-light);
-    border-radius: 8px;
-    margin-bottom: var(--space-md);
-    color: var(--color-accent);
+    padding: 6px 14px;
+    border-bottom: 1px dashed var(--color-ink-3);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
+  .feature-code { color: var(--color-cyan); }
+  .feature-pip { color: var(--color-ink-2); }
 
-  .feature-icon svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .feature-card h3 {
-    font-size: var(--font-size-base);
-    margin-bottom: var(--space-xs);
-  }
-
-  .feature-card p {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
-    margin: 0;
-    line-height: 1.5;
-  }
-
-  /* Tech Stack */
-  .tech {
-    margin-bottom: var(--space-2xl);
-  }
-
-  .tech-grid {
+  .feature-body {
+    padding: 20px 20px 22px;
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md);
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
   }
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-paper-2);
+    display: grid;
+    place-items: center;
+    color: var(--color-cyan);
+  }
+  .feature-icon svg { width: 22px; height: 22px; }
+  .feature-body h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    margin: 0;
+    line-height: 1.15;
+  }
+  .feature-body p {
+    font-size: var(--font-size-sm);
+    line-height: 1.55;
+    color: var(--color-ink-2);
+    margin: 0;
+  }
+
+  /* Tech stack — bill of materials */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 720px) { .tech-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 420px) { .tech-grid { grid-template-columns: 1fr; } }
 
   .tech-item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: var(--space-md) var(--space-lg);
-    background: var(--color-accent-light);
-    border-radius: 8px;
-    min-width: 120px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: baseline;
+    padding: 12px 14px;
+    border: 1px solid var(--color-ink);
+    background: var(--color-paper);
   }
-
+  .tech-code {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--color-cyan);
+  }
   .tech-name {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-base);
-    color: var(--color-text);
-  }
-
-  .tech-role {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    text-transform: uppercase;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
     letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+  .tech-role {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
   }
 
-  /* Milestones */
+  /* Milestones — revision log with diamond nodes */
   .milestones {
-    margin-bottom: var(--space-2xl);
-  }
-
-  .milestone-track {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 0;
-    margin-bottom: var(--space-xl);
+    gap: 14px;
+    margin-bottom: 22px;
   }
-
-  .milestone-item {
-    display: flex;
-    gap: var(--space-lg);
-    min-height: 56px;
+  .milestones::before {
+    content: "";
+    position: absolute;
+    left: 43px;
+    top: 10px;
+    bottom: 10px;
+    width: 1px;
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-ink-3) 50%,
+      transparent 50%
+    );
+    background-size: 1px 8px;
+    background-repeat: repeat-y;
+    z-index: 0;
   }
-
-  .milestone-marker {
+  .m-row {
+    display: grid;
+    grid-template-columns: 86px 1fr;
+    gap: 18px;
+    align-items: start;
+    position: relative;
+  }
+  .m-marker {
+    padding-top: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 16px;
-    flex-shrink: 0;
-    padding-top: 4px;
-  }
-
-  .milestone-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--color-accent);
-    border: 2px solid var(--color-background);
-    box-shadow: 0 0 0 2px var(--color-accent);
-    flex-shrink: 0;
+    gap: 8px;
+    position: relative;
     z-index: 1;
   }
-
-  .milestone-line {
-    width: 2px;
-    flex: 1;
-    background: var(--color-border);
-    margin-top: -1px;
+  .m-version {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--color-cyan);
+    font-weight: 600;
+    padding: 3px 7px;
+    border: 1px solid var(--color-ink);
+    background: var(--color-paper);
   }
-
-  .milestone-content {
-    padding-bottom: var(--space-lg);
-    flex: 1;
+  .m-node {
+    width: 8px;
+    height: 8px;
+    background: var(--color-ink);
+    transform: rotate(45deg);
   }
-
-  .milestone-meta {
+  .m-card {
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-paper);
+  }
+  .m-head {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: var(--space-sm);
-    margin-bottom: 2px;
+    padding: 6px 14px;
+    background: var(--color-chrome-bg);
+    color: var(--color-chrome-fg);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
-
-  .milestone-version {
-    font-size: 0.75rem;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-accent);
-    background: var(--color-accent-light);
-    padding: 2px 8px;
-    border-radius: 4px;
-  }
-
-  .milestone-date {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-  }
-
-  .milestone-title {
+  .m-code { color: var(--color-chrome-accent); }
+  .m-body { padding: 12px 16px 14px; }
+  .m-body p {
     font-size: var(--font-size-sm);
-    color: var(--color-text);
+    line-height: 1.5;
+    color: var(--color-ink);
     margin: 0;
-    line-height: 1.4;
+  }
+
+  @media (max-width: 600px) {
+    .m-row { grid-template-columns: 64px 1fr; gap: 12px; }
+    .m-version { font-size: 10px; padding: 2px 5px; }
+    .milestones::before { left: 32px; }
   }
 
   .timeline-cta {
-    text-align: center;
+    display: flex;
+    justify-content: center;
   }
 
-  /* CTA */
-  .cta {
-    margin-bottom: var(--space-xl);
+  /* Drafting-style link buttons — shared */
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    padding: 10px 16px;
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-paper);
+    text-decoration: none;
+    transition: background 0.12s ease, color 0.12s ease;
   }
-
-  .cta-content {
-    text-align: center;
-    padding: var(--space-2xl);
-    background: var(--color-accent-light);
-    border-radius: 12px;
+  .cta-link:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-bottom-color: var(--color-ink);
   }
-
-  .cta-content h2 {
-    font-size: var(--font-size-xl);
-    margin-bottom: var(--space-sm);
+  .cta-link.solid {
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
-
-  .cta-content p {
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-lg);
+  .cta-link.solid:hover {
+    background: var(--color-cyan);
+    border-color: var(--color-cyan);
+    color: var(--color-paper);
+    border-bottom-color: var(--color-cyan);
   }
+  .cta-link .arrow { color: var(--color-cyan); }
+  .cta-link:hover .arrow { color: inherit; }
 
+  /* Distribution CTA — mirrors projects index CTA block */
+  .cta-block {
+    margin-top: var(--space-2xl);
+    border: 1.5px solid var(--color-ink);
+    background: var(--color-paper-2);
+    position: relative;
+  }
+  .cta-block::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border: 1px solid var(--color-ink-3);
+    pointer-events: none;
+  }
+  .cta-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 20px;
+    border-bottom: 1px dashed var(--color-ink-3);
+    position: relative;
+    z-index: 1;
+  }
+  .cta-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--color-cyan);
+    text-transform: uppercase;
+  }
+  .cta-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--color-ink-3);
+  }
+  .cta-body {
+    padding: 22px 26px 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+    z-index: 1;
+  }
+  @media (min-width: 720px) {
+    .cta-body { flex-direction: row; align-items: center; gap: 24px; }
+  }
+  .cta-body h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 26px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    margin: 0 0 4px;
+    line-height: 1;
+  }
+  .cta-body p {
+    color: var(--color-ink-2);
+    font-size: var(--font-size-sm);
+    margin: 0;
+  }
   .cta-actions {
     display: flex;
-    gap: var(--space-md);
-    justify-content: center;
+    gap: 10px;
     flex-wrap: wrap;
-  }
-
-  /* Responsive */
-  @media (max-width: 640px) {
-    .hero h1 {
-      font-size: 2.25rem;
-    }
-
-    .hero-stats {
-      gap: var(--space-lg);
-    }
-
-    .stat-value {
-      font-size: var(--font-size-lg);
-    }
+    flex-shrink: 0;
   }
 
   @media (max-width: 480px) {
-    .hero-actions {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .btn {
-      width: 100%;
-      justify-content: center;
-    }
-
-    .cta-actions {
-      flex-direction: column;
-      align-items: center;
-    }
+    .actions { flex-direction: column; align-items: stretch; }
+    .btn { justify-content: center; }
+    .cta-actions { flex-direction: column; align-items: stretch; width: 100%; }
+    .cta-link { justify-content: center; }
   }
 </style>
