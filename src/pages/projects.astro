@@ -465,47 +465,35 @@ const pad = (n: number) => n.toString().padStart(2, "0");
     gap: 16px 24px;
   }
 
+  /* Impact — labeled prose (values are sentence-length, not numeric) */
   .impact-dim {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
     min-width: 0;
-    flex: 1 1 200px;
+    flex: 1 1 auto;
   }
   .impact-lbl {
     font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-ink-2);
+    color: var(--color-cyan);
+    padding-bottom: 4px;
+    border-bottom: 1px dashed var(--color-ink-3);
   }
-  .impact-rule {
-    height: 1px;
-    background: var(--color-ink);
-    position: relative;
-  }
-  .impact-rule::before,
-  .impact-rule::after {
-    content: "";
-    position: absolute;
-    top: -4px;
-    width: 1px;
-    height: 9px;
-    background: var(--color-ink);
-  }
-  .impact-rule::before { left: 0; }
-  .impact-rule::after { right: 0; }
+  .impact-rule { display: none; }
   .impact-val {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: 20px;
+    font-size: 16px;
+    line-height: 1.3;
     letter-spacing: 0.02em;
     text-transform: uppercase;
-    color: var(--color-cyan);
-    white-space: nowrap;
+    color: var(--color-ink);
+    overflow-wrap: anywhere;
   }
-  .dwg-card.featured .impact-val { font-size: 24px; }
+  .dwg-card.featured .impact-val { font-size: 18px; }
 
   .foot-right {
     display: flex;
