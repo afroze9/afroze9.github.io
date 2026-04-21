@@ -50,6 +50,10 @@
       btns.forEach(function (b) {
         b.setAttribute("aria-pressed", b.dataset.mode === mode ? "true" : "false");
       });
+      var favicon = document.getElementById("favicon");
+      if (favicon) {
+        favicon.setAttribute("href", mode === "dark" ? "/favicon-blueprint.svg" : "/favicon-cream.svg");
+      }
       if (persist) {
         try { localStorage.setItem("theme", mode); } catch (e) {}
       }
