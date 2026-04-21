@@ -3,6 +3,7 @@ title: "The 32.5% Fix Tax: Auditing 348 Commits of Vibe-Coded TerraStudio"
 description: "I let AI build a full desktop app for two months, then read the git history. The fix rate isn't flat, and where it spikes says a lot about what AI is good at."
 pubDate: 2026-04-20
 draft: false
+heroImage: "/writing/terrastudio-v0.39.0.png"
 ---
 
 <div class="post-carousel" data-carousel>
