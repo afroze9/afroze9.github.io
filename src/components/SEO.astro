@@ -3,9 +3,10 @@ interface Props {
   title: string;
   description: string;
   canonicalURL?: string;
+  image?: string;
 }
 
-const { title, description, canonicalURL } = Astro.props;
+const { title, description, canonicalURL, image } = Astro.props;
 const siteTitle = "Afroze Amjad | Senior Software Architect";
 const fullTitle = title === "Home" ? siteTitle : `${title} | Afroze Amjad`;
 const canonical = canonicalURL || Astro.url.href;
@@ -45,11 +46,13 @@ const websiteSchema = {
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:site_name" content="Afroze Amjad" />
+{image && <meta property="og:image" content={image} />}
 
 <!-- Twitter -->
-<meta name="twitter:card" content="summary" />
+<meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
+{image && <meta name="twitter:image" content={image} />}
 
 <link id="favicon" rel="icon" type="image/svg+xml" href="/favicon.svg" />
 

@@ -3,6 +3,7 @@ title: "MCP vs CLI for AI Agents: I Measured the Same Tool Both Ways"
 description: "Same tool, two surfaces. I ran the numbers to see which is actually cheaper for a Claude agent, and the answer wasn't what I expected."
 pubDate: 2026-04-20
 draft: false
+heroImage: "/writing/mcp-vs-cli-banner.svg"
 ---
 
 ![](./assets/mcp-vs-cli-banner.svg)

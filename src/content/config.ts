@@ -25,6 +25,7 @@ const writingCollection = defineCollection({
     description: z.string(),
     pubDate: z.date(),
     draft: z.boolean().default(false),
+    heroImage: z.string().optional(),
   }),
 });
 
