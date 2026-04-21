@@ -92,21 +92,21 @@
 /* Dark mode — authentic cyanotype blueprint (white lines on saturated blue) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --color-paper: #0f4c81;
-    --color-paper-2: #125693;
-    --color-desk: #082a4d;
+    --color-paper: #003153;        /* Prussian blue — the sheet */
+    --color-paper-2: #00406E;      /* slightly lighter Prussian for insets */
+    --color-desk: #00152B;         /* near-black Prussian — cutting mat / body */
 
-    --color-ink: #f4f8ff;
-    --color-ink-2: #c7d9ef;
-    --color-ink-3: #8faccc;
+    --color-ink: #D8E4F0;          /* blueprint "white" — pale blue, not stark */
+    --color-ink-2: #9FB4CC;
+    --color-ink-3: #5E7590;
 
-    --color-cyan: #8fd8ff;
-    --color-red: #ff8a8a;
+    --color-cyan: #8FD0F0;
+    --color-red: #E89090;
 
-    --grid: rgba(244, 248, 255, 0.05);
-    --grid-bold: rgba(244, 248, 255, 0.09);
-    --sheet-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
-                    0 22px 56px -20px rgba(0, 0, 0, 0.75);
+    --grid: rgba(216, 228, 240, 0.05);
+    --grid-bold: rgba(216, 228, 240, 0.09);
+    --sheet-shadow: 0 1px 0 rgba(0, 0, 0, 0.6),
+                    0 22px 56px -20px rgba(0, 0, 0, 0.85);
 
     --color-cat-ai: var(--color-cyan);
     --color-cat-arch: #c7d9ef;
@@ -117,21 +117,21 @@
 }
 
 :root[data-theme="dark"] {
-  --color-paper: #0f4c81;
-  --color-paper-2: #125693;
-  --color-desk: #082a4d;
+  --color-paper: #003153;        /* Prussian blue — the sheet */
+  --color-paper-2: #00406E;      /* slightly lighter Prussian for insets */
+  --color-desk: #00152B;         /* near-black Prussian — cutting mat / body */
 
-  --color-ink: #f4f8ff;
-  --color-ink-2: #c7d9ef;
-  --color-ink-3: #8faccc;
+  --color-ink: #F0F6FF;          /* clean white ink */
+  --color-ink-2: #B6CCE4;
+  --color-ink-3: #6E8AA8;
 
-  --color-cyan: #8fd8ff;
-  --color-red: #ff8a8a;
+  --color-cyan: #7ED4FF;
+  --color-red: #FF9A9A;
 
-  --grid: rgba(244, 248, 255, 0.05);
-  --grid-bold: rgba(244, 248, 255, 0.09);
-  --sheet-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
-                  0 22px 56px -20px rgba(0, 0, 0, 0.75);
+  --grid: rgba(240, 246, 255, 0.06);
+  --grid-bold: rgba(240, 246, 255, 0.10);
+  --sheet-shadow: 0 1px 0 rgba(0, 0, 0, 0.6),
+                  0 22px 56px -20px rgba(0, 0, 0, 0.85);
 
   --color-cat-ai: var(--color-cyan);
   --color-cat-arch: #c7d9ef;
