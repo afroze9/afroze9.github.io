@@ -1,0 +1,128 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeader from "../components/SectionHeader.astro";
+
+const description = "Search writing, projects, and pages on Afroze Amjad's site.";
+---
+
+<BaseLayout title="Search" description={description}>
+  <section class="search-intro">
+    <SectionHeader title="Search" />
+    <p>Full-text search across writing, projects, and pages on this site.</p>
+  </section>
+
+  <section>
+    <div id="pagefind-search" class="pagefind-wrap"></div>
+  </section>
+</BaseLayout>
+
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+<script is:inline>
+  (function () {
+    function init() {
+      if (typeof PagefindUI === "undefined") return;
+      new PagefindUI({
+        element: "#pagefind-search",
+        showSubResults: true,
+        showImages: false,
+        resetStyles: false,
+        translations: {
+          placeholder: "Search the site…",
+          zero_results: "No results for [SEARCH_TERM]",
+        },
+      });
+    }
+    var s = document.createElement("script");
+    s.src = "/pagefind/pagefind-ui.js";
+    s.onload = init;
+    document.head.appendChild(s);
+  })();
+</script>
+
+<style is:global>
+  /* Blueprint-style overrides for the Pagefind default UI */
+  .pagefind-wrap {
+    --pagefind-ui-scale: 1;
+    --pagefind-ui-primary: var(--color-ink);
+    --pagefind-ui-text: var(--color-ink);
+    --pagefind-ui-background: var(--color-paper);
+    --pagefind-ui-border: var(--color-ink);
+    --pagefind-ui-tag: var(--color-paper-2);
+    --pagefind-ui-border-width: 1.5px;
+    --pagefind-ui-border-radius: 0;
+    --pagefind-ui-image-border-radius: 0;
+    --pagefind-ui-font: var(--font-sans);
+  }
+  .pagefind-wrap .pagefind-ui__search-input {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border: 1.5px solid var(--color-ink);
+    border-radius: 0;
+    padding: 12px 16px;
+  }
+  .pagefind-wrap .pagefind-ui__search-clear {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-2);
+    background: transparent;
+    border: none;
+  }
+  .pagefind-wrap .pagefind-ui__search-clear:hover {
+    color: var(--color-ink);
+  }
+  .pagefind-wrap .pagefind-ui__message,
+  .pagefind-wrap .pagefind-ui__result-link {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-ink);
+  }
+  .pagefind-wrap .pagefind-ui__result {
+    border-top: 1px dashed var(--color-ink-3);
+    padding: 16px 0;
+  }
+  .pagefind-wrap .pagefind-ui__result:first-child {
+    border-top: none;
+  }
+  .pagefind-wrap .pagefind-ui__result-excerpt {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--color-ink-2);
+    line-height: 1.5;
+  }
+  .pagefind-wrap .pagefind-ui__result-excerpt mark {
+    background: var(--color-cyan);
+    color: var(--color-paper);
+    padding: 0 2px;
+  }
+  .pagefind-wrap .pagefind-ui__button {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border: 1.5px solid var(--color-ink);
+    border-radius: 0;
+    padding: 8px 14px;
+  }
+  .pagefind-wrap .pagefind-ui__button:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+</style>
+
+<style>
+  .search-intro {
+    margin-bottom: var(--space-lg);
+  }
+  .search-intro p {
+    color: var(--color-ink-2);
+    max-width: 65ch;
+  }
+</style>
