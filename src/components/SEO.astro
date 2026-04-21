@@ -9,6 +9,26 @@ const { title, description, canonicalURL } = Astro.props;
 const siteTitle = "Afroze Amjad | Senior Software Architect";
 const fullTitle = title === "Home" ? siteTitle : `${title} | Afroze Amjad`;
 const canonical = canonicalURL || Astro.url.href;
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Afroze Amjad",
+  url: "https://afrozeamjad.com",
+  jobTitle: "Senior Software Architect",
+  sameAs: [
+    "https://github.com/afroze9",
+    "https://linkedin.com/in/afroze-amjad"
+  ]
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Afroze Amjad",
+  url: "https://afrozeamjad.com",
+  author: { "@type": "Person", name: "Afroze Amjad" }
+};
 ---
 
 <meta charset="UTF-8" />
@@ -32,3 +52,6 @@ const canonical = canonicalURL || Astro.url.href;
 <meta name="twitter:description" content={description} />
 
 <link id="favicon" rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://afroze9.github.io/sitemap.xml
+Sitemap: https://afrozeamjad.com/sitemap-index.xml
