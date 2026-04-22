@@ -1,5 +1,5 @@
 ---
-title: "TalentBook ERP"
+title: "Internal ERP"
 date: "2023"
 company: "Confiz"
 category: "platform"

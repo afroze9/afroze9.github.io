@@ -1,7 +1,7 @@
 ---
-title: "ShopperValue Global Scale"
+title: "Footfall Analytics Global Scale"
 date: "2022"
-company: "Retail Analytics Provider"
+company: "Confiz"
 category: "architecture"
 problem: "A nationwide application tracking footfall metrics was architected for domestic scale only and could not expand to international markets due to infrastructure limitations."
 solution: "Redesigned the application architecture using Azure Cloud technologies to enable horizontal scaling, multi-region deployment, and improved observability."
